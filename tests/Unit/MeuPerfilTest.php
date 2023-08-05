@@ -63,19 +63,55 @@ class MeuPerfilTest extends TestCase
 
         $createUser = ['name' => 'TestCase' ,'email' =>'testCase@email.com' , 'password' => 'testCase'];
         $user = User::create($createUser);
-        
+        $this->meuPerfil->setUsersId($user->id);
+
         $livros = Request::create('meuperfil/adicionarLivros' , 'POST' ,
-            ['users_id'=> $user->id , 
-             'titulo' => 'TestCase' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
+            ['titulo' => 'TestCase' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
              'editoras_nome' => 'TestCase' , 
              'autores_nome' => 'TestCase' ]);
         
         //Execução
         $adicionarLivros = $this->meuPerfil->adicionarLivros($livros);
-        dd( $adicionarLivros );
         //Assert 
         $this->assertInstanceOf(Livros::class , $adicionarLivros);
+        $this->assertEquals($livros['titulo'], $adicionarLivros->titulo );
+        $this->assertEquals($livros['descricao'], $adicionarLivros->descricao );
+        $this->assertEquals($livros['visibilidade'], $adicionarLivros->visibilidade );
+        $this->assertNotEmpty( $adicionarLivros->autores_id );
+        $this->assertNotEmpty( $adicionarLivros->editoras_id );
+        $this->assertNotEmpty( $adicionarLivros->users_id );
         DB::rollBack();
+    }
+    public function testeAdicionarLivros_NaoAutenticado_Retorna401(){
+        
+        //Setup 
+        $livros = Request::create('meuperfil/adicionarLivros' , 'POST' ,
+            ['titulo' => 'TestCase' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
+             'editoras_nome' => 'TestCase' , 
+             'autores_nome' => 'TestCase' ]);
+        //Execução 
+        $adicionarLivros = $this->meuPerfil->adicionarLivros($livros);
+        
+        //Assert 
+        $this->assertStringContainsString(  '401', $adicionarLivros  );
+        
+
+    }
+    public function testeAdicionarLivros_RetornaErroDataSourceIncorreto(){
+        
+        //Setup 
+        $livros = Request::create('meuperfil/adicionarLivros' , 'POST' ,
+            ['titulo' => '' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
+             'editoras_nome' => 'TestCase' , 
+             'autores_nome' => 'TestCase' ]);
+        //Execução 
+        $this->meuPerfil->setUsersId(0);
+        $adicionarLivros = $this->meuPerfil->adicionarLivros($livros);
+        
+        //Assert 
+       
+        $this->assertIsObject( $adicionarLivros);
+        $this->assertEquals( 419 , $adicionarLivros->getStatusCode() );
     }
 
 

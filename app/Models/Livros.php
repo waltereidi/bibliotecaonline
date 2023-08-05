@@ -13,6 +13,8 @@ use Exception;
 class Livros extends Model
 {
     use HasFactory;
+    protected $table = 'livros' ; 
+    protected $fillable = ['titulo','descricao','isbn','visibilidade','users_id','editoras_id','autores_id'];
 
     public function meuPerfilLivrosDoUsuario( $users_id ){
         return DB::table('livros')
@@ -32,19 +34,18 @@ class Livros extends Model
 
         try{
             $autores = new Autores ; 
-            $autor = $autores->adicionarAutorInexistente($livros->autores_nome);
-
-            $editoras = new Editoras ; 
-            $editora = $editoras->adicionarEditoraInexistente($livros->editoras_nome);
+            $autor = $autores->adicionarAutorInexistente($livros['autores_nome']);
             
+            $editoras = new Editoras ; 
+            $editora = $editoras->adicionarEditoraInexistente($livros['editoras_nome']);
             $createLivros = [
-                'titulo' => $livros->titulo , 
-                'descricao' => $livros->descricao , 
-                'isbn' => $livros->isbn,
-                'visibilidade' => $livros->visibilidade , 
-                'users_id' => $livros->users_id , 
-                'editoras_id' => $editora['id'] , 
-                'autores_id' => $autor['id']
+                'titulo' => $livros['titulo'] , 
+                'descricao' => $livros['descricao'] , 
+                'isbn' => $livros['isbn'],
+                'visibilidade' => $livros['visibilidade'] , 
+                'users_id' => $livros['users_id'] , 
+                'editoras_id' => $editora->id , 
+                'autores_id' => $autor->id
             ];
 
             $livro = Livros::create($createLivros);

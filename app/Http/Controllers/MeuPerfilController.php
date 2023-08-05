@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use App\Models\Livros; 
-use App\Models\Editoras;
-use App\Models\Autores;
 use App\Models\User;
 
 class MeuPerfilController extends Controller
@@ -26,11 +23,9 @@ class MeuPerfilController extends Controller
  
     public function index(){
 
-        if($this->users_id === null && Auth::id() === null) 
-            {
-                return view('auth.login');
-            }else
-            {
+        if($this->users_id === null && Auth::id() === null) return view('auth.login');
+                
+          
                 (Auth::id() === null) ? $this->SetUsersId(Auth::id() ) : null ;
                 $dataSourcePerfil = User::where('id' , $this->users_id )->first();
                 $livros = new Livros;
@@ -38,10 +33,12 @@ class MeuPerfilController extends Controller
 
                 return view('meuperfil' , ['dataSourceLivros' => $dataSourceLivros->count(0)==0 ? null : $dataSourceLivros ,
                                 'dataSourceUsers' => $dataSourcePerfil ] );
-            }
     }
     
     public function adicionarLivros(Request $livros) { 
+        
+        if($this->users_id === null && Auth::id() === null) return response()->json(['erro' => 'Nao autenticado' ] , 401 );
+
         $regras = [
             'users_id' => 'required',
             'titulo' => 'required|string|max:60',
@@ -56,18 +53,18 @@ class MeuPerfilController extends Controller
             'max' => 'Limite de caracteres excedido' , 
         ];
         $dados =[ 
-            'users_id' => $livros->users_id,
-            'titulo' => $livros->titulo , 
-            'descricao' => $livros->descricao , 
-            'visibilidade' => $livros->visibilidade , 
-            'isbn' => $livros->isbn , 
-            'editoras_nome' => $livros->editoras_nome , 
-            'autores_nome' => $livros->autores_nome
+            'users_id' => $this->users_id ,
+            'titulo' => $livros['titulo'] , 
+            'descricao' => $livros['descricao'] , 
+            'visibilidade' => $livros['visibilidade'] , 
+            'isbn' => $livros['isbn'] , 
+            'editoras_nome' => $livros['editoras_nome'] , 
+            'autores_nome' => $livros['autores_nome']
         ];
         $validar = Validator::make( $dados , $regras , $mensagems);
 
         if($validar->fails() ){
-            return response()->json_encode($validar->errors());
+            return response()->json($validar->errors() , 419 );
         }else
         {
             $livrosModel = new Livros;

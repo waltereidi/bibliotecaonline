@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Editoras extends Model
 {
     use HasFactory;
+    protected $table = 'editoras';
+    protected $fillable = ['nome'];
 
     public function adicionarEditoraInexistente($nome) : Editoras {
 
