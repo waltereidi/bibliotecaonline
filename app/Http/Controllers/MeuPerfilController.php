@@ -26,7 +26,7 @@ class MeuPerfilController extends Controller
         if($this->users_id === null && Auth::id() === null) return view('auth.login');
                 
                 (Auth::id() === null) ? $this->SetUsersId(Auth::id() ) : null ;
-                $dataSourcePerfil = User::where('id' , $this->users_id )->first();
+                $dataSourcePerfil = User::find($this->users_id );
                 $livros = new Livros;
                 $dataSourceLivros = $livros->meuPerfilLivrosDoUsuario($this->users_id);
 

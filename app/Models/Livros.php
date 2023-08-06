@@ -16,17 +16,19 @@ class Livros extends Model
     protected $table = 'livros' ; 
     protected $fillable = ['titulo','descricao','isbn','visibilidade','users_id','editoras_id','autores_id'];
 
-    public function meuPerfilLivrosDoUsuario( $users_id ){
-        return DB::table('livros')
+    public function meuPerfilLivrosDoUsuario( $users_id ) {
+        $livrosDoUsuario = DB::table('livros')
         ->join('editoras' , 'editoras.id' , '=' , 'livros.editoras_id')
         ->join('autores' , 'autores.id' , '=' , 'livros.autores_id' )
-        ->where('livros.users_id' , $users_id )
         ->select('livros.users_id as users_id' , 'livros.titulo as titulo' , 'livros.isbn as isbn' ,
                 'livros.descricao as descricao' , 'livros.visibilidade as visibilidade' , 
                 'editoras.id as editoras_id' , 'editoras.nome as editoras_nome' , 
                 'autores.id as autores_id' , 'autores.nome as autores_nome' ,
                 DB::raw('0  as paginacao'))
+        ->where('livros.users_id' , $users_id )
         ->orderBy('livros.created_at' , 'desc')->skip(0)->limit(30)->get();
+
+        return $livrosDoUsuario->count() > 0 ? $livrosDoUsuario : null ; 
     }
 
     public function adicionarLivros( $livros ) : ?Livros {
