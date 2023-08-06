@@ -53,7 +53,40 @@ class Livros extends Model
             return $livro ; 
         }catch(Exception $e){
             DB::rollBack();
-            return null ; 
+            return response()->json($e , 501 ) ; 
+        }
+    }
+
+    public function editarLivros( $livros )  {
+        DB::beginTransaction();
+        try{
+            
+            $autores = new Autores ; 
+            $autor = $autores->adicionarAutorInexistente($livros['autores_nome']);
+            
+            $editoras = new Editoras ; 
+            $editora = $editoras->adicionarEditoraInexistente($livros['editoras_nome']);
+            
+            $livro = Livros::find($livros['id'])->update([
+                'titulo' => $livros['titulo'],
+                'descricao' => $livros['descricao'],
+                'isbn' => $livros['isbn'],
+                'visibilidade' => $livros['visibilidade'],
+                'editoras_id' => $editora->id  ,
+                'autores_id' => $autor->id ,
+            ]);
+            if($livro){
+                return Livros::find($livros['id']);
+            }else{
+                return $livro;
+            }
+             
+            DB::commit();
+            return $livro;
+            
+        }catch(Exception $e ){
+            DB::rollBack();
+            return response()->json($e , 501 );
         }
     }
 }

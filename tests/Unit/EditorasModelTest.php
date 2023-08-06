@@ -10,7 +10,7 @@ use App\Models\Editoras;
 
 use Tests\TestCase;
 
-class EditasModelTest extends TestCase
+class EditorasModelTest extends TestCase
 {
     //Setup 
     //Execucao

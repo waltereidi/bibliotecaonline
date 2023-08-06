@@ -26,10 +26,15 @@ class MeuPerfilTest extends TestCase
     //Execução 
     //Assert 
     private $meuPerfil ;
-
+    private $livros ;
     public function setUp() :void {
         parent::setUp();
         $this->meuPerfil = new MeuPerfilController();
+
+        $this->livros = Request::create('meuperfil/adicionarLivros' , 'POST' ,
+            ['titulo' => 'TestCase' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
+             'editoras_nome' => 'TestCase' , 
+             'autores_nome' => 'TestCase' ]); 
     }
 
     public function testeIndex_SemAutenticacao_RetornaLoginView() : void {
@@ -57,7 +62,62 @@ class MeuPerfilTest extends TestCase
     $this->assertEquals($viewDataSource['dataSourceUsers'] , null );
 
     }
-    public function testeAdicionarLivros_RetornaLivrosDataSource(){
+    public function testeAdicionarLivros_RetornaLivrosDataSource() : void {
+        //Setup 
+        DB::beginTransaction();
+
+        $createUser = ['name' => 'TestCase' ,'email' =>'testCase@email.com' , 'password' => 'testCase'];
+        $user = User::create($createUser);
+        $this->meuPerfil->setUsersId($user->id);
+
+        
+        //Execução
+        $adicionarLivros = $this->meuPerfil->adicionarLivros($this->livros);
+        //Assert 
+        $this->assertInstanceOf(Livros::class , $adicionarLivros);
+        $this->assertEquals($this->livros['titulo'], $adicionarLivros->titulo );
+        $this->assertEquals($this->livros['descricao'], $adicionarLivros->descricao );
+        $this->assertEquals($this->livros['visibilidade'], $adicionarLivros->visibilidade );
+        $this->assertNotEmpty( $adicionarLivros->autores_id );
+        $this->assertNotEmpty( $adicionarLivros->editoras_id );
+        $this->assertNotEmpty( $adicionarLivros->users_id );
+        DB::rollBack();
+    }
+    public function testeAdicionarLivros_NaoAutenticado_Retorna401() : void {
+        
+        //Setup 
+        
+        //Execução 
+        $adicionarLivros = $this->meuPerfil->adicionarLivros($this->livros);
+        
+        //Assert 
+        $this->assertStringContainsString(  '401', $adicionarLivros  );
+        
+
+    }
+    public function testeAdicionarLivros_RetornaErroDataSourceIncorreto() : void {
+        
+        //Setup 
+   
+        //Execução 
+        $this->meuPerfil->setUsersId(0);
+        $livrosRequest = Request::create('meuperfil/adicionarLivros' , 'POST' ,
+            [
+             'titulo' => '' , 'descricao' => 'TestCaseEditar' , 'visibilidade' => 0 , 'isbn' => null ,
+             'editoras_nome' => 'TestCaseEditar' , 
+             'autores_nome' => 'TestCaseEditar' ]); 
+        $adicionarLivros = $this->meuPerfil->adicionarLivros($livrosRequest);
+        
+        //Assert 
+       
+        $this->assertIsObject( $adicionarLivros);
+        $this->assertEquals( 419 , $adicionarLivros->getStatusCode() );
+    }
+
+
+
+
+    public function testeRemoverLivros_RetornaTrue() : void {
         //Setup 
         DB::beginTransaction();
 
@@ -72,99 +132,50 @@ class MeuPerfilTest extends TestCase
         
         //Execução
         $adicionarLivros = $this->meuPerfil->adicionarLivros($livros);
+        $livro = $this->meuPerfil->removerLivros($adicionarLivros->id); 
+        
         //Assert 
-        $this->assertInstanceOf(Livros::class , $adicionarLivros);
-        $this->assertEquals($livros['titulo'], $adicionarLivros->titulo );
-        $this->assertEquals($livros['descricao'], $adicionarLivros->descricao );
-        $this->assertEquals($livros['visibilidade'], $adicionarLivros->visibilidade );
-        $this->assertNotEmpty( $adicionarLivros->autores_id );
-        $this->assertNotEmpty( $adicionarLivros->editoras_id );
-        $this->assertNotEmpty( $adicionarLivros->users_id );
+        $this->assertTrue($livro);
+
         DB::rollBack();
     }
-    public function testeAdicionarLivros_NaoAutenticado_Retorna401(){
-        
-        //Setup 
-        $livros = Request::create('meuperfil/adicionarLivros' , 'POST' ,
-            ['titulo' => 'TestCase' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
-             'editoras_nome' => 'TestCase' , 
-             'autores_nome' => 'TestCase' ]);
-        //Execução 
-        $adicionarLivros = $this->meuPerfil->adicionarLivros($livros);
-        
-        //Assert 
-        $this->assertStringContainsString(  '401', $adicionarLivros  );
-        
-
-    }
-    public function testeAdicionarLivros_RetornaErroDataSourceIncorreto(){
-        
-        //Setup 
-        $livros = Request::create('meuperfil/adicionarLivros' , 'POST' ,
-            ['titulo' => '' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
-             'editoras_nome' => 'TestCase' , 
-             'autores_nome' => 'TestCase' ]);
-        //Execução 
-        $this->meuPerfil->setUsersId(0);
-        $adicionarLivros = $this->meuPerfil->adicionarLivros($livros);
-        
-        //Assert 
-       
-        $this->assertIsObject( $adicionarLivros);
-        $this->assertEquals( 419 , $adicionarLivros->getStatusCode() );
-    }
-
-
-    // public function testeIndex_RetornaViewComDados() : void {
-    //     //Setup
-    //     $dataSource = [
-    //         'users_id' , 
-    //         'livros_id' , 'nome' , 'descricao' , 'isbn' , 'visibilidade' ,
-    //         'autores_id', 'autores_nome' , 
-    //         'editoras_id' , 'editoras_nome',
-    //         'paginacao' ];
-
-    //      
-    //     //Execução
-    //     $this->meuPerfil->SetIdTeste(1);
-    //     $view = $this->meuPerfil->index(); 
-
-    //     $viewDataSource = $view->getData();
-    //     $viewDataSourceColunas = array_keys($viewDataSource->getAttributes());
-    //     //Assert 
-    //     $this->assertInstanceOf(View::class , $view );
-    //     $this->assertEquals('meuperfil' , $view->getName() );
-        
-    //     $this->assertEquals($dataSource , $viewDataSource );
-
-    // }
-
-    public function testeEditarLivros_RetornaLivrosDataSource(){
+    public function testeRemoverLivros_RetornaFalse() : void {
         //Setup
-         
+        DB::beginTransaction();
 
-        $livros = Livros::getModel();
+        //Execução 
+        $livro = $this->meuPerfil->removerLivros(0);
+
+        //Assert 
+        $this->assertFalse($livro);
+        DB::rollBack();
+    }
+
+    public function testeEditarLivros_RetornaLivrosDataSource() : void{
+        //Setup
+        DB::beginTransaction();
+        $createUser = ['name' => 'TestCase' ,'email' =>'testCase@email.com' , 'password' => 'testCase'];
+        $user = User::create($createUser);
+        $this->meuPerfil->setUsersId($user->id);
+
         //Execucao 
-        $editarLivros = $this->meuPerfil->editarLivros($livros);
-
+        $adicionarLivros = $this->meuPerfil->adicionarLivros($this->livros);
+        $editarLivrosRequest = Request::create('meuperfil/adicionarLivros' , 'POST' ,
+            ['id' => $adicionarLivros->id , 
+             'titulo' => 'TestCaseEditar' , 'descricao' => 'TestCaseEditar' , 'visibilidade' => 0 , 'isbn' => null ,
+             'editoras_nome' => 'TestCaseEditar' , 
+             'autores_nome' => 'TestCaseEditar' ]); 
+        $editarLivros = $this->meuPerfil->editarLivros($editarLivrosRequest);
         //Asssert
         $this->assertInstanceOf(Livros::class , $editarLivros );
-
+        $this->assertEquals($editarLivrosRequest['titulo'], $editarLivros->titulo );
+        $this->assertEquals($editarLivrosRequest['descricao'], $editarLivros->descricao );
+        $this->assertEquals($editarLivrosRequest['visibilidade'], $editarLivros->visibilidade );
+        $this->assertNotEmpty( $editarLivros->autores_id );
+        $this->assertNotEmpty( $editarLivros->editoras_id );
+        $this->assertNotEmpty( $editarLivros->users_id );
+        DB::rollBack();
     }
 
     
-
-    public function testeRemoverLivros_RetornaTrue(){
-        //Setup 
-        
-        $id = 1 ; 
-        //Execução
-        $removerLivros = $this->meuPerfil->removerLivros($id);
-
-
-        //Assert 
-        $this->assertEquals(true , $removerLivros);
-    }
-
-
 }

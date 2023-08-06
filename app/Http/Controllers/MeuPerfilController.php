@@ -25,7 +25,6 @@ class MeuPerfilController extends Controller
 
         if($this->users_id === null && Auth::id() === null) return view('auth.login');
                 
-          
                 (Auth::id() === null) ? $this->SetUsersId(Auth::id() ) : null ;
                 $dataSourcePerfil = User::where('id' , $this->users_id )->first();
                 $livros = new Livros;
@@ -34,11 +33,7 @@ class MeuPerfilController extends Controller
                 return view('meuperfil' , ['dataSourceLivros' => $dataSourceLivros->count(0)==0 ? null : $dataSourceLivros ,
                                 'dataSourceUsers' => $dataSourcePerfil ] );
     }
-    
-    public function adicionarLivros(Request $livros) { 
-        
-        if($this->users_id === null && Auth::id() === null) return response()->json(['erro' => 'Nao autenticado' ] , 401 );
-
+    private function validarLivrosRequest(Request $livros) {
         $regras = [
             'users_id' => 'required',
             'titulo' => 'required|string|max:60',
@@ -48,6 +43,8 @@ class MeuPerfilController extends Controller
             'editoras_nome' => 'required|string|max:60' ,
             'autores_nome' => 'required|string|max:60' , 
         ];
+        
+
         $mensagems= [
             'required' => 'Este campo é obrigatório' , 
             'max' => 'Limite de caracteres excedido' , 
@@ -61,8 +58,21 @@ class MeuPerfilController extends Controller
             'editoras_nome' => $livros['editoras_nome'] , 
             'autores_nome' => $livros['autores_nome']
         ];
-        $validar = Validator::make( $dados , $regras , $mensagems);
+        if(isset($livros['id']) ){ 
+            $regras['id'] = 'required' ;
+            $dados['id'] = $livros['id'] ; 
+        }
 
+        return [ 'validador' => Validator::make( $dados , $regras , $mensagems) , 'dados'=>$dados ];
+    } 
+    public function adicionarLivros(Request $livros) { 
+        
+        if($this->users_id === null && Auth::id() === null) return response()->json(['erro' => 'Nao autenticado' ] , 401 );
+
+        $validaLivrosRequrest = $this->validarLivrosRequest($livros) ;
+        $validar = $validaLivrosRequrest['validador'];
+        $dados = $validaLivrosRequrest['dados'];
+         
         if($validar->fails() ){
             return response()->json($validar->errors() , 419 );
         }else
@@ -73,14 +83,35 @@ class MeuPerfilController extends Controller
         }
     }
 
-    public function editarLivros(Livros $livros) : Livros {
-        $livros = Livros::getModel();
-        return $livros ; 
+    public function editarLivros(Request $livros)  {
+        
+        if($this->users_id === null && Auth::id() === null) return response()->json(['erro' => 'Nao autenticado' ] , 401 );
+
+        $validaLivrosRequrest = $this->validarLivrosRequest($livros);
+        $validar = $validaLivrosRequrest['validador'];
+        $dados = $validaLivrosRequrest['dados'];
+
+        if($validar->fails() ){
+            return response()->json($validar->errors() , 419 );
+        }else
+        {
+            $livrosModel = new Livros;
+            $livro = $livrosModel->editarLivros($dados);
+            return $livro ; 
+        }
+
+
     }
 
 
     public function removerLivros($id) : Bool {
-        return true ; 
+        $livro = Livros::find($id); 
+        if($livro){
+            return $livro->delete();
+        }else{
+            return false ; 
+        }
+
 
     }
 
