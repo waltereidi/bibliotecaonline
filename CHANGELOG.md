@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/v10.2.4...10.x)
+## [Unreleased](https://github.com/laravel/laravel/compare/postgresql...main)
+
+## [postgresql](https://github.com/laravel/laravel/compare/v10.2.4...postgresql) - 2023-08-06
 
 ## [v10.2.4](https://github.com/laravel/laravel/compare/v10.2.3...v10.2.4) - 2023-06-07
 
