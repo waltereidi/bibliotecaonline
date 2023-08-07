@@ -26,15 +26,17 @@ class MeuPerfilController extends Controller
         $livrosModel = new Livros; 
         if($this->users_id === null && Auth::id() === null) return view('auth.login');
                 
-                (Auth::id() === null) ? $this->SetUsersId(Auth::id() ) : null ;
-                $dataSourcePerfil = MeuPerfil::where('users_id',$this->users_id )->first();
-                
-                $dataSourceLivros = $livrosModel->meuPerfilLivrosDoUsuario($this->users_id);
+            (Auth::id() === null) ? $this->SetUsersId(Auth::id() ) : null ;
+            $dataSourcePerfil = MeuPerfil::where('users_id',$this->users_id )->first();
+            
+            $dataSourceLivros = $livrosModel->meuPerfilLivrosDoUsuario($this->users_id);
+            $dataSourceQuantidadeLivros = $livrosModel->meuPerfilLivrosDoUsuarioQuantidade($this->users_id);
 
-                return view('meuperfil' , ['dataSourceLivros' => $dataSourceLivros->count(0)==0 ? null : $dataSourceLivros ,
-                                'dataSourceUsers' => $dataSourcePerfil ] );
+            return view('meuperfil' , ['dataSourceLivros' => $dataSourceLivros,
+                                'dataSourceUsers' => $dataSourcePerfil  , 
+                                'dataSourceQuantidadeLivros' => $dataSourceQuantidadeLivros ]);
     }
-    private function validarLivrosRequest(Request $livros) {
+    public function validarLivrosRequest(Request $livros) {
         $regras = [
             'users_id' => 'required',
             'titulo' => 'required|string|max:60',
@@ -43,12 +45,14 @@ class MeuPerfilController extends Controller
             'isbn' => 'nullable|string|max:20' ,
             'editoras_nome' => 'required|string|max:60' ,
             'autores_nome' => 'required|string|max:60' , 
+            'capalivro' => 'nullable|max:512|url'
         ];
         
 
         $mensagems= [
             'required' => 'Este campo é obrigatório' , 
             'max' => 'Limite de caracteres excedido' , 
+            'url' => 'URL inválida'
         ];
         $dados =[ 
             'users_id' => $this->users_id ,
@@ -57,7 +61,8 @@ class MeuPerfilController extends Controller
             'visibilidade' => $livros['visibilidade'] , 
             'isbn' => $livros['isbn'] , 
             'editoras_nome' => $livros['editoras_nome'] , 
-            'autores_nome' => $livros['autores_nome']
+            'autores_nome' => $livros['autores_nome'] , 
+            'capalivro' => $livros['capalivro']
         ];
         if(isset($livros['id']) ){ 
             $regras['id'] = 'required' ;
@@ -112,7 +117,10 @@ class MeuPerfilController extends Controller
         }else{
             return false ; 
         }
-
+    }
+    public function getPaginacaoLivrosDoUsuario(Request $request){
+        $livros = new Livros; 
+        return $livros->meuPerfilLivrosDoUsuario($request->users_id , $request->paginacao );
 
     }
 
