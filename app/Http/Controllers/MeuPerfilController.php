@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-use App\Models\Livros; 
-use App\Models\User;
+use App\Models\Livros;
+use App\Models\MeuPerfil;
 
 class MeuPerfilController extends Controller
 {
@@ -16,19 +16,20 @@ class MeuPerfilController extends Controller
     
     public function __construc(){
         $this->users_id = Auth::id();
+        
     }
     public function SetUsersId($id){
         $this->users_id = $id ;
     }
  
     public function index(){
-
+        $livrosModel = new Livros; 
         if($this->users_id === null && Auth::id() === null) return view('auth.login');
                 
                 (Auth::id() === null) ? $this->SetUsersId(Auth::id() ) : null ;
-                $dataSourcePerfil = User::find($this->users_id );
-                $livros = new Livros;
-                $dataSourceLivros = $livros->meuPerfilLivrosDoUsuario($this->users_id);
+                $dataSourcePerfil = MeuPerfil::where('users_id',$this->users_id )->first();
+                
+                $dataSourceLivros = $livrosModel->meuPerfilLivrosDoUsuario($this->users_id);
 
                 return view('meuperfil' , ['dataSourceLivros' => $dataSourceLivros->count(0)==0 ? null : $dataSourceLivros ,
                                 'dataSourceUsers' => $dataSourcePerfil ] );
@@ -66,7 +67,7 @@ class MeuPerfilController extends Controller
         return [ 'validador' => Validator::make( $dados , $regras , $mensagems) , 'dados'=>$dados ];
     } 
     public function adicionarLivros(Request $livros) { 
-        
+        $livrosModel = new Livros; 
         if($this->users_id === null && Auth::id() === null) return response()->json(['erro' => 'Nao autenticado' ] , 401 );
 
         $validaLivrosRequrest = $this->validarLivrosRequest($livros) ;
@@ -77,14 +78,14 @@ class MeuPerfilController extends Controller
             return response()->json($validar->errors() , 419 );
         }else
         {
-            $livrosModel = new Livros;
+            
             $livro = $livrosModel->adicionarLivros($dados);
             return $livro ; 
         }
     }
 
     public function editarLivros(Request $livros)  {
-        
+        $livrosModel = new Livros; 
         if($this->users_id === null && Auth::id() === null) return response()->json(['erro' => 'Nao autenticado' ] , 401 );
 
         $validaLivrosRequrest = $this->validarLivrosRequest($livros);
@@ -95,7 +96,6 @@ class MeuPerfilController extends Controller
             return response()->json($validar->errors() , 419 );
         }else
         {
-            $livrosModel = new Livros;
             $livro = $livrosModel->editarLivros($dados);
             return $livro ; 
         }
@@ -105,7 +105,8 @@ class MeuPerfilController extends Controller
 
 
     public function removerLivros($id) : Bool {
-        $livro = Livros::find($id); 
+        $livrosModel = new Livros; 
+        $livro = $livrosModel->find($id); 
         if($livro){
             return $livro->delete();
         }else{

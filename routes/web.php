@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MeuPerfilController;
+use App\Models\Livros;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +23,4 @@ Auth::routes(['verify' => true]);
 
 Route::get('/paginainicial', [App\Http\Controllers\PaginaInicialController::class, 'index'])->name('paginainicial');
 
-Route::post('/meuPerfil' ,[App\Http\Controllers\MeuPerfilController::class, 'index'] )->name('meuPerfil');
+Route::post('/meuPerfil' ,[App\Http\Controllers\MeuPerfilController::class, 'index'] );

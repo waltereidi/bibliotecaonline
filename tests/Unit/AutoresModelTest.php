@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Models\Autores;
 use Illuminate\Support\Facades\DB;
@@ -18,11 +18,12 @@ class AutoresModelTest extends TestCase
         $this->autores = new Autores();
 
     }
+   
+
 
     public function testeAdicionarAutorInexistente_retornaEntidade(){
         
     //Setup 
-        DB::beginTransaction();
         $nomeAutor = 'TestCase';
     //Execucao
         $autor = $this->autores->adicionarAutorInexistente($nomeAutor);
@@ -33,7 +34,6 @@ class AutoresModelTest extends TestCase
         $this->assertNotEmpty($autor->updated_at);
         $this->assertNotEmpty($autor->created_at);
         $this->assertEquals($autor->nome  , $nomeAutor);
-        DB::rollBack();
     }
 
 }

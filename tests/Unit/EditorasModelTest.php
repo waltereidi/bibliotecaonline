@@ -1,10 +1,8 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Testing\WithFaker;
-
 use App\Models\Editoras;
 
 use Tests\TestCase;
@@ -21,10 +19,10 @@ class EditorasModelTest extends TestCase
 
     }
 
+   
     public function testeAdicionarAutorInexistente_retornaEntidade(){
         
     //Setup 
-        DB::beginTransaction();
         $nomeEditora = 'TestCase';
     //Execucao
         $editora = $this->editoras->adicionarEditoraInexistente($nomeEditora);
@@ -35,7 +33,6 @@ class EditorasModelTest extends TestCase
         $this->assertNotEmpty($editora->id);
         $this->assertNotEmpty($editora->updated_at);
         $this->assertNotEmpty($editora->created_at);
-        DB::rollBack();
     }
 
 }
