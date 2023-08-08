@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Mail\WelcomeEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Middleware\VerificarCsrfApi;
+use Illuminate\Contracts\Session\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +22,17 @@ use Illuminate\Support\Facades\Mail;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('enviarEmail' , function(){
 
-    Mail::to('walter-eidi@hotmail.com')->send(new WelcomeEmail());
-    return 'ok';
-});
+Route::post('meuperfil/adicionarLivros', [MeuPerfilController::class , 'adicionarLivros'] );
 
-Route::post('meuperfil/adicionarLivros', [MeuPerfilController::class , 'adicionarLivros'] )->name('meuperfil/adicionarLivros');
 Route::post('meuperfil/getPaginacaoLivrosDoUsuario' , [MeuPerfilController::class , 'getPaginacaoLivrosDoUsuario']);
-Route::post('meuperfil/editarMeuPerfil' , [MeuPerfilController::class , 'editarMeuPerfil']);
+
+Route::put('meuperfil/editarLivros' , [MeuPerfilController::class , 'editarLivros']);
+
+Route::delete('meuperfil/removerLivro/{id}/{crsf_token}');
+
+Route::put('meuperfil/editarMeuPerfil' , [MeuPerfilController::class , 'editarMeuPerfil']);
+
+
+
+

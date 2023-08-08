@@ -124,6 +124,7 @@ class LivrosModelTest extends TestCase
             $livros = new Livros;
             $user = User::where('email' , 'testCase@email.com')->first(); 
             //Execução 
+            
             $meuPerfilLivrosDoUsuarioQuantidade = $livros->meuPerfilLivrosDoUsuarioQuantidade( $user->id );
     
             //Assert 

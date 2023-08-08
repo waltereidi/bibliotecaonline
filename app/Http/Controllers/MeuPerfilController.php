@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Models\Livros;
 use App\Models\MeuPerfil;
+use Illuminate\Support\Carbon;
 
 class MeuPerfilController extends Controller
 {
@@ -76,6 +77,7 @@ class MeuPerfilController extends Controller
         return [ 'validador' => Validator::make( $dados , $regras , $mensagems) , 'dados'=>$dados ];
     } 
     public function validarMeuPerfilRequest(Request $meuPerfil ) {
+        
         $regras = [
             'profile_picture' => 'url|string|max:1024', 
             'introducao' => 'string|max:1024' , 
@@ -90,9 +92,9 @@ class MeuPerfilController extends Controller
             'users_id' => $this->users_id , 
             'profile_picture' => (empty($meuPerfil->profile_picture) ? null : $meuPerfil->profile_picture   )  , 
             'introducao' => (empty($meuPerfil->introducao) ? null : $meuPerfil->introducao   )  , 
-            'datanascimento' => (empty($meuPerfil->dataNascimento) ? null : $meuPerfil->dataNascimento   )  , 
+            'datanascimento' => (empty($meuPerfil->datanascimento) ? null : Carbon::parse($meuPerfil->datanascimento)->locale('pt_BR')->toDateString()   )  , 
         ];  
-
+        
         return ['validador' => Validator::make($dados , $regras , $mensagens) , 'dados' =>$dados ];
     }
 

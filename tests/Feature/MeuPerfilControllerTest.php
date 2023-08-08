@@ -244,17 +244,20 @@ class MeuPerfilControllerTest extends TestCase
         $requestEditarMeuPerfil = Request::create('meuperfil/editarMeuPerfil' ,'POST' , 
         ['profile_picture' => 'https://img.freepik.com/free-psd/book-hardcover-mockup_125540-225.jpg?w=1060&t=st=1691442549~exp=1691443149~hmac=dcdee8ad230673bf52de12265b676387c937a4cf1f04434ed43a26ea2c051d48' , 
          'introducao' => 'TestCase' , 
-        'datanascimento' => Carbon::createfromDate(1993 , 12 , 29 )->age 
+        'datanascimento' => Carbon::createfromDate(1993 , 12 , 29 )->toDateString() 
         ]);
         //Execução
-        $meuPerfil->setUsersId($user->id);
-        $editarMeuPerfil = $meuPerfil->editarMeuPerfil($requestEditarMeuPerfil);
 
+        $meuPerfil->setUsersId($user->id);
+        
+        $editarMeuPerfil = $meuPerfil->editarMeuPerfil($requestEditarMeuPerfil);
+        
         //Assert
         $this->assertInstanceOf(MeuPerfil::class , $editarMeuPerfil);
         $this->assertEquals($editarMeuPerfil->profile_picture , $requestEditarMeuPerfil->profile_picture); 
         $this->assertEquals($editarMeuPerfil->introducao , $requestEditarMeuPerfil->introducao);
-        $this->assertEquals($editarMeuPerfil->datanascimento , $requestEditarMeuPerfil->datanascimento );
+        $this->assertEquals(Carbon::parse($editarMeuPerfil->datanascimento)->locale('pt_BR')->toDateString() ,
+         Carbon::parse($requestEditarMeuPerfil->datanascimento)->locale('pt_BR')->toDateString());
 
     }
     public function testeEditarMeuPerfil_RetornaMensagemDeErro() : void {
@@ -279,7 +282,7 @@ class MeuPerfilControllerTest extends TestCase
         $requestEditarMeuPerfil = Request::create('meuperfil/editarMeuPerfil' ,'POST' , 
         ['profile_picture' => 'URL' , 
          'introducao' => 'TestCase' , 
-         'datanascimento' => Carbon::createFromDate(1993 , 12 , 29 )->age]);
+         'datanascimento' => Carbon::createFromDate(1993 , 12 , 29 )->toDateString()]);
         //Execução 
         $meuPerfil->setUsersId($user->id); 
         $validarMeuPerfilRequest = $meuPerfil->validarMeuPerfilRequest($requestEditarMeuPerfil ); 
@@ -291,6 +294,7 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertNotEmpty($dados); 
         $this->assertEquals($dados['users_id'] , $user->id );
         $this->assertEquals($dados['datanascimento'] , $requestEditarMeuPerfil->datanascimento );
+    
     }
     public function testeValidarMeuPerfilRequest_RetornaSucesso() : void {
         //Setup
@@ -299,7 +303,8 @@ class MeuPerfilControllerTest extends TestCase
         $requestEditarMeuPerfil = Request::create('meuperfil/editarMeuPerfil' ,'POST' , 
         ['profile_picture' => 'https://img.freepik.com/free-psd/book-hardcover-mockup_125540-225.jpg?w=1060&t=st=1691442549~exp=1691443149~hmac=dcdee8ad230673bf52de12265b676387c937a4cf1f04434ed43a26ea2c051d48' , 
          'introducao' => 'TestCase' , 
-         'datanascimento' => Carbon::createFromDate(1993 , 12 , 29 )->age]);
+         'datanascimento' => Carbon::createFromDate(1993 , 12 , 29 )->toDateString()]);
+        
         //Execução 
         $meuPerfil->setUsersId($user->id); 
         $validarMeuPerfilRequest = $meuPerfil->validarMeuPerfilRequest($requestEditarMeuPerfil ); 
