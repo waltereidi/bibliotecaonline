@@ -15,7 +15,7 @@ class Livros extends Model
     use HasFactory;
     protected $table = 'livros' ; 
     protected $fillable = ['titulo','descricao','isbn','visibilidade','users_id',
-    'editoras_id','autores_id' , 'created_at' , 'updated_at'];
+    'editoras_id','autores_id' , 'created_at' , 'updated_at', 'genero' , 'idioma'];
 
     public function meuPerfilLivrosDoUsuario( $users_id , $paginacao = 0 ) {
         $livrosDoUsuario = DB::table('livros')
@@ -25,7 +25,9 @@ class Livros extends Model
          'livros.isbn as isbn' ,'livros.descricao as descricao' , 
          'livros.visibilidade as visibilidade' ,'editoras.id as editoras_id' ,
          'editoras.nome as editoras_nome' ,'autores.id as autores_id' ,
-          'autores.nome as autores_nome' ,DB::raw($paginacao.' as paginacao'))
+          'autores.nome as autores_nome' , 'livros.idioma as idioma' , 'livros.genero as genero' , 
+          'livros.capalivro as capalivro' , 
+          DB::raw($paginacao.' as paginacao'))
           ->where('livros.users_id' , $users_id )->orderBy('livros.created_at' , 'desc')
           ->skip($paginacao)->limit(30)->get();
         
@@ -46,13 +48,15 @@ class Livros extends Model
             $editora = $editoras->adicionarEditoraInexistente($livros['editoras_nome']);
             $createLivros = [
                 'titulo' => $livros['titulo'] , 
-                'descricao' => $livros['descricao'] , 
-                'isbn' => $livros['isbn'],
+                'descricao' => (empty($livros['descricao']) ? null : $livros['descricao']  ) , 
+                'isbn' => (empty($livros['isbn']) ? null : $livros['isbn']  ) ,
                 'visibilidade' => $livros['visibilidade'] , 
                 'users_id' => $livros['users_id'] , 
                 'editoras_id' => $editora->id , 
                 'autores_id' => $autor->id , 
-                'capalivro' => $livros['capalivro'], 
+                'capalivro' => (empty($livros['capalivro']) ? null : $livros['capalivro']  ) , 
+                'genero' => (empty($livros['genero']) ? null : $livros['genero']  ) , 
+                'idioma' => (empty($livros['idioma']) ? null : $livros['idioma']  ) , 
                 'created_at' => now()
             ];
 
@@ -76,12 +80,14 @@ class Livros extends Model
             
             $livro = Livros::find($livros['id'])->update([
                 'titulo' => $livros['titulo'],
-                'descricao' => $livros['descricao'],
-                'isbn' => $livros['isbn'],
+                'descricao' => empty($livros['descricao'] )? null : $livros['descricao'],
+                'isbn' => empty($livros['isbn'] )? null : $livros['isbn'] ,
                 'visibilidade' => $livros['visibilidade'],
                 'editoras_id' => $editora->id  ,
                 'autores_id' => $autor->id ,
-                'capalivro' => $livros['capalivro'] , 
+                'capalivro' => empty($livros['capalivro'] )? null : $livros['capalivro'] , 
+                'genero' => empty($livros['genero'] )? null : $livros['genero'] , 
+                'idioma' => empty($livros['idioma'] )? null : $livros['idioma'] , 
                 'updated_at' => now(), 
             ]);
             if($livro){

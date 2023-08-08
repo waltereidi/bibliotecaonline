@@ -45,7 +45,9 @@ class MeuPerfilController extends Controller
             'isbn' => 'nullable|string|max:20' ,
             'editoras_nome' => 'required|string|max:60' ,
             'autores_nome' => 'required|string|max:60' , 
-            'capalivro' => 'nullable|max:512|url'
+            'capalivro' => 'nullable|max:512|url' , 
+            'genero' => 'nullable|max:30|string' , 
+            'idioma' => 'nullable|max:30|string' , 
         ];
         
 
@@ -57,16 +59,18 @@ class MeuPerfilController extends Controller
         $dados =[ 
             'users_id' => $this->users_id ,
             'titulo' => $livros['titulo'] , 
-            'descricao' => $livros['descricao'] , 
-            'visibilidade' => $livros['visibilidade'] , 
-            'isbn' => $livros['isbn'] , 
-            'editoras_nome' => $livros['editoras_nome'] , 
-            'autores_nome' => $livros['autores_nome'] , 
-            'capalivro' => $livros['capalivro']
+            'descricao' =>  (empty($livros->descricao ) ? null :$livros->descricao     ) , 
+            'visibilidade' => $livros->visibilidade  , 
+            'isbn' =>  (empty($livros->isbn ) ? null :$livros->isbn     ), 
+            'editoras_nome' => $livros->editoras_nome  , 
+            'autores_nome' => $livros->autores_nome  , 
+            'capalivro' =>  (empty($livros->capalivro ) ? null :$livros->capalivro     ) , 
+            'genero' =>  (empty($livros->genero ) ? null :$livros->genero     ) , 
+            'idioma' =>  (empty($livros->idioma ) ? null :$livros->idioma     ) , 
         ];
-        if(isset($livros['id']) ){ 
+        if(isset($livros->id) ){ 
             $regras['id'] = 'required' ;
-            $dados['id'] = $livros['id'] ; 
+            $dados['id'] = $livros->id ; 
         }
 
         return [ 'validador' => Validator::make( $dados , $regras , $mensagems) , 'dados'=>$dados ];
@@ -76,15 +80,17 @@ class MeuPerfilController extends Controller
             'profile_picture' => 'url|string|max:1024', 
             'introducao' => 'string|max:1024' , 
             'users_id' => 'required|integer' , 
+            'datanascimento' => 'nullable|date',  
         ];
         $mensagens = [
             'url' => 'URL inválida' ,
             'required' => 'Este campo é obrigatório',
         ];
         $dados = [
-            'users_id' => $this->users_id, 
-            'profile_picture' => $meuPerfil->profile_picture , 
-            'introducao' => $meuPerfil->introducao , 
+            'users_id' => $this->users_id , 
+            'profile_picture' => (empty($meuPerfil->profile_picture) ? null : $meuPerfil->profile_picture   )  , 
+            'introducao' => (empty($meuPerfil->introducao) ? null : $meuPerfil->introducao   )  , 
+            'datanascimento' => (empty($meuPerfil->dataNascimento) ? null : $meuPerfil->dataNascimento   )  , 
         ];  
 
         return ['validador' => Validator::make($dados , $regras , $mensagens) , 'dados' =>$dados ];

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('profile_picture' , 1024 )->nullable(); 
             $table->string('introducao' , 1024 )->nullable();
+            $table->date('datanascimento')->nullable(); 
 
             $table->integer('users_id')->unsigned();
             $table->foreign('users_id')

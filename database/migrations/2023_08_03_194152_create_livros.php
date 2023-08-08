@@ -20,7 +20,9 @@ return new class extends Migration
             $table->smallInteger('visibilidade')->default(0)
                 ->comment('0 privado | 1 publico | 2 amigos');
             $table->string('capalivro',512)->nullable();
-            
+            $table->string('genero' , 30 )->nullable();
+            $table->string('idioma' , 30 )->nullable();
+
             $table->integer('users_id')->unsigned();
             $table->foreign('users_id')
                 ->references('id')->on('users');
