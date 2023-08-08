@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('editoras', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps(0);
+            $table->timestamps();
             $table->string('nome' ,60 );
         });
     }

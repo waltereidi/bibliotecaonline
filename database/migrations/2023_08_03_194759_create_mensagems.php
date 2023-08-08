@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mensagems', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps(0);
+            $table->timestamps();
             $table->string('mensagem' ,1024);
             
             $table->integer('origem_user_id')->unsigned();

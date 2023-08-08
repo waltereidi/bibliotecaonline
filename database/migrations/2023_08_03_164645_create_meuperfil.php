@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('meuperfil', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps(0);
-            $table->string('profile_picture' , 128 )->nullable(); 
+            $table->timestamps();
+            $table->string('profile_picture' , 1024 )->nullable(); 
             $table->string('introducao' , 1024 )->nullable();
 
             $table->integer('users_id')->unsigned();

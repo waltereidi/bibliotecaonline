@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\MeuPerfilController;
 use Tests\TestCase;
 use App\Models\Livros;
 use App\Models\User;
@@ -111,4 +112,6 @@ class LivrosModelTest extends TestCase
             //Assert 
             $this->assertIsInt($meuPerfilLivrosDoUsuarioQuantidade);
         }
+
+       
 }

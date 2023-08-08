@@ -14,7 +14,8 @@ class Livros extends Model
 {
     use HasFactory;
     protected $table = 'livros' ; 
-    protected $fillable = ['titulo','descricao','isbn','visibilidade','users_id','editoras_id','autores_id'];
+    protected $fillable = ['titulo','descricao','isbn','visibilidade','users_id',
+    'editoras_id','autores_id' , 'created_at' , 'updated_at'];
 
     public function meuPerfilLivrosDoUsuario( $users_id , $paginacao = 0 ) {
         $livrosDoUsuario = DB::table('livros')
@@ -52,6 +53,7 @@ class Livros extends Model
                 'editoras_id' => $editora->id , 
                 'autores_id' => $autor->id , 
                 'capalivro' => $livros['capalivro'], 
+                'created_at' => now()
             ];
 
             $livro = Livros::create($createLivros);
@@ -80,6 +82,7 @@ class Livros extends Model
                 'editoras_id' => $editora->id  ,
                 'autores_id' => $autor->id ,
                 'capalivro' => $livros['capalivro'] , 
+                'updated_at' => now(), 
             ]);
             if($livro){
                 DB::commit();

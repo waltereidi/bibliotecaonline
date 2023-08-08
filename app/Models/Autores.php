@@ -10,12 +10,12 @@ class Autores extends Model
 {
     use HasFactory;
     protected $table = 'autores'; 
-    protected $fillable = ['nome'];
+    protected $fillable = ['nome' , 'created_at' , 'updated_at'];
     
     public function adicionarAutorInexistente( String $nome ) : Autores {
         $autor = Autores::whereRaw("(nome <-> ? ) = 0 " , $nome )->first(); 
         if( $autor == null ){
-            $createAutor = ['nome' => $nome];
+            $createAutor = ['nome' => $nome , 'created_at' => now()];
             return Autores::create($createAutor);
         }else{
             return $autor; 

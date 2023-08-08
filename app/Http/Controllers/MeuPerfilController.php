@@ -18,7 +18,7 @@ class MeuPerfilController extends Controller
         $this->users_id = Auth::id();
         
     }
-    public function SetUsersId($id){
+    public function setUsersId($id){
         $this->users_id = $id ;
     }
  
@@ -26,7 +26,7 @@ class MeuPerfilController extends Controller
         $livrosModel = new Livros; 
         if($this->users_id === null && Auth::id() === null) return view('auth.login');
                 
-            (Auth::id() === null) ? $this->SetUsersId(Auth::id() ) : null ;
+            (Auth::id() === null) ? $this->setUsersId(Auth::id() ) : null ;
             $dataSourcePerfil = MeuPerfil::where('users_id',$this->users_id )->first();
             
             $dataSourceLivros = $livrosModel->meuPerfilLivrosDoUsuario($this->users_id);
@@ -71,6 +71,25 @@ class MeuPerfilController extends Controller
 
         return [ 'validador' => Validator::make( $dados , $regras , $mensagems) , 'dados'=>$dados ];
     } 
+    public function validarMeuPerfilRequest(Request $meuPerfil ) {
+        $regras = [
+            'profile_picture' => 'url|string|max:1024', 
+            'introducao' => 'string|max:1024' , 
+            'users_id' => 'required|integer' , 
+        ];
+        $mensagens = [
+            'url' => 'URL inválida' ,
+            'required' => 'Este campo é obrigatório',
+        ];
+        $dados = [
+            'users_id' => $this->users_id, 
+            'profile_picture' => $meuPerfil->profile_picture , 
+            'introducao' => $meuPerfil->introducao , 
+        ];  
+
+        return ['validador' => Validator::make($dados , $regras , $mensagens) , 'dados' =>$dados ];
+    }
+
     public function adicionarLivros(Request $livros) { 
         $livrosModel = new Livros; 
         if($this->users_id === null && Auth::id() === null) return response()->json(['erro' => 'Nao autenticado' ] , 401 );
@@ -104,10 +123,7 @@ class MeuPerfilController extends Controller
             $livro = $livrosModel->editarLivros($dados);
             return $livro ; 
         }
-
-
     }
-
 
     public function removerLivros($id) : Bool {
         $livrosModel = new Livros; 
@@ -121,6 +137,20 @@ class MeuPerfilController extends Controller
     public function getPaginacaoLivrosDoUsuario(Request $request){
         $livros = new Livros; 
         return $livros->meuPerfilLivrosDoUsuario($request->users_id , $request->paginacao );
+
+    }
+    public function editarMeuPerfil(Request $request ){
+
+        $validator = $this->validarMeuPerfilRequest($request);
+        $dados = $validator['dados'];
+        $validador = $validator['validador'];
+
+        if($validador->fails()){
+            return response()->json($validador->errors() , 419 );
+        }else{
+            $meuPerfil = new MeuPerfil();
+            return $meuPerfil->editarMeuPerfil($dados);
+        }
 
     }
 

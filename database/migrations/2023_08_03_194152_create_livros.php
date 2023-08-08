@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('livros', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps(0);
+            $table->timestamps();
             $table->string('titulo' , 60);
             $table->string('isbn' , 20 )->nullable();
             $table->string('descricao' ,1024 )->nullable();

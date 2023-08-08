@@ -28,3 +28,4 @@ Route::get('enviarEmail' , function(){
 
 Route::post('meuperfil/adicionarLivros', [MeuPerfilController::class , 'adicionarLivros'] )->name('meuperfil/adicionarLivros');
 Route::post('meuperfil/getPaginacaoLivrosDoUsuario' , [MeuPerfilController::class , 'getPaginacaoLivrosDoUsuario']);
+Route::post('meuperfil/editarMeuPerfil' , [MeuPerfilController::class , 'editarMeuPerfil']);

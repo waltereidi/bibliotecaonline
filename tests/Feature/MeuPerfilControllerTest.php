@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use App\Models\Livros; 
 use App\Models\User;
 use App\Http\Controllers\MeuPerfilController ;
+use App\Models\MeuPerfil;
+
+use function PHPUnit\Framework\assertNotEmpty;
 
 class MeuPerfilControllerTest extends TestCase
 {
@@ -31,7 +34,7 @@ class MeuPerfilControllerTest extends TestCase
         //Setup 
         $meuPerfil = new MeuPerfilController();
         //Execução 
-        $meuPerfil->SetUsersId(0);
+        $meuPerfil->setUsersId(0);
         $view = $meuPerfil->index();
         $viewDataSource = $view->getData();
         //Assert 
@@ -198,7 +201,7 @@ class MeuPerfilControllerTest extends TestCase
              'autores_nome' => 'TestCase'  , 
             'capalivro' => 'testeURLInvalida',
         ]); 
-        $meuPerfil->SetUsersId(0);                
+        $meuPerfil->setUsersId(0);                
        //Execução
         $validator = $meuPerfil->validarLivrosRequest( $livros );
         $dados = $validator['dados'];
@@ -217,7 +220,7 @@ class MeuPerfilControllerTest extends TestCase
              'autores_nome' => 'TestCase'  , 
             'capalivro' => null ,
         ]); 
-        $meuPerfil->SetUsersId(0);
+        $meuPerfil->setUsersId(0);
                 
        //Execução
         $validator = $meuPerfil->validarLivrosRequest( $livros );
@@ -228,5 +231,74 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertNotEmpty($dados);
 
     }
-    
+    public function testeEditarMeuPerfil_RetornaDataSource() : void {
+        //Setup 
+        $meuPerfil = new MeuPerfilController();
+        $user = User::where('email' , '=' , 'testCase@email.com')->first();
+        $requestEditarMeuPerfil = Request::create('meuperfil/editarMeuPerfil' ,'POST' , 
+        ['profile_picture' => 'https://img.freepik.com/free-psd/book-hardcover-mockup_125540-225.jpg?w=1060&t=st=1691442549~exp=1691443149~hmac=dcdee8ad230673bf52de12265b676387c937a4cf1f04434ed43a26ea2c051d48' , 
+         'introducao' => 'TestCase']);
+        //Execução
+        $meuPerfil->setUsersId($user->id);
+        $editarMeuPerfil = $meuPerfil->editarMeuPerfil($requestEditarMeuPerfil);
+
+        //Assert
+        $this->assertInstanceOf(MeuPerfil::class , $editarMeuPerfil);
+        $this->assertEquals($editarMeuPerfil->profile_picture , $requestEditarMeuPerfil->profile_picture); 
+        $this->assertEquals($editarMeuPerfil->introducao , $requestEditarMeuPerfil->introducao);
+
+    }
+    public function testeEditarMeuPerfil_RetornaMensagemDeErro() : void {
+        //Setup 
+        $meuPerfil = new MeuPerfilController();
+        $user = User::where('email' , '=' , 'testCase@email.com')->first();
+        $requestEditarMeuPerfil = Request::create('meuperfil/editarMeuPerfil' ,'POST' , 
+        ['profile_picture' => 'URL' , 
+         'introducao' => 'TestCase']);
+        
+        //Execução
+        $meuPerfil->setUsersId($user->id) ; 
+        $editarMeuPerfil = $meuPerfil->editarMeuPerfil($requestEditarMeuPerfil);
+        //Assert
+        $this->assertEquals( 419 , $editarMeuPerfil->getStatusCode() );
+
+    }
+    public function testeValidarMeuPerfilRequest_RetornaErroValidacao() : void {
+        //Setup
+        $meuPerfil = new MeuPerfilController();
+        $user = User::where('email' , '=' , 'testCase@email.com')->first();
+        $requestEditarMeuPerfil = Request::create('meuperfil/editarMeuPerfil' ,'POST' , 
+        ['profile_picture' => 'URL' , 
+         'introducao' => 'TestCase']);
+        //Execução 
+        $meuPerfil->setUsersId($user->id); 
+        $validarMeuPerfilRequest = $meuPerfil->validarMeuPerfilRequest($requestEditarMeuPerfil ); 
+        $validador = $validarMeuPerfilRequest['validador']; 
+        $dados = $validarMeuPerfilRequest['dados'];
+        
+        //Assert 
+        $this->assertTrue($validador->fails());
+        $this->assertNotEmpty($dados); 
+        $this->assertEquals($dados['users_id'] , $user->id );
+    }
+    public function testeValidarMeuPerfilRequest_RetornaSucesso() : void {
+        //Setup
+        $meuPerfil = new MeuPerfilController();
+        $user = User::where('email' , '=' , 'testCase@email.com')->first();
+        $requestEditarMeuPerfil = Request::create('meuperfil/editarMeuPerfil' ,'POST' , 
+        ['profile_picture' => 'https://img.freepik.com/free-psd/book-hardcover-mockup_125540-225.jpg?w=1060&t=st=1691442549~exp=1691443149~hmac=dcdee8ad230673bf52de12265b676387c937a4cf1f04434ed43a26ea2c051d48' , 
+         'introducao' => 'TestCase']);
+        //Execução 
+        $meuPerfil->setUsersId($user->id); 
+        $validarMeuPerfilRequest = $meuPerfil->validarMeuPerfilRequest($requestEditarMeuPerfil ); 
+        $validador = $validarMeuPerfilRequest['validador']; 
+        $dados = $validarMeuPerfilRequest['dados'];
+        
+        //Assert 
+        $this->assertFalse($validador->fails());
+        $this->assertNotEmpty($dados); 
+        $this->assertEquals($dados['users_id'] , $user->id );
+        $this->assertEquals($dados['profile_picture'] , $requestEditarMeuPerfil->profile_picture);
+
+    }
 }
