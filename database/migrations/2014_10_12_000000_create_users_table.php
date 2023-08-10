@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps(0);
-            $table->string('api_token', 40 )->nullable();
+            $table->string('api_token', 64 )->nullable();
             $table->date('validade_token')->nullable();
         });
         DB::table('users')->insert(array(['name' => 'TestCase' ,'email' =>'testCase@email.com' , 'password' => 'testCase']));

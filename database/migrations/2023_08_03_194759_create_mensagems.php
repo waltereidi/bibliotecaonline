@@ -11,18 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mensagems', function (Blueprint $table) {
+        Schema::create('mensagens', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
             $table->string('mensagem' ,1024);
             
-            $table->integer('origem_user_id')->unsigned();
-            $table->foreign('origem_user_id')
+            $table->integer('meuperfil_id')->unsigned();
+            $table->foreign('meuperfil_id')
                 ->references('id')->on('users');
 
-            $table->integer('liros_id')->unsigned();
-            $table->foreign('liros_id')
+            $table->integer('livros_id')->unsigned();
+            $table->foreign('livros_id')
                 ->references('id')->on('livros');
+
+            $table->boolean('visualizado')->default(false);
+            $table->boolean('visivel')->default('true');
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mensagems');
+        Schema::dropIfExists('mensagens');
     }
 };

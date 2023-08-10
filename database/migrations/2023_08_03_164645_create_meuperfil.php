@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use App\Models\User;
 return new class extends Migration
 {
     /**
@@ -18,11 +19,16 @@ return new class extends Migration
             $table->string('introducao' , 1024 )->nullable();
             $table->date('datanascimento')->nullable(); 
 
-            $table->integer('users_id')->unsigned();
+            $table->integer('users_id')->unsigned()->uniqid();
             $table->foreign('users_id')
                 ->references('id')->on('users');
 
         });
+        $user = User::where('email' , '=' , 'testCase@email.com')->first(); 
+        DB::table('meuperfil')->insert(array([
+            'users_id' => $user->id 
+        ]));
+
     }
 
     /**

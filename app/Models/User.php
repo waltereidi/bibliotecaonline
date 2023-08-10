@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\PasswordReset;
 use App\Notifications\EmailVerify;
+use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -24,6 +25,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'created_at' , 
+        'updated_at' , 
+        'validade_token' , 
+        'api_token', 
+
     ];
 
     /**
@@ -51,4 +57,15 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new PasswordReset($token));
     }
 
+    public function gerarNovoToken( $id ) : ?User {
+
+        $user = User::find($id );
+        $token =  $user->createToken('Token')->plainTextToken ;
+        User::find($id)->update([
+            'updated_at' => now() , 
+            'api_token' => $token, 
+            'validade_token' =>Carbon::now()->add(7 , 'day')->toDateString() , 
+        ]);
+        return User::find($id) ; 
+    }
 }

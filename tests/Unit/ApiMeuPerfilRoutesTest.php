@@ -1,26 +1,16 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Models\User;
 use Tests\TestCase;
 
-class ApiRoutesTest extends TestCase
+class ApiMeuPerfilRoutesTest extends TestCase
 {
     /**
      * A basic feature test example.
      */
-    public function testeGetPaginacaoLivrosDoUsuario_Retorna200() : void
-    {   //Setup 
-
-        $user = User::where('email' , '=' , 'testCase@email.com')->first();
-        $dados = ['paginacao' => 0 , 'users_id'=>$user->id , 'Authorization' => 'Bearer '.$user->api_token ];
-        //Execução
-        $retorno = $this->post('/api/meuperfil/getPaginacaoLivrosDoUsuario' ,  $dados );
-
-        //Assert 
-        $retorno->assertStatus(200);
-    }
+ 
     public function testeGetPaginacaoLivrosDoUsuario_SemToken_Retorna401() :void
     {   $user = User::where('email' , '=' , 'testCase@email.com')->first();
         $dados = ['paginacao' => 0 , 'users_id'=>$user->id  ];

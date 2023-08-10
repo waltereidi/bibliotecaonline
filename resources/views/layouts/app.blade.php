@@ -61,7 +61,7 @@
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('meuPerfil') }}"
+                                    <a class="dropdown-item" href="{{ route('meuperfil') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('meuPerfil-form').submit();">
                                         {{ __('Meu perfil') }}
@@ -71,7 +71,7 @@
                                         @csrf
                                     </form>
 
-                                    <form id="meuPerfil-form" action="{{ route('meuPerfil') }}" method="POST" class="d-none">
+                                    <form id="meuPerfil-form" action="{{ route('meuperfil') }}" method="POST" class="d-none">
                                         <input type="hidden" value="{{ Auth::user()->id }}">
                                         @csrf
                                     </form>

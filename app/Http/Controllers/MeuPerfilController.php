@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
 
 class MeuPerfilController extends Controller
 {
-    public $users_id ; 
+    protected $users_id ; 
     
     public function __construc(){
         $this->users_id = Auth::id();
@@ -52,7 +52,7 @@ class MeuPerfilController extends Controller
         ];
         
 
-        $mensagems= [
+        $mensagens= [
             'required' => 'Este campo é obrigatório' , 
             'max' => 'Limite de caracteres excedido' , 
             'url' => 'URL inválida'
@@ -74,7 +74,7 @@ class MeuPerfilController extends Controller
             $dados['id'] = $livros->id ; 
         }
 
-        return [ 'validador' => Validator::make( $dados , $regras , $mensagems) , 'dados'=>$dados ];
+        return [ 'validador' => Validator::make( $dados , $regras , $mensagens) , 'dados'=>$dados ];
     } 
     public function validarMeuPerfilRequest(Request $meuPerfil ) {
         
@@ -107,7 +107,7 @@ class MeuPerfilController extends Controller
         $dados = $validaLivrosRequrest['dados'];
          
         if($validar->fails() ){
-            return response()->json($validar->errors() , 419 );
+            return response()->json($validar->errors() , 417 );
         }else
         {
             
@@ -125,7 +125,7 @@ class MeuPerfilController extends Controller
         $dados = $validaLivrosRequrest['dados'];
 
         if($validar->fails() ){
-            return response()->json($validar->errors() , 419 );
+            return response()->json($validar->errors() , 417 );
         }else
         {
             $livro = $livrosModel->editarLivros($dados);
@@ -154,7 +154,7 @@ class MeuPerfilController extends Controller
         $validador = $validator['validador'];
 
         if($validador->fails()){
-            return response()->json($validador->errors() , 419 );
+            return response()->json($validador->errors() , 417 );
         }else{
             $meuPerfil = new MeuPerfil();
             return $meuPerfil->editarMeuPerfil($dados);

@@ -23,4 +23,4 @@ Auth::routes(['verify' => true]);
 
 Route::get('/paginainicial', [App\Http\Controllers\PaginaInicialController::class, 'index'])->name('paginainicial');
 
-Route::post('/meuPerfil' ,[App\Http\Controllers\MeuPerfilController::class, 'index'] );
+Route::post('/meuPerfil' ,[App\Http\Controllers\MeuPerfilController::class, 'index'] )->name('meuperfil');

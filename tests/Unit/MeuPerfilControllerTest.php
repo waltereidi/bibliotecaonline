@@ -31,7 +31,7 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertInstanceOf(View::class , $view );
         $this->assertEquals('auth.login' , $view->getName() );
     }
-    public function testeIndex_SemLivros_RetornaViewComDataSourceLivrosNullPerfil1() : void {
+    public function testeIndex_SemLivros_RetornaViewComDataSourceLivrosNullPerfil() : void {
 
         //Setup 
         $meuPerfil = new MeuPerfilController();
@@ -40,7 +40,6 @@ class MeuPerfilControllerTest extends TestCase
         $view = $meuPerfil->index();
         $viewDataSource = $view->getData();
         //Assert 
-        $this->assertEquals($meuPerfil->users_id , 0 );
         $this->assertInstanceOf(View::class , $view ); 
         $this->assertEquals('meuperfil' , $view->getName() );
         $this->assertNotEmpty( $viewDataSource );
@@ -109,7 +108,7 @@ class MeuPerfilControllerTest extends TestCase
         
         //Assert 
         $this->assertIsObject( $adicionarLivros);
-        $this->assertEquals( 419 , $adicionarLivros->getStatusCode() );
+        $this->assertEquals( 417 , $adicionarLivros->getStatusCode() );
         
     }
 
@@ -272,7 +271,7 @@ class MeuPerfilControllerTest extends TestCase
         $meuPerfil->setUsersId($user->id) ; 
         $editarMeuPerfil = $meuPerfil->editarMeuPerfil($requestEditarMeuPerfil);
         //Assert
-        $this->assertEquals( 419 , $editarMeuPerfil->getStatusCode() );
+        $this->assertEquals( 417 , $editarMeuPerfil->getStatusCode() );
 
     }
     public function testeValidarMeuPerfilRequest_RetornaErroValidacao() : void {
