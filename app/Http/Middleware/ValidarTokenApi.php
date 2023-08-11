@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ValidarTokenApi
 {
@@ -17,8 +18,10 @@ class ValidarTokenApi
      */
     public function handle(Request $request, Closure $next): Response
     {   
-        if( isset($request->Authorization) && 
-            User::where('api_token' ,'=',  substr($request->Authorization , 7 ) )->where('validade_token' , '>' , Carbon::now()->toDateString())->first()        ){
+        $user =User::where('api_token' ,'=',  substr($request->Authorization , 7 ) )->where('validade_token' , '>' , Carbon::now()->toDateString())->first() ;
+        if( isset($request->Authorization) &&  $user )
+        {
+            Auth::attempt(['email'=> $user->email , 'password' => $user->password ]);
             return $next($request);
         }else{
             return response()->json( 'Token não autorizado, gere outro token novamente ', 401 );

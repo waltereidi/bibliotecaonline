@@ -16,11 +16,11 @@ return new class extends Migration
             $table->timestamps();
             $table->string('mensagem' ,1024);
             
-            $table->integer('meuperfil_id')->unsigned();
+            $table->unsignedBigInteger('meuperfil_id');
             $table->foreign('meuperfil_id')
                 ->references('id')->on('users');
 
-            $table->integer('livros_id')->unsigned();
+            $table->unsignedBigInteger('livros_id');
             $table->foreign('livros_id')
                 ->references('id')->on('livros');
 

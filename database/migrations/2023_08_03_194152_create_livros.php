@@ -23,15 +23,15 @@ return new class extends Migration
             $table->string('genero' , 30 )->nullable();
             $table->string('idioma' , 30 )->nullable();
 
-            $table->integer('users_id')->unsigned();
+            $table->unsignedBigInteger('users_id');
             $table->foreign('users_id')
                 ->references('id')->on('users');
             
-            $table->integer('autores_id')->unsigned();
+            $table->unsignedBigInteger('autores_id');
             $table->foreign('autores_id')
                 ->references('id')->on('autores');
             
-            $table->integer('editoras_id')->unsigned();
+            $table->unsignedBigInteger('editoras_id');
             $table->foreign('editoras_id')
                 ->references('id')->on('editoras');
 

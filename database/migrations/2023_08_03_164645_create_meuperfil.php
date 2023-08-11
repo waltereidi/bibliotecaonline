@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('introducao' , 1024 )->nullable();
             $table->date('datanascimento')->nullable(); 
 
-            $table->integer('users_id')->unsigned()->uniqid();
+            $table->unsignedBigInteger('users_id')->uniqid();
             $table->foreign('users_id')
                 ->references('id')->on('users');
 

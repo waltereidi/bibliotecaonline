@@ -12,6 +12,7 @@ use App\Models\Livros;
 use App\Models\Mensagens;
 use App\Models\MeuPerfil;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class MensagensControllerTest extends TestCase
 {
@@ -19,18 +20,20 @@ class MensagensControllerTest extends TestCase
      * A basic unit test example.
      */
     public function teste_AdicionarMensagens_RetornaDataSourceJson(): void
-    {
+    {  
         //Setup 
         $request = new PostMensagensRequest(['mensagem' => 'testCase' ]);
         $livros = new Livros();
         $livrosDataSource = ['titulo' => 'TestCaseAdicionarMensagens' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
         'capalivro' => null , 'editoras_nome' => 'TestCaseAdicionarMensagens' , 
         'autores_nome' => 'TestCaseAdicionarMensagens' , 'genero' =>'Ficção Ciêntifica' , 'idioma' => 'Inglês' ]; 
-        
+        $user = User::where('email' , 'testCase@email.com')->first();
+        Auth::loginUsingId($user->id , true );
         $mensagensController = new MensagensController();
         
         //Execução 
-        $user = User::where('email' , 'testCase@email.com')->first();
+        
+        
         $livrosDataSource['users_id'] = $user->id ;        
 
         $livro = $livros->adicionarLivros($livrosDataSource);
@@ -55,11 +58,12 @@ class MensagensControllerTest extends TestCase
         $livrosDataSource = ['titulo' => 'TestCaseDeletarMensagens' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
         'capalivro' => null , 'editoras_nome' => 'TestCaseDeletarMensagens' , 
         'autores_nome' => 'TestCaseDeletarMensagens' , 'genero' =>'Ficção Ciêntifica' , 'idioma' => 'Inglês' ]; 
-        
+        $user = User::where('email' , 'testCase@email.com')->first();
+        Auth::loginUsingId($user->id , true );
         $mensagensController = new MensagensController(); 
 
         //Execução 
-        $user = User::where('email' , 'testCase@email.com')->first();
+        
         $livrosDataSource['users_id'] = $user->id ;        
 
         $livro = $livros->adicionarLivros($livrosDataSource);
@@ -85,11 +89,12 @@ class MensagensControllerTest extends TestCase
         $livrosDataSource = ['titulo' => 'TestCaseAdicionarMensagens' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
         'capalivro' => null , 'editoras_nome' => 'TestCaseAdicionarMensagens' , 
         'autores_nome' => 'TestCaseAdicionarMensagens' , 'genero' =>'Ficção Ciêntifica' , 'idioma' => 'Inglês' ]; 
-        
+        $user = User::where('email' , 'testCase@email.com')->first();
+        Auth::loginUsingId($user->id , true );
         $mensagensController = new MensagensController(); 
 
         //Execução 
-        $user = User::where('email' , 'testCase@email.com')->first();
+        
         $livrosDataSource['users_id'] = $user->id ;        
 
         $livro = $livros->adicionarLivros($livrosDataSource);
@@ -116,11 +121,12 @@ class MensagensControllerTest extends TestCase
         $livrosDataSource = ['titulo' => 'TestCaseEditarMensagensVisualizado' , 'descricao' => null , 'visibilidade' => 0 , 'isbn' => null ,
         'capalivro' => null , 'editoras_nome' => 'TestCaseEditarMensagensVisualizado' , 
         'autores_nome' => 'TestCaseEditarMensagensVisualizado' , 'genero' =>'Ficção Ciêntifica' , 'idioma' => 'Inglês' ]; 
-        
+        $user = User::where('email' , 'testCase@email.com')->first();
+        Auth::loginUsingId($user->id , true );
         $mensagensController = new MensagensController(); 
 
         //Execução 
-        $user = User::where('email' , 'testCase@email.com')->first();
+        
         $livrosDataSource['users_id'] = $user->id ;        
         
         $livro = $livros->adicionarLivros($livrosDataSource);
@@ -142,5 +148,57 @@ class MensagensControllerTest extends TestCase
         $this->assertEquals( 200 , $editarMensagensVisualizada->getStatusCode() );
         $this->assertTrue( $editarMensagensVisualizada->getData()); 
         $this->assertEquals( 0 ,$mensagensDoLivro->count() );  
+    }
+
+    public function teste_GetMensagensCaixa_RetornaDataSource(){
+
+        //Setup 
+        $user = User::where('email' , '=' , 'testCase@email.com')->first();
+        Auth::loginUsingId($user->id , true );
+        $mensagensController = new MensagensController(); 
+        //Execução 
+
+        $getMensagensCaixa = $mensagensController->getMensagensCaixa(); 
+        $dados = $getMensagensCaixa->getData(); 
+        $validarChaves = get_object_vars($dados[0]);
+        //Assert 
+        $this->assertEquals( 200 , $getMensagensCaixa->getStatusCode()); 
+        $this->assertFalse( empty($dados)  );
+        $this->assertIsArray($dados);
+        $this->assertArrayHasKey( 'visualizado' , $validarChaves  ); 
+        $this->assertArrayHasKey( 'livros_id' , $validarChaves );
+        $this->assertArrayHasKey( 'meuperfil_id' , $validarChaves ); 
+        $this->assertArrayHasKey( 'autores_id' , $validarChaves ); 
+        $this->assertArrayHasKey( 'editoras_id' , $validarChaves ); 
+        $this->assertArrayHasKey( 'editoras_nome' , $validarChaves ); 
+        $this->assertArrayHasKey( 'autores_nome' , $validarChaves ); 
+    }
+
+    public function teste_GetMensagensLivros_RetornaDataSource( ){
+        //Setup 
+        $user = User::where('email' , '=' , 'testCase@email.com')->first();
+        Auth::loginUsingId($user->id , true); 
+        $mensagensController = new MensagensController(); 
+        
+        $livro = Livros::where('users_id' , '=',  $user->id)->first();
+        $request = new PostMensagensRequest(['mensagem' => 'testCase' ]);
+        $request['livros_id'] = $livro->id ;
+        $adicionarMensagem = $mensagensController->adicionarMensagens($request );
+
+        //Execução 
+        $getMensagensLivros = $mensagensController->getMensagensLivros($livro->id);
+        $dados = $getMensagensLivros->getData();
+        $validarChaves = get_object_vars($dados[0]);
+
+        //Assert 
+        $this->assertEquals(200 , $getMensagensLivros->getStatusCode() );
+        $this->assertFalse( empty($dados)); 
+        $this->assertIsArray($validarChaves);
+        $this->assertArrayHasKey( 'mensagem' , $validarChaves);
+        $this->assertArrayHasKey( 'created_at' , $validarChaves);
+        $this->assertArrayHasKey( 'livros_id' , $validarChaves);
+        $this->assertArrayHasKey( 'meuperfil_id' , $validarChaves);
+        $this->assertArrayHasKey( 'visualizado' , $validarChaves);
+
     }
 }

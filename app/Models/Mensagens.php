@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon; 
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Mensagens extends Model
 {
@@ -50,5 +52,35 @@ class Mensagens extends Model
 
         return $mensagens ; 
     }
+
+    public function getMensagensCaixa( int $meuPerfilId ) : ?object {
+        return $this->join('meuperfil' , 'meuperfil.id', '=' , DB::raw( $meuPerfilId ))
+            ->join('users' , 'users.id' , '=' , 'meuperfil.users_id' ) 
+            ->join('livros' , function( JoinClause $join ){
+              $join->on('livros.id' , '=' ,  'mensagens.livros_id' )->orON('livros.users_id' , '=' , 'users.id' ) ;
+            } )
+            ->join('autores' , 'autores.id' , '=' , 'livros.autores_id' ) 
+            ->join('editoras' , 'editoras.id' , '=' , 'livros.editoras_id') 
+            ->select( DB::raw( 'distinct( livros.id ) as livros_id' ) ,
+               DB::raw( 'max(mensagens.created_at ) over( partition by livros.id ) as created_at ' ) , 
+               DB::raw( '( max( case visualizado when true then 0 when false then 1 end ) over( partition by livros.id ) ) = 0 as visualizado' ) , 
+              'mensagens.id as id ' ,
+              'meuperfil.id as meuperfil_id' ,
+              'livros.titulo as livro_titulo' , 
+              'autores.nome as autores_nome' , 'autores.id as autores_id' , 
+              'editoras.nome as editoras_nome' , 'editoras.id as editoras_id' 
+              )->where('mensagens.visivel' , '=' , 'true')->get();
+    }
+
+    public function getMensagensLivros( array $dados ) : ?object { 
+        return $this->leftJoin('livros' , 'livros.id' , '=' , DB::raw( $dados['livros_id'] ) ) 
+            ->select('mensagens.mensagem as mensagem' , 'mensagens.livros_id as livros_id' , 
+                'mensagens.visualizado as visualizado' , 'mensagens.created_at as created_at' , 
+                'mensagens.meuperfil_id as meuperfil_id' )
+            ->whereRaw( 'mensagens.visivel AND mensagens.livros_id = ? AND ( (mensagens.meuperfil_id = ? OR livros.users_id = ? ) )  ' , 
+            [ intval($dados['livros_id']) , intval($dados['meuperfil_id']) , intval($dados['users_id']) ] 
+            )
+            ->get();
+    } 
 
 }

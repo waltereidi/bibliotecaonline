@@ -16,9 +16,11 @@ class MensagensController extends Controller
 {
     protected $users_id ;
     protected $mensagens ;
+    protected $meuPerfil ; 
     public function __construct(){
         $this->users_id = Auth::id(); 
         $this->mensagens = new Mensagens();
+        $this->meuPerfil = MeuPerfil::where('users_id' , '=' , $this->users_id)->first(); 
     }
     public function setUsersId($id){
         $this->users_id = $id ; 
@@ -27,8 +29,7 @@ class MensagensController extends Controller
     public function adicionarMensagens( PostMensagensRequest $request ) : JsonResponse {
     
         $dados = $request->all() ; 
-        $meuPerfil = MeuPerfil::where('users_id' , '=' , $this->users_id )->first();
-        $dados['meuperfil_id'] = $meuPerfil->id ; 
+        $dados['meuperfil_id'] = $this->meuPerfil->id ; 
 
         $retorno = $this->mensagens->adicionarMensagens($dados) ; 
         if($retorno === null ){
@@ -56,9 +57,8 @@ class MensagensController extends Controller
     }
     public function editarMensagensVisualizado(PutMensagensVisualizadoRequest $request ) : JsonResponse {
 
-        $meuPerfil = MeuPerfil::where('users_id' , '=' , $this->users_id)->first(); 
         $dados = $request->all() ; 
-        $dados['meuperfil_id'] = $meuPerfil->id ; 
+        $dados['meuperfil_id'] = $this->meuPerfil->id ; 
 
         $retorno = $this->mensagens->editarMensagensVisualizado( $dados );
         if(!$retorno){
@@ -67,6 +67,22 @@ class MensagensController extends Controller
             return response()->json( true , 200 ); 
         }
 
+    }
+    public function getMensagensCaixa( ) : JsonResponse {
+
+        $retorno = $this->mensagens->getMensagensCaixa($this->meuPerfil->id );
+        
+            return response()->json($retorno , 200 ); 
+
+    }
+    public function getMensagensLivros( int $livros_id ) : JsonResponse {
+        $dados['livros_id'] = $livros_id; 
+        $dados['meuperfil_id'] = $this->meuPerfil->id ;
+        $dados['users_id'] = $this->users_id; 
+        $retorno = $this->mensagens->getMensagensLivros( $dados ); 
+
+        return response()->json($retorno , 200 );
+        
     }
 
 }
