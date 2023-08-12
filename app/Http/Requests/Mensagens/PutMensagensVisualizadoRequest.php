@@ -23,6 +23,8 @@ class PutMensagensVisualizadoRequest extends FormRequest
     {
         return [
             'livros_id' => ['required' , 'number'] , 
+            'meuperfil_id' => ['required' , 'number'] , 
+            
         ];
     }
 

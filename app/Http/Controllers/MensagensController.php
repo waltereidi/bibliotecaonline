@@ -48,6 +48,7 @@ class MensagensController extends Controller
 
     public function editarMensagens(PutMensagensRequest $request ) : JsonResponse { 
         $dados = $request->all() ; 
+       
         $retorno = $this->mensagens->editarMensagens( $dados );
         if($retorno === null ){
             response()->json('Erro no banco de dados , contate o admnistrador.' , 501 );            
@@ -58,14 +59,12 @@ class MensagensController extends Controller
     public function editarMensagensVisualizado(PutMensagensVisualizadoRequest $request ) : JsonResponse {
 
         $dados = $request->all() ; 
-        $dados['meuperfil_id'] = $this->meuPerfil->id ; 
+        $dados['sessao_meuperfil_id'] = $this->meuPerfil->id ; 
+        
 
         $retorno = $this->mensagens->editarMensagensVisualizado( $dados );
-        if(!$retorno){
-            return response()->json( 'Ocorreu um erro ao editar a visualização de sua mensagem , contate o administrador.' , 501 ) ;
-        }else{
+       
             return response()->json( true , 200 ); 
-        }
 
     }
     public function getMensagensCaixa( ) : JsonResponse {

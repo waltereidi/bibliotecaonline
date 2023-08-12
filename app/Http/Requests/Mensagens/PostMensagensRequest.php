@@ -22,8 +22,9 @@ class PostMensagensRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'mensagem' => 'required|string|1024' , 
-            'livros_id' => 'required|number' , 
+            'mensagem' => ['required','string' , 'max:1024'] , 
+            'livros_id' => ['required' , 'number'] , 
+            'meuperfil_id' => ['required', 'number'] ,
         ];
     }
 
