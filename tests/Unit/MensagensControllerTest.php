@@ -151,7 +151,7 @@ class MensagensControllerTest extends TestCase
         $this->assertIsBool( $editarMensagensVisualizada->getData()); 
     }
 
-    public function teste_GetMensagensCaixa_RetornaDataSource(){
+    public function teste_GetMensagensCaixa_RetornaDataSource() : void {
 
         //Setup 
         $user = User::where('email' , '=' , 'testCase@email.com')->first();
@@ -175,7 +175,7 @@ class MensagensControllerTest extends TestCase
         $this->assertArrayHasKey( 'autores_nome' , $validarChaves ); 
     }
 
-    public function teste_GetMensagensLivros_RetornaDataSource( ){
+    public function teste_GetMensagensLivros_RetornaDataSource( ) : void {
         //Setup 
         $user = User::where('email' , '=' , 'testCase@email.com')->first();
         Auth::loginUsingId($user->id , true); 
