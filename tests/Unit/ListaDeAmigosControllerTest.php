@@ -3,6 +3,9 @@
 namespace Tests\Unit;
 
 use App\Http\Controllers\ListaDeAmigosController;
+use App\Http\Requests\ListaDeAmigos\DeleteListaDeAmigosRequest;
+use App\Http\Requests\ListaDeAmigos\PostListaDeAmigosRequest;
+use App\Models\ListaDeAmigos;
 use App\Models\Livros;
 use App\Models\MeuPerfil;
 use App\Models\User;
@@ -18,17 +21,21 @@ class ListaDeAmigosControllerTest extends TestCase
    public $user; 
    public $meuPerfil ; 
    public $livros ; 
-
+   public $livro ;
    public function setUp() : void {
         parent::setUp();
-        $this->listaDeAmigosController = new ListaDeAmigosController();
+        
         $this->user = User::where('email' , '=' , 'testCase@email.com')->first();
+        Auth::loginUsingId($this->user->id ); 
+        $this->listaDeAmigosController = new ListaDeAmigosController();
+
         $this->meuPerfil = MeuPerfil::where('users_id' , '=' , $this->user->id )->first();
         $this->livros = new Livros(); 
-        Auth::loginUsingId($this->user->id ); 
+        
+        $this->livro = Livros::where('users_id' , '=' , $this->user->id)->first();
    }
 
-   public function TesteGetListaDeAmigos_RetornaDataSource() : void { 
+   public function testeGetListaDeAmigos_RetornaDataSource() : void { 
         //Setup 
 
         //Execução 
@@ -39,14 +46,45 @@ class ListaDeAmigosControllerTest extends TestCase
         
    }
 
-   public function TesteAdicionarListaDeAmigos_RetornaDataSource() : void { 
-
+   public function testeAdicionarListaDeAmigos_RetornaDataSource() : void { 
+          //Setup
+          $userAmigo = User::where('email' ,'=' , 'testCaseAmigo@email.com')->first();
+          
+          $meuPerfilAmigo = MeuPerfil::where('users_id' , '=' , $userAmigo->id)->first();
+          
+          $requestAdiconarListaDeAmigos = new PostListaDeAmigosRequest([
+               'meuperfil_id' => $meuPerfilAmigo->id  , 
+               'livros_id' => $this->livro->id ,
+               ]);
+          
+          //Execução
+          $retornoAdicionaListaDeAmigos = $this->listaDeAmigosController->adicionarListaDeAmigos( $requestAdiconarListaDeAmigos );
+          //Assert
+          $this->assertEquals(200 , $retornoAdicionaListaDeAmigos->getStatusCode());
 
 
    }
-   public function TesteRemoverListaDeAmigos_RetornaBoolean() : void { 
+   public function testeRemoverListaDeAmigos_RetornaBoolean() : void { 
 
+   
+          //Setup
+          $userAmigo = User::where('email' , '=' ,'testCaseAmigo@email.com')->first(); 
+          $meuPerfilAmigo = MeuPerfil::where('users_id' , '=' , $userAmigo->id)->first(); 
+          
+          $listaDeAmigos = ListaDeAmigos::where('meuperfil_id' ,'=' , $this->meuPerfil->id )
+          ->where('meuperfilamigo_id' , '=' , $meuPerfilAmigo->id )->first();
+          
+          $deleteListaDeAmigosRequest = new DeleteListaDeAmigosRequest(
+               ['id' => $listaDeAmigos->id , 
+               'meuperfil_id' => $listaDeAmigos->meuperfil_id , 
+               'meuperfilamigo_id' => $listaDeAmigos->meuperfilamigo_id ,     
+               ]
+          );
+          //Execução     
+          $removerListaDeAmigos = $this->listaDeAmigosController->removerListaDeAmigos( $deleteListaDeAmigosRequest );
 
+          //Assert 
+          $this->assertEquals(200 , $removerListaDeAmigos->getStatusCode()); 
    }
 
 

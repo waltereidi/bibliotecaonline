@@ -22,7 +22,16 @@ class PostListaDeAmigosRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'livros_id' => ['required' , 'number'] ,
+            'meuperfil_id' => ['required' , 'number'] , 
         ];
     }
+    public function mensagens() : array {
+
+        return [
+            'required' => 'Este campo é obrigatório' ,
+        ];
+
+    }
+    
 }

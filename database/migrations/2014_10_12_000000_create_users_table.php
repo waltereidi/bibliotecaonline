@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('validade_token')->nullable();
         });
         DB::table('users')->insert(array(['name' => 'TestCase' ,'email' =>'testCase@email.com' , 'password' => 'testCase']));
+        DB::table('users')->insert(array(['name' => 'TestCaseAmigo' ,'email' =>'testCaseAmigo@email.com' , 'password' => 'testCase']));
     }
         
     

@@ -22,7 +22,9 @@ class DeleteMensagensRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required' , 'number' ]
+            'id' => ['required' , 'number' ] ,
+            'meuperfil_id' => ['required' , 'number'] , 
+            'meuperfilamigo_id' => ['required' , 'number'] , 
         ];
     }
 

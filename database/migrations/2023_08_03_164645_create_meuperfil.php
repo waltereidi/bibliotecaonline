@@ -25,10 +25,13 @@ return new class extends Migration
 
         });
         $user = User::where('email' , '=' , 'testCase@email.com')->first(); 
+        $userAmigo = User::where('email' , '=' , 'testCaseAmigo@email.com')->first(); 
         DB::table('meuperfil')->insert(array([
             'users_id' => $user->id 
         ]));
-
+        DB::table('meuperfil')->insert(array([
+            'users_id' => $userAmigo->id 
+        ]));
     }
 
     /**
