@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/postgresql...main)
+## [Unreleased](https://github.com/laravel/laravel/compare/TypeScript...main)
+
+## [TypeScript](https://github.com/laravel/laravel/compare/postgresql...TypeScript) - 2023-08-15
 
 ## [postgresql](https://github.com/laravel/laravel/compare/v10.2.4...postgresql) - 2023-08-06
 
