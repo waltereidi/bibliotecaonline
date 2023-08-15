@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -20,7 +21,6 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
-
     /**
      * Where to redirect users after login.
      *
@@ -36,5 +36,21 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+    protected function authenticated(Request $request, $user)
+    {
+        if( !empty($request->session()->get('url')) ){
+            $user->markEmailAsVerified();
+        }
+        if (!$user->hasVerifiedEmail() ) {
+            
+            auth()->logout(); // Desloga o usuário
+            Session::flash('error', 'Você precisa verificar seu email para continuar.');
+            return redirect()->route('login')
+                             ->with('error', 'Você precisa verificar seu email para continuar.');
+        }
+
+        // O email está verificado, redireciona para onde desejar
+        return redirect('/paginainicial');
     }
 }

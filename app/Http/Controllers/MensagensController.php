@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Mensagens\GetMensagensLivrosRequest;
 use App\Http\Requests\Mensagens\DeleteMensagensRequest;
 use App\Http\Requests\Mensagens\PostMensagensRequest;
 use App\Http\Requests\Mensagens\PutMensagensRequest;
@@ -11,7 +12,7 @@ use App\Models\Mensagens;
 use App\Models\MeuPerfil;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Livros;
 class MensagensController extends Controller
 {
     protected $users_id ;
@@ -74,14 +75,18 @@ class MensagensController extends Controller
             return response()->json($retorno , 200 ); 
 
     }
-    public function getMensagensLivros( int $livros_id ) : JsonResponse {
-        $dados['livros_id'] = $livros_id; 
+    public function getMensagensLivros( GetMensagensLivrosRequest $request ) : JsonResponse {
+        
+        if(Livros::find($request->livros_id )){
+        $dados['livros_id'] = $request->livros_id ; 
         $dados['meuperfil_id'] = $this->meuPerfil->id ;
         $dados['users_id'] = $this->users_id; 
         $retorno = $this->mensagens->getMensagensLivros( $dados ); 
 
         return response()->json($retorno , 200 );
-        
+        }else{
+            return response()->json('id não enviado' , 419);
+        }
     }
 
 }

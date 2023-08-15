@@ -23,8 +23,8 @@ class PostMensagensRequest extends FormRequest
     {
         return [
             'mensagem' => ['required','string' , 'max:1024'] , 
-            'livros_id' => ['required' , 'number'] , 
-            'meuperfil_id' => ['required', 'number'] ,
+            'livros_id' => ['required'] , 
+            'meuperfil_id' => ['required'] ,
         ];
     }
 

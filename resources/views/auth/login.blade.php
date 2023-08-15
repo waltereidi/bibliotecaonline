@@ -64,9 +64,16 @@
                                 @endif
                             </div>
                         </div>
+                       
                     </form>
+                    
                 </div>
+                
             </div>
+            @if(Session::has('error'))
+                    </br>
+                    <div class="alert alert-danger">{{ Session::get('error') }}</div>
+                    @endif
         </div>
     </div>
 </div>

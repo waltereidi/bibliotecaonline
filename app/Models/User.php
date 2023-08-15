@@ -14,6 +14,7 @@ use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
+    
     use HasApiTokens, HasFactory, Notifiable;
     use Notifiable;
     /**
@@ -41,7 +42,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
-
+    /**
+     * Validação do email 
+     * 
+     */
+    protected $middleware = ['auth', 'verified'];
     /**
      * The attributes that should be cast.
      *
@@ -58,14 +63,20 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function gerarNovoToken( $id ) : ?User {
-
+        
+        
         $user = User::find($id );
+        $dataAtual = Carbon::now() ;
+        $dataToken = Carbon::parse($user->validade_token);
+        if( $dataAtual->diffInDays($dataToken)<2  ){
+            
         $token =  $user->createToken('Token')->plainTextToken ;
         User::find($id)->update([
             'updated_at' => now() , 
             'api_token' => $token, 
             'validade_token' =>Carbon::now()->add(7 , 'day')->toDateString() , 
-        ]);
+        ]);   
+        }
         return User::find($id) ; 
     }
 }

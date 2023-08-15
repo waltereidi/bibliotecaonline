@@ -23,8 +23,9 @@ class EmailVerificadoListener
      */
     public function handle(Verified $event): void
     {
-        MeuPerfil::create([
-            'created_at' => now() , 
-            'users_id' => $event->user->id ]) ;
+        
+            MeuPerfil::create([
+                'created_at' => now() , 
+                'users_id' => $event->user->id ]) ;
     }
 }

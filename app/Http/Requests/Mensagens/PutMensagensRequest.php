@@ -22,14 +22,14 @@ class PutMensagensRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required' , 'number'] , 
+            'id' => ['required' ] , 
             'mensagem' => 'required' ,'string' , 'max:1024' , 
         ];
     }
     public function messages(): array 
     {
         return [ 
-            'required' => 'este campo é obrigatório' , 
+            'required' => 'Campo obrigatório não preenchido' , 
             'max:1024' => 'limite de caracteres excedido' ,  
         ];    
     }

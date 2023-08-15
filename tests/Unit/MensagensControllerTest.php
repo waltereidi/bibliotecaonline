@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase; 
 use App\Http\Controllers\MensagensController;
+use App\Http\Requests\Mensagens\GetMensagensLivrosRequest;
 use App\Http\Requests\Mensagens\DeleteMensagensRequest;
 use App\Http\Requests\Mensagens\PostMensagensRequest;
 use App\Http\Requests\Mensagens\PutMensagensRequest;
@@ -187,9 +188,11 @@ class MensagensControllerTest extends TestCase
         $request['livros_id'] = $livro->id ;
         $request['meuperfil_id'] = $meuPerfil->id ; 
         $adicionarMensagem = $mensagensController->adicionarMensagens($request );
-
+        $requestGetMensagensLivros = new GetMensagensLivrosRequest( [
+            'livros_id' => $livro->id 
+        ] );
         //Execução 
-        $getMensagensLivros = $mensagensController->getMensagensLivros($livro->id);
+        $getMensagensLivros = $mensagensController->getMensagensLivros($requestGetMensagensLivros);
         $dados = $getMensagensLivros->getData();
         $validarChaves = get_object_vars($dados[0]);
 

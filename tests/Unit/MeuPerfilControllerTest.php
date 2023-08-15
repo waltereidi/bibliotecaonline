@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use Illuminate\View\View; 
 
@@ -189,7 +189,7 @@ class MeuPerfilControllerTest extends TestCase
         $meuPerfil = new MeuPerfilController(); 
         $user = User::where('email' , 'testCase@email.com')->first();
         $request = Request::create('meuperfil/getPaginacaoLivrosDoUsuario' , 'POST' ,
-            ['users_id' => $user->id , 'paginacao' => 999 ]); 
+            ['users_id' => $user->id , 'paginacao' => 99999 ]); 
         //Execução 
         $livrosDoUsuarioPaginacao = $meuPerfil->getPaginacaoLivrosDoUsuario($request); 
         

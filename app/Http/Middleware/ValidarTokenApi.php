@@ -18,8 +18,15 @@ class ValidarTokenApi
      */
     public function handle(Request $request, Closure $next): Response
     {   
-        $user =User::where('api_token' ,'=',  substr($request->Authorization , 7 ) )->where('validade_token' , '>' , Carbon::now()->toDateString())->first() ;
-        if( isset($request->Authorization) &&  $user )
+        if($request->method()==='GET'){
+            $api_token = $request->headers->get('authorization');
+         
+        }else{
+            $api_token = $request->Authorization; 
+        }
+
+        $user =User::where('api_token' ,'=',  substr($api_token, 7 ) )->where('validade_token' , '>' , Carbon::now()->toDateString())->first() ;
+        if( isset($api_token) &&  $user )
         {
             Auth::attempt(['email'=> $user->email , 'password' => $user->password ]);
             return $next($request);

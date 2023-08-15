@@ -22,16 +22,16 @@ class DeleteMensagensRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required' , 'number' ] ,
-            'meuperfil_id' => ['required' , 'number'] , 
-            'meuperfilamigo_id' => ['required' , 'number'] , 
+            'id' => ['required' ] ,
+            'meuperfil_id' => ['required'] , 
+            'meuperfilamigo_id' => ['required'] , 
         ];
     }
 
     public function messages(): array 
     {
         return [
-            'id.required' => 'O ID da mensagem deve estar preenchido.'
+            'required' => 'Campo obrigatório não preenchido'
         ];
     }
 }

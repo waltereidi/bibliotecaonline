@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\ListaDeAmigos;
+namespace App\Http\Requests\Mensagens;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostListaDeAmigosRequest extends FormRequest
+class GetMensagensLivrosRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,14 @@ class PostListaDeAmigosRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'livros_id' => ['required' ] ,
-            'meuperfil_id' => ['required' ] , 
+            'livros_id' => ['required'  ] ,
         ];
-    }
-    public function mensagens() : array {
 
+    }
+    public function messages(): array 
+    {
         return [
-            'required' => 'Este campo é obrigatório' ,
+            'livros_id.required' => 'este campo é obrigatório' , 
         ];
-
     }
-    
 }

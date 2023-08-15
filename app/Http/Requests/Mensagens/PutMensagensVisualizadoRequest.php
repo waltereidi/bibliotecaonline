@@ -22,8 +22,8 @@ class PutMensagensVisualizadoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'livros_id' => ['required' , 'number'] , 
-            'meuperfil_id' => ['required' , 'number'] , 
+            'livros_id' => ['required' ] , 
+            'meuperfil_id' => ['required' ] , 
             
         ];
     }
@@ -31,7 +31,7 @@ class PutMensagensVisualizadoRequest extends FormRequest
     public function messages() : array 
     {
         return [
-            'required' => 'Este campo é obrigatório' ,
+            'required' => 'Campo obrigatório não preenchido' ,
         ];
     }
 }

@@ -24,9 +24,9 @@ class DeleteListaDeAmigosRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'meuperfil_id' => ['required' , 'number'] , 
-            'meuperfilamigo_id' => ['required' , 'number'] , 
-            'id' => ['required' , 'number'] , 
+            'meuperfil_id' => ['required'] , 
+            'meuperfilamigo_id' => ['required'] , 
+            'id' => ['required'] , 
         ];
     }
     public function messages() : array
