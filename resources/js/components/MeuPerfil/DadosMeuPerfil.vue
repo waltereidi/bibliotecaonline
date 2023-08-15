@@ -1,21 +1,21 @@
-<script>
+<script lang="ts">
+import { User } from "@/User ";
+let user = new User ;
 
+console.log(user.getUserId());
+export default{
 
-export default {
-    props : ['authentication']
-    ,
-    data(){
+    data() {
         return {
-         
+        dados : user.getUserId()
         }
-    }, 
-    mounted(){
-        console.log(this.authentication);
     }
 }
+
 </script>
 
 
 <template>
-    <h1>Dados do meu perfil {{ this.authentication }}</h1>
-</template>
+    <h1>User {{ dados }}</h1>
+
+   </template>
