@@ -6,7 +6,7 @@ export class MeuPerfilController{
         return a+b ;
     }
     getDadosMeuPerfil() {
-
+        axios.post<MeuPerfilDados>('/api/getDadosMeuPerfil')
 
     }
 }

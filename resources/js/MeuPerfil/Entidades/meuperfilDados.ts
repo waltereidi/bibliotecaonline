@@ -1,6 +1,9 @@
 interface MeuPerfilDados {
-    introducao? : string ;
+    id: number,
+    users_id: number,
+    introducao?: string;
     profile_picture? : string ;
     datanascimento? : string ;
-    updated_at : string ;
+    updated_at: string;
+    created_at: string;
 }

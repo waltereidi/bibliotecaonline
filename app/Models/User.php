@@ -14,7 +14,7 @@ use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    
+
     use HasApiTokens, HasFactory, Notifiable;
     use Notifiable;
     /**
@@ -26,10 +26,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'created_at' , 
-        'updated_at' , 
-        'validade_token' , 
-        'api_token', 
+        'created_at',
+        'updated_at',
+        'validade_token',
+        'api_token',
 
     ];
 
@@ -43,8 +43,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
     /**
-     * Validação do email 
-     * 
+     * Validação do email
+     *
      */
     protected $middleware = ['auth', 'verified'];
     /**
@@ -62,21 +62,22 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new PasswordReset($token));
     }
 
-    public function gerarNovoToken( $id ) : ?User {
-        
-        
-        $user = User::find($id );
-        $dataAtual = Carbon::now() ;
+    public function gerarNovoToken($id): ?User
+    {
+
+
+        $user = User::find($id);
+        $dataAtual = Carbon::now();
         $dataToken = Carbon::parse($user->validade_token);
-        if( $dataAtual->diffInDays($dataToken)<2  ){
-            
-        $token =  $user->createToken('Token')->plainTextToken ;
-        User::find($id)->update([
-            'updated_at' => now() , 
-            'api_token' => $token, 
-            'validade_token' =>Carbon::now()->add(7 , 'day')->toDateString() , 
-        ]);   
+        if ($dataAtual->diffInDays($dataToken, false) < 2 || empty($user->api_token) || empty($user->validade_token)) {
+
+            $token =  $user->createToken('Token')->plainTextToken;
+            User::find($id)->update([
+                'updated_at' => now(),
+                'api_token' => $token,
+                'validade_token' => Carbon::now()->add(7, 'day')->toDateString(),
+            ]);
         }
-        return User::find($id) ; 
+        return User::find($id);
     }
 }
