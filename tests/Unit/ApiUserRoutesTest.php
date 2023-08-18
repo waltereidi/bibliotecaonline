@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Http\Controllers\UsersController;
 use Tests\TestCase;
-use App\Http\Requests\Users\PostGetDadosUsers;
 use App\Models\User;
 
 class ApiUserRoutesTest extends TestCase
