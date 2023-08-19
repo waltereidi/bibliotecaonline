@@ -14,11 +14,13 @@ test('getDefaultHeaders', () => {
 });
 
 test('getDadosUsers', () => {
-
     const retorno: Users = apiRequest.getTestToken('testCase@email.com' , 'testCase');
     expect(retorno.id).not.toBeNull();
+
+
     expect(retorno.api_token).not.toBeNull();
     expect(retorno.validade_token).not.toBeNull();
 
-
 });
+
+

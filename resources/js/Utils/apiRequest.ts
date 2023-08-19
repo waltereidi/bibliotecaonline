@@ -8,13 +8,13 @@ export class ApiRequest {
         'Authorization': `Bearer ${api_token}` ,
         'Content-Type': 'application/json' };
     }
-    getTestToken(email: string, password: string) :Users {
+     getTestToken(email: string, password: string) :Users {
         const body: object = {
             'email': email,
             'password': password ,
         };
-        const retorno:Users =axios.post<Users>('/api/users/getDadosUsers' , body );
 
+        const retorno: Users =  axios.post<Users>('/api/users/getDadosUsers', body);
         return retorno;
     }
 }
