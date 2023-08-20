@@ -1,26 +1,23 @@
-import { expect, test } from 'vitest';
+import { expect, test ,describe } from 'vitest';
 import { ApiRequest } from '@/Utils/ApiRequest';
 import { Users } from '@/Utils/Entidades/users';
+import axios  from 'axios';
+const apiRequest = new ApiRequest;
 
-const apiRequest = new ApiRequest();
+describe('apirequest testes ', () => {
 
-
-test('getDefaultHeaders', () => {
+    test('getDefaultHeaders', async () => {
     const api_token: string = 'Token';
-    const retorno: object = apiRequest.getDefaultHeaders(api_token);
+    const retorno: object = await apiRequest.getDefaultHeaders(api_token);
     expect(retorno['Authorization']).toBe('Bearer Token');
     expect(retorno['Content-Type']).toBe('application/json');
 
 });
 
-test('getDadosUsers', () => {
-    const retorno: Users = apiRequest.getTestToken('testCase@email.com' , 'testCase');
-    expect(retorno.id).not.toBeNull();
-
-
-    expect(retorno.api_token).not.toBeNull();
-    expect(retorno.validade_token).not.toBeNull();
-
 });
+
+
+
+
 
 

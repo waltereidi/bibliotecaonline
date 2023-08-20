@@ -4,12 +4,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build --emptyOutDir",
-    "test": "jest",
+    "test": "vitest",
     "front:serve": "cd FrontEndApp && yarn dev",
     "front:build": "cd FrontEndApp && yarn build",
     "serve": "concurrently \"php artisan serve --port=8080\" \"yarn front:serve\"",
     "deploy": "yarn setup && yarn front:build && php artisan migrate",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.10",

@@ -5,16 +5,21 @@ export class ApiRequest {
 
     getDefaultHeaders(api_token: string) : object {
         return {
-        'Authorization': `Bearer ${api_token}` ,
-        'Content-Type': 'application/json' };
+            'Authorization': `Bearer ${api_token}` ,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive'
+        }
     }
-     getTestToken(email: string, password: string) :Users {
+    async getTestToken(email: string, password: string) :Users {
         const body: object = {
             'email': email,
             'password': password ,
         };
+        return await axios.post('/api/users/getDadosUsers', body);
 
-        const retorno: Users =  axios.post<Users>('/api/users/getDadosUsers', body);
-        return retorno;
+
+
     }
 }
