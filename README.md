@@ -5,7 +5,8 @@
 <p>Troque livros biblioteca online , um projeto para facilitar a troca de livros online </br>
 TDD, VueJS ,TypeScript , PHP , Laravel , PostgreSQL </br>
 <strong>Adicionado middlewares de validação de token</br>
-Envio de emails para autenticação de de criação de conta e modificação de senha.
+Envio de emails para autenticação de de criação de conta e modificação de senha.</br>
+Model de mensagens com exemplo de SQL Avançado , funções de janela e filtro de agregações.
 </strong>
 
 
