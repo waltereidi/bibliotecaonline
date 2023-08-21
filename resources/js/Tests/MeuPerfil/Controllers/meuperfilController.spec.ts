@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import { MeuPerfilController } from "@/MeuPerfil/Controllers/meuperfilController";
-import { axios } from 'axios';
+import axios from 'axios';
 import { ApiRequest } from '@/Utils/ApiRequest';
 import { MeuPerfilDados } from '@/MeuPerfil/Entidades/meuperfilDados';
 import { LivrosMeuPerfil } from '@/MeuPerfil/Entidades/livrosMeuperfil';
@@ -64,9 +64,9 @@ test('getPostLivros', () => {
 
     const retorno: LivrosMeuPerfil = meuperfilController.getPostLivros(dados);
     expect(retorno.id).toBe(1);
-    expect(retorno.titulo).toBe('testCaseFrontEnd');
-    expect(retorno.descricao).toBeNull();
-    expect(retorno.visibilidade).toBe(0);
+    expect(retorno.mensagem).toBe();
+    expect(retorno.livros_id).toBe();
+    expect(retorno.meuperfil_id).toBe();
     expect(retorno['Content-Type']).toBe('application/json');
     expect(retorno['Authorization']).toBe('Bearer ');
     expect(retorno['Accept']).toBe('application/json');
@@ -74,3 +74,5 @@ test('getPostLivros', () => {
     expect(retorno['Connection']).toBe('keep-alive');
 
 });
+
+
