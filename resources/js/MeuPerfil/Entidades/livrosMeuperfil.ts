@@ -1,6 +1,6 @@
 import { LivrosSituacaoEnum } from "@/livrosituracaoenum";
 
-interface LivrosMeuPerfil {
+export interface LivrosMeuPerfil {
     users_id : number ,
     titulo : string ,
     isbn? : string ,

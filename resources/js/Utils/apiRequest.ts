@@ -5,7 +5,7 @@ export class ApiRequest {
 
     getDefaultHeaders(api_token: string) : object {
         return {
-            'Authorization': `Bearer ${api_token}` ,
+            'Authorization': `Bearer ${api_token??''}` ,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -18,8 +18,6 @@ export class ApiRequest {
             'password': password ,
         };
         return await axios.post('/api/users/getDadosUsers', body);
-
-
-
     }
+
 }

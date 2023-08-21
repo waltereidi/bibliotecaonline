@@ -17,23 +17,19 @@ class ValidarTokenApi
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {   
-        if($request->method()==='GET'){
+    {
+        if ($request->method() === 'GET') {
             $api_token = $request->headers->get('authorization');
-         
-        }else{
-            $api_token = $request->Authorization; 
+        } else {
+            $api_token = $request->Authorization;
         }
 
-        $user =User::where('api_token' ,'=',  substr($api_token, 7 ) )->where('validade_token' , '>' , Carbon::now()->toDateString())->first() ;
-        if( isset($api_token) &&  $user )
-        {
-            Auth::attempt(['email'=> $user->email , 'password' => $user->password ]);
+        $user = User::where('api_token', '=',  substr($api_token, 7))->where('validade_token', '>', Carbon::now()->toDateString())->first();
+        if (isset($api_token) &&  $user) {
+            Auth::loginUsingId($user->id);
             return $next($request);
-        }else{
-            return response()->json( 'Token não autorizado, gere outro token novamente ', 401 );
+        } else {
+            return response()->json('Token não autorizado, gere outro token novamente ', 401);
         }
-
-        
     }
 }

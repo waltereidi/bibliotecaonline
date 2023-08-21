@@ -1,4 +1,4 @@
-interface MeuPerfilDados {
+export interface MeuPerfilDados {
     id: number;
     users_id: number;
     introducao?: string;

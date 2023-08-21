@@ -11,16 +11,16 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
         @vite('resources/js/MeuPerfil/meuperfil.ts')
     </head>
- 
+
         @extends('layouts.app')
         @section('content')
             <div id="meuPerfil">
                 <dadosmeuperfil :authentication="{{ json_encode(Auth::user()->api_token) }}"></dadosmeuperfil>
 
-                <livrosdomeuperfil  :authentication="{{ json_encode(Auth::user()->api_token) }}"></livrosdomeuperfil>
-            </div> 
-            
+                <livrosmeuperfil  :authentication="{{ json_encode(Auth::user()->api_token) }}"></livrosmeuperfil>
+            </div>
+
         @endsection
-           
- 
+
+
 </html>

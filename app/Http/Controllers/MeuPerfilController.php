@@ -80,7 +80,7 @@ class MeuPerfilController extends Controller
             'genero' => (empty($livros->genero) ? null : $livros->genero),
             'idioma' => (empty($livros->idioma) ? null : $livros->idioma),
         ];
-        if (isset($livros->id)) {
+        if (isset($livros->id) && $livros->id != null) {
             $regras['id'] = 'required';
             $dados['id'] = $livros->id;
         }
@@ -158,11 +158,11 @@ class MeuPerfilController extends Controller
     public function getPaginacaoLivrosDoUsuario(Request $request)
     {
         $livros = new Livros;
-        return $livros->meuPerfilLivrosDoUsuario($request->users_id, $request->paginacao);
+        $parametros = $request->all();
+        return $livros->meuPerfilLivrosDoUsuario(Auth::id(), empty($request->paginacao) ? 0 : $request->paginacao);
     }
     public function editarMeuPerfil(Request $request)
     {
-
         $validator = $this->validarMeuPerfilRequest($request);
         $dados = $validator['dados'];
         $validador = $validator['validador'];

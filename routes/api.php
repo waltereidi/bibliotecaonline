@@ -33,7 +33,7 @@ Route::prefix('mensagens')->group(function () {
     Route::middleware('validartoken')->delete('deletarMensagens', [MensagensController::class, 'deletarMensagens']);
     Route::middleware('validartoken')->put('editarMensagens', [MensagensController::class, 'editarMensagens']);
     Route::middleware('validartoken')->put('editarMensagensVisualizado', [MensagensController::class, 'editarMensagensVisualizado']);
-    Route::middleware('validartoken')->get('getMensagensCaixa', [MensagensController::class, 'getMensagensCaixa']);
+    Route::middleware('validartoken')->post('getMensagensCaixa', [MensagensController::class, 'getMensagensCaixa']);
     Route::middleware('validartoken')->post('getMensagensLivros', [MensagensController::class, 'getMensagensLivros']);
 });
 Route::prefix('users')->group(function () {
