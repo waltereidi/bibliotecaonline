@@ -3,7 +3,10 @@
 <p>Projeto TDD Biblioteca Online</p>
 </br>
 <p>Troque livros biblioteca online , um projeto para facilitar a troca de livros online </br>
-TDD, VueJS ,TypeScript , PHP , Laravel , PostgreSQL
+TDD, VueJS ,TypeScript , PHP , Laravel , PostgreSQL , 
+<strong>Adicionado middlewares de validação de token</br>
+Envio de emails para autenticação de de criação de conta e login.
+</strong>
 
 
 </p>
