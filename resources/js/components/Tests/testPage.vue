@@ -21,11 +21,16 @@ console.log(status);
 if ( users.api_token != null) {
     const meuPerfil = new MeuPerfilController(users.api_token);
     await meuPerfil.getDadosMeuPerfil().then(response => { console.log(response.data) });
-    await meuPerfil.getLivrosMeuPerfil(202122).then(response => { console.log(response.data) });
+    await meuPerfil.getLivrosMeuPerfil(0).then(response => { console.log(JSON.stringify(response.data) ) });
 
     const mensagensController = new MensagensController(users.api_token);
 
-    await mensagensController.getMensagensCaixa().then(response=> console.log( response.data ) );
+    const retorno = await mensagensController.getMensagensCaixa().then(response => {
+        return response;
+    });
+    const headerGetMensagensLivros = mensagensController.getDadosMensagensLivros(retorno.data[0].livros_id);
+    await mensagensController.getMensagensLivros(headerGetMensagensLivros).then(response => {console.log(JSON.stringify( response.data) )});
+
 }
 
 

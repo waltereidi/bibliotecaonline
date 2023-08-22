@@ -6,5 +6,6 @@ export interface MensagensCaixa {
     editoras_id: number;
     editoras_nome: string;
     autores_nome: string;
-
+    isbn?: string;
+    capalivro?: string;
 }

@@ -3,5 +3,6 @@ export interface GetMensagensLivros {
     created_at : string ;
     livros_id : number ;
     meuperfil_id : number ;
-    visualizado : boolean ;
+    visualizado: boolean;
+    id: number;
  }
