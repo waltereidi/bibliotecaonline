@@ -20,7 +20,7 @@ console.log(users);
 console.log(status);
 if ( users.api_token != null) {
     const meuPerfil = new MeuPerfilController(users.api_token);
-    await meuPerfil.getDadosMeuPerfil().then(response => { console.log(response.data) });
+    await meuPerfil.getDadosMeuPerfil().then(response => { console.log(JSON.stringify( response.data )) });
     await meuPerfil.getLivrosMeuPerfil(0).then(response => { console.log(JSON.stringify(response.data) ) });
 
     const mensagensController = new MensagensController(users.api_token);

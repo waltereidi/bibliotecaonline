@@ -1,8 +1,39 @@
+@use "@material/card";
+@use "@material/button/styles";
+@use "@material/floating-label/mdc-floating-label";
+@use "@material/line-ripple/mdc-line-ripple";
+@use "@material/notched-outline/mdc-notched-outline";
+@use "@material/textfield";
+@use "@material/textfield/icon";
 // Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
-
+@import url("https://fonts.bunny.net/css?family=Nunito");
+@import "material-icons/iconfont/material-icons.css";
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import 'bootstrap/scss/bootstrap';
+@import "bootstrap/scss/bootstrap";
+
+@include card.core-styles;
+@include icon.icon-core-styles;
+@include textfield.core-styles;
+
+.mdc-button {
+    &--cancelar {
+        --mdc-theme-primary: #2962ff;
+    }
+    &--confirmar {
+        --mdc-theme-primary: #00c853;
+    }
+
+    &--editar {
+        --mdc-theme-primary: #212121;
+    }
+
+    &--adicionar {
+        --mdc-theme-primary: #00c853;
+    }
+    &--excluir {
+        --mdc-theme-primary: #d50000;
+    }
+}

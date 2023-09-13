@@ -1,0 +1,122 @@
+.mdc-card {
+    margin: 2em 0 2em 0;
+    &--elevated {
+        flex-flow: row wrap;
+        .leftInfo {
+            padding-left: 2em;
+            flex: 1 1 auto;
+            order: 1;
+            flex-flow: row wrap;
+            &--titulo {
+                flex: 1 1 100%;
+                order: 1;
+            }
+            &--informacoes {
+                flex: 1 1 100%;
+                order: 2;
+                flex-flow: row wrap;
+                display: flex;
+                &__left {
+                    flex: 0 0 40%;
+                    order: 1;
+                    flex-flow: row wrap;
+                    .infoLivro {
+                        flex: 0 0 auto;
+                        display: flex;
+                        p {
+                            flex: 0 0 6em;
+                            font-weight: bold;
+                        }
+                        @media (min-width: 240px) and (max-width: 600px) {
+                            span {
+                                word-break: break-all;
+                                flex: 0 0 100%;
+                            }
+                        }
+                        @media (min-width: 600px) and (max-width: 1100px) {
+                            span {
+                                word-break: break-all;
+                                flex: 0 0 10em;
+                            }
+                        }
+                        @media (min-width: 1100px) {
+                            span {
+                                word-break: break-all;
+                                flex: 0 0 13em;
+                            }
+                        }
+                    }
+
+                    .label {
+                        font-weight: bold;
+                    }
+                }
+                @media (min-width: 0px) and (max-width: 600px) {
+                    &__right {
+                        display: none;
+                    }
+                }
+                @media (min-width: 600px) and (max-width: 1100px) {
+                    &__right {
+                        padding: 1em;
+                        flex: 0 0 100%;
+                        order: 2;
+                        word-break: normal;
+                    }
+                }
+                @media (min-width: 1100px) {
+                    &__right {
+                        flex: 0 0 auto;
+                        max-width: 30em;
+                        order: 2;
+                        word-break: normal;
+                    }
+                }
+            }
+        }
+
+        @media (min-width: 0px) and (max-width: 600px) {
+            .rightMedia {
+                flex: 0 1 100%;
+                order: 3;
+                justify-content: center;
+                display: flex;
+
+                img {
+                    max-width: 15em;
+                    object-fit: contain;
+                    padding: 0.5em;
+                }
+            }
+        }
+        @media (min-width: 600px) and (max-width: 1400px) {
+            .rightMedia {
+                flex: 0 0 100%;
+                order: 3;
+
+                justify-content: center;
+                display: flex;
+
+                img {
+                    max-width: 12em;
+                    object-fit: contain;
+                    padding: 0.5em;
+                }
+            }
+        }
+        @media (min-width: 1400px) {
+            .rightMedia {
+                flex: 0 0 auto;
+                order: 3;
+                justify-content: center;
+                display: flex;
+
+                img {
+                    max-width: 20em;
+                    object-fit: contain;
+                    padding: 0.5em;
+                }
+            }
+        }
+    }
+}

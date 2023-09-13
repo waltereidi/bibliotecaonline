@@ -35,7 +35,15 @@
     "bootstrap": "^5.3.1",
     "lodash": "^4.17.21",
     "vue-loader": "^17.0.1",
-    "webpack": "^5.0.0-rc.6"
+    "webpack": "^5.0.0-rc.6",
+    "@material/button": "^14.0.0",
+    "@material/card": "^14.0.0",
+    "@material/dialog": "^14.0.0",
+    "@material/shape": "^14.0.0",
+    "@material/textfield": "^14.0.0",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
+    "material-icons": "^1.13.10"
   },
   "name": "bibliotecaonline",
   "description": "Troque livros , bibliotecaonline",
