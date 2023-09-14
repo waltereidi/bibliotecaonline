@@ -47,13 +47,32 @@
             order: 0;
             flex: 0 1 15em;
             display: inline-grid;
-            grid-auto-rows: 2em;
+            grid-auto-rows: 2.3em;
             grid-auto-columns: 100%;
 
             [class^="menuGrid"] {
                 display: grid;
                 align-items: center;
                 border-color: solid 1px #bdbdbd;
+
+                .menuContent {
+                    display: flex;
+                    width: 15em;
+                    flex-flow: row wrap;
+                    p {
+                        flex: 1 0 auto;
+                        display: flex;
+                        order: 1;
+                    }
+                    em {
+                        flex: 0 0 1em;
+                        order: 2;
+                        padding-right: 1em;
+                    }
+                }
+                .menuContent:hover {
+                    background-color: #9b65ff25;
+                }
             }
 
             .header {

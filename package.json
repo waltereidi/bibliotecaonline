@@ -36,6 +36,8 @@
     "lodash": "^4.17.21",
     "vue-loader": "^17.0.1",
     "webpack": "^5.0.0-rc.6",
+    "vuex": "^4.0.2",
+    "pinia":"^2.1.6" ,
     "@material/button": "^14.0.0",
     "@material/card": "^14.0.0",
     "@material/dialog": "^14.0.0",

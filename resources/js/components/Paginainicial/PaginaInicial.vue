@@ -10,20 +10,35 @@ export default {
         return {
             dataSource: LivrosDataSource,
             searchBar: '',
+            modal: false,
         }
 
     },
 
     methods: {
         buscar() {
-
+            console.log(this.$store.getters.getLockScreen);
+        }
+    },
+    computed: {
+        lockScreen() {
+            return this.$store.getters.getLockScreen;
+        }
+    },
+    watch: {
+        lockScreen: {
+            handler(newData) {
+                this.modal = newData;
+            },
+            immediate: true,
+            deep: true,
         }
     }
 
 }
 </script>
 <template>
-    <div class="container">
+    <div class="container" @click="burcar">
         <div class="header">
             <img :src="'/imagens/wallpaper.jpg'" />
         </div>
@@ -47,9 +62,16 @@ export default {
                 <div class="menuGrid header">
                     <h5>Indices</h5>
                 </div>
-                <div class="menuGrid">Gênero</div>
-                <div class="menuGrid">Idioma</div>
-
+                <div class="menuGrid">
+                    <div class="menuContent">
+                        <p>Genero</p><em>1</em>
+                    </div>
+                </div>
+                <div class="menuGrid">
+                    <div class="menuContent">
+                        <p>Idioma</p><em>12</em>
+                    </div>
+                </div>
 
 
             </div>

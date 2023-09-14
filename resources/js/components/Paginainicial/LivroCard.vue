@@ -1,5 +1,6 @@
 <script lang="ts">
 import config from "@/../json/bibliotecaconfig.json";
+import ModalImagem from "@/components/Utils/ModalImagem.vue";
 
 export default {
     props: {
@@ -25,6 +26,9 @@ export default {
         } else {
             this.downloadIcon = '';
         }
+    },
+    components: {
+        ModalImagem,
     }
 
 }
@@ -38,8 +42,6 @@ export default {
             </div>
             <div class="leftInfo--informacoes">
                 <div class="leftInfo--informacoes__left">
-
-
 
                     <div v-if="dataSource.isbn" class="infoLivro">
                         <p>ISBN:</p><span>{{ dataSource.isbn }}</span>
@@ -67,13 +69,13 @@ export default {
             </div>
         </div>
         <div class="rightMedia">
-            <img :src="dataSource.capalivro ?? configDataSource.capaLivroDefault" />
+            <ModalImagem :srcImagem="dataSource.capalivro ?? configDataSource.capaLivroDefault"></ModalImagem>
         </div>
 
 
     </div>
 </template>
 
-<style scoped>
+<style >
 @import "@/../sass/Paginainicial/livroCard.scss";
 </style>
