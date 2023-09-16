@@ -1,44 +1,109 @@
 <script lang="ts">
 import LivroCard from "./LivroCard.vue";
 import LivrosDataSource from "@/../json/livrosdoperfils.json";
-
+import Paginacao from "@/components/Utils/Paginacao.vue";
 export default {
     components: {
         LivroCard,
+        Paginacao,
     },
     data() {
         return {
             dataSource: LivrosDataSource,
             searchBar: '',
             modal: false,
+            indiceAtivo: 'Todos',
+            indicesDataSource: {
+                type: Object
+            },
+
         }
 
     },
 
     methods: {
         buscar() {
-            console.log(this.$store.getters.getLockScreen);
+        },
+        getIndices() {
+            return [
+                {
+                    "nomeIndice": "Todos",
+                    "quantidade": 4,
+                    "tipo": "todos"
+                },
+                {
+                    "nomeIndice": "Ficção cientifica",
+                    "quantidade": 3,
+                    "tipo": "genero"
+                },
+                {
+                    "nomeIndice": "Biografia",
+                    "quantidade": 4,
+                    "tipo": "genero"
+                },
+                {
+                    "nomeIndice": "Tecnologia da informação do b",
+                    "quantidade": 4,
+                    "tipo": "genero"
+                },
+                {
+                    "nomeIndice": "Românce",
+                    "quantidade": 4,
+                    "tipo": "genero"
+                }
+
+            ];
+
+
+
+        },
+        getIndicesMobile() {
+            return [
+                {
+                    "nomeIndice": "Todos",
+                    "quantidade": 4,
+                    "tipo": "todos"
+                },
+                {
+                    "nomeIndice": "Ficção cientifica",
+                    "quantidade": 3,
+                    "tipo": "genero"
+                },
+                {
+                    "nomeIndice": "Biografia",
+                    "quantidade": 4,
+                    "tipo": "genero"
+                },
+                {
+                    "nomeIndice": "Tecnologia da informação do b",
+                    "quantidade": 4,
+                    "tipo": "genero"
+                },
+                {
+                    "nomeIndice": "Românce",
+                    "quantidade": 4,
+                    "tipo": "genero"
+                }
+
+            ];
+
+
+
+        },
+
+        getDataSourceIndices(nomeIndice: string, tipo: string) {
+            this.indiceAtivo = nomeIndice;
+        },
+        childRetornaPaginacao(paginaAtual: number, multiplicador: number) {
+
         }
     },
-    computed: {
-        lockScreen() {
-            return this.$store.getters.getLockScreen;
-        }
-    },
-    watch: {
-        lockScreen: {
-            handler(newData) {
-                this.modal = newData;
-            },
-            immediate: true,
-            deep: true,
-        }
-    }
+
 
 }
 </script>
 <template>
-    <div class="container" @click="burcar">
+    <div :class="{ 'container locked': lockScreen, 'container': !lockScreen }">
         <div class="header">
             <img :src="'/imagens/wallpaper.jpg'" />
         </div>
@@ -55,6 +120,15 @@ export default {
             </div>
             <div class="indexBar">
 
+                <div v-for="indice in getIndicesMobile()"
+                    :class="{ 'index ativo': indice.nomeIndice === indiceAtivo, 'index': indice.nomeIndice !== indiceAtivo }"
+                    @click="getDataSourceIndices(indice.nomeIndice, indice.tipo, index)">
+                    {{ indice.nomeIndice }}
+                </div>
+
+
+
+
             </div>
         </div>
         <div class="conteudo">
@@ -63,21 +137,33 @@ export default {
                     <h5>Indices</h5>
                 </div>
                 <div class="menuGrid">
-                    <div class="menuContent">
-                        <p>Genero</p><em>1</em>
+                    <div v-for=" menuIndice  in   this.getIndices() ">
+                        <div :class="{ 'menuContent': !(menuIndice.nomeIndice === indiceAtivo), 'menuContent ativo': (menuIndice.nomeIndice === indiceAtivo) }"
+                            @click="getDataSourceIndices(menuIndice.nomeIndice, menuIndice.tipo)">
+                            <p>{{ menuIndice.nomeIndice }}</p><em> {{ menuIndice.quantidade }}</em>
+                        </div>
                     </div>
                 </div>
-                <div class="menuGrid">
-                    <div class="menuContent">
-                        <p>Idioma</p><em>12</em>
-                    </div>
-                </div>
+
 
 
             </div>
             <div class="conteudo--mainContent">
+                <div class="conteudo--mainContent__header">
+                    <div class="paginacaoContainer">
+                        <div class="paginacaoContainer--left">
+                        </div>
+                        <div class="paginacaoContainer--right">
+                            <Paginacao :multiplicador="8" :quantidade="35" :limitePaginacao="5" :travarPaginacao="false"
+                                @retornaPaginacao="childRetornaPaginacao">
+                            </Paginacao>
+                        </div>
+
+
+                    </div>
+                </div>
                 <div class="conteudo--mainContent__livro">
-                    <div v-for=" livro  in  dataSource ">
+                    <div v-for="         livro          in          dataSource         ">
                         <LivroCard :dataSource="livro"></LivroCard>
                     </div>
 

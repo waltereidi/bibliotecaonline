@@ -18,16 +18,20 @@ export default {
     },
     methods: {
         keyListener(event) {
-            if (event.keyCode === 27) {
+            if (event.keyCode === 27 && this.showModal) {
+                this.$store.commit('closeModal');
                 this.showModal = false;
             }
         },
         fecharModal() {
-            this.$store.lockScreen = false;
-            this.showModal = false;
+            if (this.showModal) {
+                this.$store.commit('closeModal');
+                this.showModal = false;
+            }
+
         },
         abrirModal() {
-            this.$store.lockScreen = true;
+            this.$store.commit('openModal');
             this.showModal = true;
         }
     },
@@ -36,12 +40,12 @@ export default {
 }
 </script>
 <template>
-    <img class="img-thumbnail" :src="srcImagem" @click="abrirModal" style="width: 100%;">
-    <div :class="{ 'showModal': showModal, 'hide': !showModal }" @click="showModal = false">
+    <img class="img-thumbnail cursor" :src="srcImagem" @click="abrirModal" loading="lazy" style="width: 100%;">
+    <div :class="{ 'showModal': showModal, 'hide': !showModal }" @click="fecharModal">
         <div class="row">
             <button id="modalButton" type="button" class="btn-close btn-close-white" aria-label="Close"
                 @click="fecharModal"></button>
-            <img :src="srcImagem" class="modalImage">
+            <img :src="srcImagem" loading="lazy" alt="capalivroModal" class="modalImage">
 
         </div>
     </div>
@@ -49,6 +53,10 @@ export default {
 <style scoped>
 .hide {
     display: none;
+}
+
+.cursor {
+    cursor: pointer;
 }
 
 .showModal {

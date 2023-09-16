@@ -1,5 +1,7 @@
 .mdc-card {
     margin: 2em 0 2em 0;
+    padding: 1em 0 1em 0;
+
     &--elevated {
         flex-flow: row wrap;
         .leftInfo {
@@ -10,6 +12,10 @@
             &--titulo {
                 flex: 1 1 100%;
                 order: 1;
+                h3 > a {
+                    text-decoration: none;
+                }
+                padding: 0.5em 0 0.5em 0;
             }
             &--informacoes {
                 flex: 1 1 100%;

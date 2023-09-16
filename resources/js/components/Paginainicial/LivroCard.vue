@@ -38,7 +38,7 @@ export default {
     <div class="mdc-card mdc-card--elevated">
         <div class="leftInfo">
             <div class="leftInfo--titulo">
-                <h3>Titulo</h3>
+                <h3><a :href="'/livros/' + dataSource.id">{{ dataSource.titulo }}</a></h3>
             </div>
             <div class="leftInfo--informacoes">
                 <div class="leftInfo--informacoes__left">
@@ -59,7 +59,12 @@ export default {
                         <p> Idioma:</p><span>{{ dataSource.idioma }}</span>
                     </div>
                     <div class="infoLivro" v-if="dataSource.urldownload">
-                        <p>Download:</p><span><img :src="downloadIcon" v-if="dataSource.urldownload"></span>
+                        <p>Download:</p><span><a :href="dataSource.urldownload" target="_blank">
+                                <img :src="downloadIcon" v-if="dataSource.urldownload">
+                                <p v-else>{{ dataSource.urldownload }}</p>
+                            </a>
+
+                        </span>
                     </div>
 
                 </div>
