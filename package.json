@@ -2,19 +2,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build --emptyOutDir",
-    "test": "vitest",
-    "front:serve": "cd FrontEndApp && yarn dev",
-    "front:build": "cd FrontEndApp && yarn build",
-    "serve": "concurrently \"php artisan serve --port=8080\" \"yarn front:serve\"",
-    "deploy": "yarn setup && yarn front:build && php artisan migrate",
-    "preview": "vite preview",
-    "coverage": "vitest run --coverage"
+       "dev": "vite",
+        "build": "vite build",
+        "serve": "vite --host",
+        "test": "vitest"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.10",
-    "@babel/preset-react": "^7.22.5",
     "@popperjs/core": "^2.11.6",
     "@types/jest": "^29.5.3",
     "@vitejs/plugin-vue": "^4.2.3",
@@ -33,7 +27,6 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.1",
-    "lodash": "^4.17.21",
     "vue-loader": "^17.0.1",
     "webpack": "^5.0.0-rc.6",
     "vuex": "^4.0.2",
@@ -49,10 +42,10 @@
   },
   "name": "bibliotecaonline",
   "description": "Troque livros , bibliotecaonline",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "vite.config.js",
   "directories": {
-    "test": "tests"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",

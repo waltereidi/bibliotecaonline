@@ -1,7 +1,10 @@
 <script lang="ts">
 export default {
     props: {
-        srcImagem: String,
+        srcImagem: {
+            type: String,
+            required: true,
+        }
     },
     data() {
         return {
@@ -35,7 +38,6 @@ export default {
             this.showModal = true;
         }
     },
-    emits: ['fecharModal'],
 
 }
 </script>

@@ -1,7 +1,8 @@
 <script lang="ts">
 import config from "@/../json/bibliotecaconfig.json";
 import LivroDataSource from "@/../json/livroDataSource.json";
-
+import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
+import ModalDownload from "@/components/Utils/Modal/ModalDownload.vue";
 export default {
     props: {
         dataSource: {
@@ -13,97 +14,92 @@ export default {
         return {
             configDataSource: config,
             livroDataSource: LivroDataSource,
-            downloadIcon: '',
 
         }
     },
-    mounted() {
-        if (/drive\.google/.test(this.livroDataSource.urldownload)) {
-            this.downloadIcon = 'icons\\icons8-google-drive.svg';
-        } else if (/1drv\.ms/.test(this.livroDataSource.urldownload)) {
-            this.downloadIcon = 'icons\\icons8-onedrive.svg';
-        } else if (/dropbox/.test(this.livroDataSource.urldownload)) {
-            this.downloadIcon = 'icons\\icons8-dropbox.svg';
-        } else {
-            this.downloadIcon = '';
-        }
+    components: {
+        ModalImagem,
+        ModalDownload,
+
     }
 }
 </script>
 <template>
-    <div class="header"></div>
     <div class="container">
-
-        <div class="container container--left">
-            <img class="rounded mx-auto d-block" :src="livroDataSource.capalivro ?? configDataSource.capaLivroDefault"
-                alt="capa do livro">
+        <div class="header">
 
         </div>
-        <div class="container container--right">
-            <div class="container container--descricao">
-                <div class="livro-titulo">
-                    <h3>{{ livroDataSource.titulo }}</h3>
+        <div class="mainContent">
+            <div class="mainContent--left">
+                <div class="mainContent--left__capalivro">
+                    <ModalImagem :srcImagem="livroDataSource.capalivro ?? configDataSource.capaLivroDefault"></ModalImagem>
+                </div>
+            </div>
+            <div class="mainContent--right">
+                <div class="mainContent--right__titulo">
+                    <h3> {{ livroDataSource.titulo }}
 
-                    <p> <span v-if="livroDataSource.idioma.length > 0">Edição {{ livroDataSource.idioma }}
-                            <span class="pipeLineSeparator">|</span></span>
-                        Por {{ livroDataSource.autores_nome }}
+                    </h3>
+                    <p><span v-if="livroDataSource.idioma.length > 0">Edição
+                            {{ livroDataSource.idioma }}
+                            <span class="pipeLineSeparator">|</span></span>Por
+                        {{ livroDataSource.autores_nome }}
+
                     </p>
+                    <hr>
+                </div>
+                <div class="mainContent--right__informacao">
+                    <details v-if="livroDataSource.descricao.length > 400">
+
+                        <summary>Leia mais...
+                            <blockquote>
+                                {{ livroDataSource.descricao.substring(0, 400) }}<span>...</span>
+                            </blockquote>
+
+                        </summary>
+                        {{ livroDataSource.descricao }}
+                    </details>
+
+                    <blockquote v-else>
+                        {{ livroDataSource.descricao }}
+                    </blockquote>
+
+                    <div class="containerInformacao border rounded">
+                        <div class="containerInformacao--item">Autor
+                            <div class="containerInformacao--itemDescricao">{{ livroDataSource.autores_nome }}</div>
+                        </div>
+                        <div class="containerInformacao--item">Editora
+                            <div class="containerInformacao--itemDescricao">{{ livroDataSource.editoras_nome }}</div>
+                        </div>
+                        <div class="containerInformacao--item">ISBN
+                            <div class="containerInformacao--itemDescricao">{{ livroDataSource.isbn }}</div>
+                        </div>
+                        <div class="containerInformacao--item">Gênero
+                            <div class="containerInformacao--itemDescricao">{{ livroDataSource.genero }}</div>
+                        </div>
+                        <div class="containerInformacao--item-last">Idioma
+                            <div class="containerInformacao--itemDescricao containerInformacao--itemDescricao__last">{{
+                                livroDataSource.idioma }}</div>
+                        </div>
+                    </div>
 
                 </div>
-                <br><br>
-                <hr>
-
-
-                <details v-if="livroDataSource.descricao.length > 400">
-
-                    <summary>Leia mais...
-                        <blockquote>
-                            {{ livroDataSource.descricao.substring(0, 400) }}<span>...</span>
-                        </blockquote>
-
-                    </summary>
-                    {{ livroDataSource.descricao }}
-                </details>
-
-                <blockquote v-else>
-                    {{ livroDataSource.descricao }}
-                </blockquote>
-            </div>
-            <div class="container container--informacao ">
-                <div class="containerInformacao border rounded">
-                    <div class="containerInformacao--item">Autor
-                        <div class="containerInformacao--itemDescricao">{{ livroDataSource.autores_nome }}</div>
+                <div class="download">
+                    <div class="label">
+                        Download:
                     </div>
-                    <div class="containerInformacao--item">Editora
-                        <div class="containerInformacao--itemDescricao">{{ livroDataSource.editoras_nome }}</div>
-                    </div>
-                    <div class="containerInformacao--item">ISBN
-                        <div class="containerInformacao--itemDescricao">{{ livroDataSource.isbn }}</div>
-                    </div>
-                    <div class="containerInformacao--item">Gênero
-                        <div class="containerInformacao--itemDescricao">{{ livroDataSource.genero }}</div>
-                    </div>
-                    <div class="containerInformacao--item-last">Idioma
-                        <div class="containerInformacao--itemDescricao containerInformacao--itemDescricao__last">{{
-                            livroDataSource.idioma }}</div>
+                    <div class="icon">
+                        <ModalDownload :urldownload="livroDataSource.urldownload"></ModalDownload>
                     </div>
                 </div>
-            </div>
-            <br>
-            <div class="container--download">
-                <div class="container--header">Download</div>
 
-                <a :href="livroDataSource.urldownload" target="_blank"><img v-if="downloadIcon" :src="this.downloadIcon"
-                        alt="download">
-                    <p>{{ livroDataSource.urldownload }}</p>
-                </a>
             </div>
+
+
+
         </div>
-
-
-    </div>
-    <div class="footer">
-        sd
+        <div class="footer">
+        </div>
     </div>
 </template>
 <style scoped>

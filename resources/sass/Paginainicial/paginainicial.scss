@@ -1,6 +1,6 @@
 .container {
     flex-flow: row wrap;
-    font-family: Georgia;
+    font-family: arial;
     font-size: 0.95em;
     .header {
         flex: 0 1 100%;
@@ -181,9 +181,4 @@
             }
         }
     }
-}
-.locked {
-    overflow: revert;
-
-    background-color: red;
 }

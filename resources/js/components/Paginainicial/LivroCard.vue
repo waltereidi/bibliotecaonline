@@ -1,6 +1,8 @@
 <script lang="ts">
 import config from "@/../json/bibliotecaconfig.json";
-import ModalImagem from "@/components/Utils/ModalImagem.vue";
+import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
+import ModalDownload from "@/components/Utils/Modal/ModalDownload.vue";
+
 
 export default {
     props: {
@@ -29,6 +31,7 @@ export default {
     },
     components: {
         ModalImagem,
+        ModalDownload,
     }
 
 }
@@ -58,18 +61,14 @@ export default {
                     <div class="infoLivro" v-if="dataSource.idioma">
                         <p> Idioma:</p><span>{{ dataSource.idioma }}</span>
                     </div>
-                    <div class="infoLivro" v-if="dataSource.urldownload">
-                        <p>Download:</p><span><a :href="dataSource.urldownload" target="_blank">
-                                <img :src="downloadIcon" v-if="dataSource.urldownload">
-                                <p v-else>{{ dataSource.urldownload }}</p>
-                            </a>
-
-                        </span>
+                    <div class="infoLivro infoLivro--download" v-if="dataSource.urldownload">
+                        <p>Download:</p>
+                        <ModalDownload :urldownload="dataSource.urldownload"></ModalDownload>
                     </div>
 
                 </div>
                 <div v-if="dataSource.descricao" class="leftInfo--informacoes__right">
-                    <p>{{ dataSource.descricao }}</p>
+                    <p>{{ dataSource.descricao.substring(0, 600) + (dataSource.descricao.length > 600 ? '...' : '') }}</p>
                 </div>
             </div>
         </div>

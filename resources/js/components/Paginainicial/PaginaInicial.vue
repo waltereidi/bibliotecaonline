@@ -103,7 +103,7 @@ export default {
 }
 </script>
 <template>
-    <div :class="{ 'container locked': lockScreen, 'container': !lockScreen }">
+    <div class="container">
         <div class="header">
             <img :src="'/imagens/wallpaper.jpg'" />
         </div>

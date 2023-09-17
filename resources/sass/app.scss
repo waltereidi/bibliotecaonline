@@ -1,10 +1,12 @@
 @use "@material/card";
+@use "@material/button";
 @use "@material/button/styles";
 @use "@material/floating-label/mdc-floating-label";
 @use "@material/line-ripple/mdc-line-ripple";
 @use "@material/notched-outline/mdc-notched-outline";
 @use "@material/textfield";
 @use "@material/textfield/icon";
+@use "@material/dialog";
 // Fonts
 @import url("https://fonts.bunny.net/css?family=Nunito");
 @import "material-icons/iconfont/material-icons.css";
@@ -13,11 +15,11 @@
 
 // Bootstrap
 @import "bootstrap/scss/bootstrap";
-
+@include dialog.core-styles;
 @include card.core-styles;
 @include icon.icon-core-styles;
 @include textfield.core-styles;
-
+@include dialog.core-styles;
 .mdc-button {
     &--cancelar {
         --mdc-theme-primary: #2962ff;
@@ -36,4 +38,10 @@
     &--excluir {
         --mdc-theme-primary: #d50000;
     }
+    &--download {
+        --mdc-theme-primary: #d50000;
+    }
+}
+.body {
+    font-family: "Roboto Mono";
 }

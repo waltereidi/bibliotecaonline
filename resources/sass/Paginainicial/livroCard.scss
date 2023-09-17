@@ -29,7 +29,8 @@
                     .infoLivro {
                         flex: 0 0 auto;
                         display: flex;
-                        p {
+                        margin: 0.5em 0 0.5em 0;
+                        > p {
                             flex: 0 0 6em;
                             font-weight: bold;
                         }
@@ -51,6 +52,18 @@
                                 flex: 0 0 13em;
                             }
                         }
+                        &--download {
+                            height: 3em;
+                            align-items: center;
+
+                            img {
+                                height: 3em;
+                                margin-bottom: 1em;
+                            }
+                            button {
+                                margin-bottom: 1.5em;
+                            }
+                        }
                     }
 
                     .label {
@@ -68,6 +81,7 @@
                         flex: 0 0 100%;
                         order: 2;
                         word-break: normal;
+                        font-size: 14px;
                     }
                 }
                 @media (min-width: 1100px) {
@@ -76,6 +90,7 @@
                         max-width: 30em;
                         order: 2;
                         word-break: normal;
+                        font-size: 14px;
                     }
                 }
             }
