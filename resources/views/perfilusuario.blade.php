@@ -6,15 +6,15 @@
 
         <title>Meu perfil biblioteca online</title>
 
-        @vite('resources/js/MeuPerfil/meuperfil.ts')
+        @vite('resources/js/PerfilUsuario/perfilUsuario.ts')
     </head>
 
         @extends('layouts.app')
         @section('content')
-            <div id="meuPerfil">
-                <dadosmeuperfil :authentication="{{ json_encode(Auth::user()->api_token) }}"></dadosmeuperfil>
+            <div id="perfilUsuario">
+                <perfilusuario>
 
-                <livrosmeuperfil  :authentication="{{ json_encode(Auth::user()->api_token) }}"></livrosmeuperfil>
+                </perfilusuario>
             </div>
 
         @endsection

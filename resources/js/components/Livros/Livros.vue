@@ -44,6 +44,8 @@ export default {
                             {{ livroDataSource.idioma }}
                             <span class="pipeLineSeparator">|</span></span>Por
                         {{ livroDataSource.autores_nome }}
+                        <span class="pipeLineSeparator">|</span>Doador: <a
+                            :href="'/perfilusuario/' + livroDataSource.users_id">{{ livroDataSource.users_name }}</a>
 
                     </p>
                     <hr>

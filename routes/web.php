@@ -29,6 +29,12 @@ Route::post('/meuPerfil', [App\Http\Controllers\MeuPerfilController::class, 'ind
 Route::get('/livros', function () {
     return view('livros');
 });
-Route::get('/testpage', function () {
-    return view('tests.testpage');
+Route::get('/perfilusuario', function () {
+    return view('perfilusuario');
 });
+
+
+
+// Route::get('/testpage', function () {
+//     return view('tests.testpage');
+// });

@@ -61,6 +61,9 @@ export default {
                     <div class="infoLivro" v-if="dataSource.idioma">
                         <p> Idioma:</p><span>{{ dataSource.idioma }}</span>
                     </div>
+                    <div class="infoLivro">
+                        <p>Doador:</p><span><a href="/perfilusuario">{{ dataSource.users_name }}</a></span>
+                    </div>
                     <div class="infoLivro infoLivro--download" v-if="dataSource.urldownload">
                         <p>Download:</p>
                         <ModalDownload :urldownload="dataSource.urldownload"></ModalDownload>

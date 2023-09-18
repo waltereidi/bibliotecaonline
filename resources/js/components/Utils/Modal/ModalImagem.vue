@@ -78,7 +78,8 @@ export default {
 }
 
 .modalImage {
-    height: 100%;
+    max-width: 95vw;
+    max-height: 95vh;
 }
 
 

@@ -1,0 +1,72 @@
+.container {
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1em;
+    max-width: 40vw;
+    font-family: sans-serif !important;
+    &--header {
+        &__blackline {
+            height: 15em;
+            background-color: black;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+            h3 {
+                display: inline;
+                position: relative;
+                top: 5.8em;
+                left: 7.6em;
+                color: white;
+            }
+            .containerProfilePicture {
+                position: relative;
+                background-color: teal;
+                height: 15em;
+                width: 8vw;
+                top: 3em;
+                left: 1.6em;
+                border-radius: 8px;
+            }
+        }
+        &__headerbottom {
+            background-color: white;
+            height: 8em;
+
+            .scores {
+                margin-right: 5em;
+                float: right;
+                height: 5em;
+                flex-wrap: row wrap;
+                display: flex;
+                gap: 1em;
+                margin-top: 1em;
+
+                &--card {
+                    text-align: center;
+                    margin-top: 1.4em;
+                    h4 {
+                        line-height: 0.5em;
+                    }
+                    p {
+                        font-size: 0.9em;
+                        color: rgba(33, 37, 41, 0.75);
+                    }
+                }
+            }
+        }
+    }
+    &--conteudo {
+        height: 4em;
+        padding: 1em 0 1em 0;
+        h5 {
+            margin-left: 1.6em;
+        }
+        p {
+            font-family: sans-serif;
+            font-size: 1rem;
+            padding: 1em 3.5em 1em 3.5em;
+        }
+    }
+    &--containerLivros {
+    }
+}

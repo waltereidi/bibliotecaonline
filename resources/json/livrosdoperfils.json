@@ -2,6 +2,7 @@
    {
       "id":2099,
       "users_id":1,
+      "users_name":"Walter",
       "titulo":"Principles: Life and Work",
       "isbn":"1501124021",
       "descricao":"In 1975, Ray Dalio founded an investment firm, Bridgewater Associates, out of his two-bedroom apartment in New York City. Forty years later, Bridgewater has made more money for its clients than any other hedge fund in history and grown into the fifth most important private company in the United States, according to Fortune magazine. Dalio himself has been named to Time magazine’s list of the 100 most influential people in the world. Along the way, Dalio discovered a set of unique principles that have led to Bridgewater’s exceptionally effective culture, which he describes as “an idea meritocracy that strives to achieve meaningful work and meaningful relationships through radical transparency.” It is these principles, and not anything special about Dalio—who grew up an ordinary kid in a middle-class Long Island neighborhood—that he believes are the reason behind his success.",
@@ -19,6 +20,7 @@
    {
       "id":2098,
       "users_id":1,
+      "users_name":"Walter",
       "titulo":"The most powerful idea in the world",
       "isbn":"B0036S49WS",
       "descricao":"Concerning how a toy built in Alexandria failed to inspire, and how a glass tube made in italy succeeded; the spectacle of two german hemispheres attached to sixteen german horses; and the critical importance of nothing at all to get to crofton from Birmingham, you take the M5 south about sixty miles to Brockworth and then change to the A417, which meanders first east, then southwest, then southeast, for another forty-six miles, changing, for no apparent reason, into the A419, and then the A436. In Burbage, you turn left at the Wolfhall Road and follow it another mile, across the railroad tracks and over the canal. The reason for making this three-hour journey (not counting time for wrong turns) is visible for the last quarter-mile or so: two red brick buildings next to a sixty-foot-tall chimney.",
@@ -36,6 +38,7 @@
    {
       "id":2094,
       "users_id":1,
+      "users_name":"Walter",
       "titulo":"TestCaseAdicionarMensagens",
       "isbn":"ISBN 09090",
       "descricao":"Introdução livro",
@@ -53,6 +56,7 @@
    {
       "id":2096,
       "users_id":1,
+      "users_name":"Walter",
       "titulo":"TestCaseAdicionarMensagens",
       "isbn":"ISBN 09090",
       "descricao":"Introdução livro",
@@ -70,6 +74,7 @@
    {
       "id":2097,
       "users_id":1,
+      "users_name":"Walter",
       "titulo":"TestCaseEditarMensagensVisualizado",
       "isbn":"ISBN 09090",
       "descricao":"Introdução livro",

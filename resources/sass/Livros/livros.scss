@@ -56,7 +56,6 @@
                 order: 1;
                 display: flex;
                 justify-content: right;
-                align-items: center;
                 &__capalivro {
                     max-width: 100%;
                     margin-right: 2em;
@@ -122,6 +121,7 @@
 }
 .pipeLineSeparator {
     color: #bdbdbd;
+    margin: 0 0.5em 0 0.5em;
 }
 details[open] {
     blockquote {

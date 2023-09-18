@@ -19,7 +19,7 @@
 </head>
 <body id="documentBody">
 
-    <div id="app">
+    <div id="app" >
 
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -85,7 +85,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main  class="py-4">
             @yield('content')
         </main>
 

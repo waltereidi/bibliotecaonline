@@ -1,9 +1,13 @@
 <script lang="ts">
+
 export default {
 
+
 }
+
 </script>
+
+
 <template>
-    <h1>Livros do meu perfil </h1>
+    <h1>meu perfil</h1>
 </template>
-<style scoped></style>
