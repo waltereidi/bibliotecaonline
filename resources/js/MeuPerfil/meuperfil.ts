@@ -1,7 +1,8 @@
 import { createApp } from 'vue/dist/vue.esm-bundler';
-import DadosMeuPerfil from "../components/MeuPerfil/MeuPerfil.vue";
-import LivrosMeuPerfil from "../components/MeuPerfil/LivrosMeuPerfil.vue";
-
+import MeuPerfil from "../components/MeuPerfil/MeuPerfil.vue";
+import {store} from "@/store";
 const meuPerfil = createApp();
-meuPerfil.component('meuperfil' , DadosMeuPerfil).component('livrosmeuperfil', LivrosMeuPerfil);
+meuPerfil.use(store);
+meuPerfil.component('meuperfil', MeuPerfil);
+
 meuPerfil.mount('#meuPerfil');

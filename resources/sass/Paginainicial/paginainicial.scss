@@ -64,6 +64,8 @@
                 .index:active {
                     background-color: #9b65ff45;
                     cursor: pointer;
+                    transform: scale(1.03);
+                    transition: all 0.03s ease-in-out 0.03s;
                 }
                 .ativo {
                     background-color: #9b65ff45;
@@ -105,11 +107,13 @@
                         flex: 0 0 1em;
                         order: 2;
                     }
+                    transition: all 0.1s ease-in 0.3s;
                 }
                 .menuContent:hover {
                     background-color: #9b65ff25;
                     border-bottom: 2px solid #2962ff80;
                     cursor: pointer;
+                    transition: all 0.01s ease-in-out 0.01s;
                 }
                 .menuContent:active {
                     background-color: #9b65ff25;
@@ -131,6 +135,7 @@
 
             .header {
                 background-color: #9b65ff30;
+                color: color(display-p3 0.3 0.3 0.5);
                 height: 2em;
                 width: 14em;
                 border-left: 2px solid #2962ff;

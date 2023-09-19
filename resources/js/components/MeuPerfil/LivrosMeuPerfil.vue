@@ -1,9 +1,16 @@
 <script lang="ts">
 export default {
+    data() {
+        return {
 
+        }
+
+    },
 }
 </script>
 <template>
-    <h1>Livros do meu perfil </h1>
+    <div class="mavonEditor">
+    </div>
 </template>
+
 <style scoped></style>

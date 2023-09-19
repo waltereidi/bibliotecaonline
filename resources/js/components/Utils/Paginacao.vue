@@ -76,31 +76,35 @@ export default {
 }
 </script>
 <template>
-    <nav aria-label="Page navigation example" class="paginacao">
-        <ul class="pagination">
+    <nav class="paginacao">
+        <ul class="pagination pagination-sm">
             <li class="page-item" v-if="quantidade > multiplicador">
                 <a class="page-link" @click="voltarPagina" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only"></span>
+                    Anterior
                 </a>
             </li>
             <div v-for="pagina in seletorPaginas">
                 <li v-if="paginacaoAtual == pagina" @click="retornaPaginacao(pagina)" class="page-item active">
                     <span class="page-link">
                         {{ pagina }}
-                        <span class="sr-only"></span>
+
                     </span>
                 </li>
-                <li class="page-item" @click="retornaPaginacao(pagina)" v-else><a class="page-link">{{ pagina }}</a></li>
+                <li class="page-item" @click="retornaPaginacao(pagina)" v-else>
+                    <a class="page-link">{{ pagina }}</a>
+                </li>
             </div>
 
             <li class="page-item" v-if="quantidade > multiplicador">
                 <a class="page-link" @click="proximaPagina" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only"></span>
+                    Próximo
                 </a>
             </li>
         </ul>
     </nav>
 </template>
-<style scoped></style>
+<style scoped>
+.borderless {
+    border: 0;
+}
+</style>

@@ -12,9 +12,8 @@
         @extends('layouts.app')
         @section('content')
             <div id="meuPerfil">
-                <dadosmeuperfil :authentication="{{ json_encode(Auth::user()->api_token) }}"></dadosmeuperfil>
+                <meuperfil :authentication="{{ json_encode(Auth::user()->api_token) }}"></meuperfil>
 
-                <livrosmeuperfil  :authentication="{{ json_encode(Auth::user()->api_token) }}"></livrosmeuperfil>
             </div>
 
         @endsection

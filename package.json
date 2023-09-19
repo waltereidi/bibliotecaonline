@@ -2,10 +2,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-       "dev": "vite",
-        "build": "vite build",
-        "serve": "vite --host",
-        "test": "vitest"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite --host",
+    "test": "vitest"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.10",
@@ -26,11 +26,6 @@
     "vue-loader": "^17.0.1"
   },
   "dependencies": {
-    "bootstrap": "^5.3.1",
-    "vue-loader": "^17.0.1",
-    "webpack": "^5.0.0-rc.6",
-    "vuex": "^4.0.2",
-    "pinia":"^2.1.6" ,
     "@material/button": "^14.0.0",
     "@material/card": "^14.0.0",
     "@material/dialog": "^14.0.0",
@@ -38,7 +33,13 @@
     "@material/textfield": "^14.0.0",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
-    "material-icons": "^1.13.10"
+    "bootstrap": "^5.3.1",
+    "material-icons": "^1.13.10",
+    "mavon-editor": "^3.0.1",
+    "pinia": "^2.1.6",
+    "vue-loader": "^17.0.1",
+    "vuex": "^4.0.2",
+    "webpack": "^5.0.0-rc.6"
   },
   "name": "bibliotecaonline",
   "description": "Troque livros , bibliotecaonline",

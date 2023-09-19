@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@vite('resources/js/paginainicial/paginainicial.ts')
+@vite('resources/js/Paginainicial/paginainicial.ts')
 
 @section('content')
 

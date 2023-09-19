@@ -1,6 +1,6 @@
 .mdc-card {
     margin: 2em 0 2em 0;
-    padding: 1em 0 1em 0;
+    padding: 1em 0.3em 1em 0.1em;
 
     &--elevated {
         flex-flow: row wrap;
@@ -98,6 +98,7 @@
 
         @media (min-width: 0px) and (max-width: 600px) {
             .rightMedia {
+                padding: 1em;
                 flex: 0 1 100%;
                 order: 3;
                 justify-content: center;

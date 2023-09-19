@@ -1,6 +1,6 @@
 <script lang="ts">
 import MeuPerfilDataSource from "@/../json/meuperfildatasource.json";
-import LivroPerfilUsuario from "@/components/PerfilUsuario/LivrosPerfilUsuario.vue";
+import LivrosDoPerfil from "@/../json/livrosdoperfils.json";
 import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
 import config from "@/../json/bibliotecaconfig.json";
 export default {
@@ -8,12 +8,15 @@ export default {
         return {
             meuPerfilDataSource: MeuPerfilDataSource,
             configDataSource: config,
+            livrosDataSource: LivrosDoPerfil,
+            windowSize: window.innerWidth,
         }
     },
     components: {
-        LivroPerfilUsuario,
         ModalImagem,
-    }
+    },
+
+
 }
 </script>
 
@@ -34,10 +37,7 @@ export default {
                         <h4>15</h4>
                         <p>Livros cadastrados</p>
                     </div>
-                    <div class="scores--card">
-                        <h4>3</h4>
-                        <p>Ticaracatica</p>
-                    </div>
+
                 </div>
 
             </div>
@@ -49,8 +49,30 @@ export default {
             <p>{{ meuPerfilDataSource.introducao }}</p>
 
         </div>
-        <div class="container--containerLivros">
+        <div class="container--containerLivros" v-if="windowSize > 460">
+            <div v-for="livro in livrosDataSource" class="container--containerLivros__livro">
+                <div class="capalivro">
+                    <img :src="livro.capalivro ?? configDataSource.capaLivroDefault">
+                </div>
 
+                <h5 class="titulo"><a :href="'livros/' + livro.id">{{ livro.titulo }}</a></h5>
+                <p class="informacao">{{ livro.autores_nome }}</p>
+            </div>
+
+        </div>
+        <div class="container--containerLivros" v-else>
+
+            <div v-for="livro in livrosDataSource" class="container--containerLivros__livro">
+                <a :href="'livros/' + livro.id">
+                    <div class="capalivro">
+                        <img :src="livro.capalivro ?? configDataSource.capaLivroDefault">
+                    </div>
+
+                    <h5 class="titulo">{{ livro.titulo }}</h5>
+                    <p class="informacao">{{ livro.autores_nome }}</p>
+                </a>
+
+            </div>
 
         </div>
 
