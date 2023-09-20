@@ -35,31 +35,59 @@ export default {
                 </div>
             </div>
             <div class="content--form__right">
-                <label class="mdc-text-field mdc-text-field--filled">
+                <label class="mdc-text-field mdc-text-field--filled ">
                     <label class="mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
                         <span class="mdc-text-field__ripple"></span>
-                        <span class="mdc-floating-label mdc-floating-label--float-above" id="my-label-id">
+                        <span class="mdc-floating-label mdc-floating-label--float-above">
                             Url da imagem do perfil
                         </span>
-                        <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id">
+                        <input class="mdc-text-field__input" type="text" aria-label="profile_picture">
                         <span class="mdc-line-ripple"></span>
                     </label>
                 </label>
 
-                <input type="date" class="datepicker">
 
+                <label class="mdc-text-field mdc-text-field--filled ">
+                    <label class="mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+                        <span class="mdc-text-field__ripple"></span>
+                        <span class="mdc-floating-label mdc-floating-label--float-above">
+                            Data de nascimento
+                        </span>
+                        <input type="date" class="mdc-text-field__date datepicker" max="2013-12-31"
+                            aria-label="datanascimento">
+                        <span class="mdc-line-ripple"></span>
+                    </label>
+                </label>
+
+
+                <label class="mdc-text-field mdc-text-field--filled mdc-text-field--CKEditor">
+                    <span class="mdc-floating-label mdc-floating-label--float-above">
+                        Introdução do perfil
+                    </span>
+                </label>
                 <div class="CKEditor">
-                    <CKEditor :content="'sdsd'"></CKEditor>
+
+                    <CKEditor :content="''" :width="'30em'"></CKEditor>
                 </div>
+                <div class="actions">
+                    <div class="actions--space">
+
+                    </div>
+                    <div class="actions--salvar">
+                        <button class="mdc-button mdc-button--raised">Salvar</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="content--livrosContainer">
+
+
             </div>
 
         </div>
-
-        <div class="content--livrosContainer">
-
-
-        </div>
-
     </div>
 </template>
 <style scoped>

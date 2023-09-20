@@ -1,5 +1,5 @@
 <template>
-    <textarea v-model="dataSource" id="editor1"></textarea>
+    <textarea v-model="dataSource" id="editor"></textarea>
 </template>
 
 <script >
@@ -11,6 +11,11 @@ export default {
             required: false,
             default: '',
         },
+        width: {
+            type: String,
+            required: true,
+        }
+
 
     },
     data() {
@@ -18,7 +23,7 @@ export default {
     },
     mounted() {
         ClassicEditor
-            .create(document.querySelector('#editor1'), {
+            .create(document.querySelector('#editor'), {
                 toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
                 heading: {
                     options: [
@@ -27,7 +32,15 @@ export default {
                         { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
                     ]
                 }
+            }).then(editor => {
+                editor.editing.view.change(writer => {
+                    writer.setStyle('min-height', '10em', editor.editing.view.document.getRoot());
+                    writer.setStyle('width', this.width, editor.editing.view.document.getRoot());
+
+                });
+                window.editor = editor;
             })
+
             .catch(error => {
                 console.error(error);
             });
@@ -36,3 +49,4 @@ export default {
 
 </script>
 
+<style></style>
