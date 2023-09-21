@@ -1,7 +1,12 @@
-@media (min-width: 1400px) {
+@media (min-width: 320px) and (max-width: 460px) {
+    .datepicker {
+        color: transparent;
+        border: none;
+    }
     .content {
-        margin-top: 4em;
+        margin: 4em auto 0 auto;
         flex-flow: column;
+        max-width: 320px;
         display: flex;
         &--form:hover,
         &--form:active {
@@ -17,7 +22,74 @@
             transition: all 0.1s ease-out 0.5s;
             flex-flow: row wrap;
             display: flex;
-            max-width: 60em;
+            padding: 1em;
+            &__left {
+                flex: 1 1 auto;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                margin-bottom: 2em;
+                .profile_picture {
+                    justify-content: center;
+                    max-width: 150px;
+                }
+            }
+            &__right {
+                pointer-events: auto;
+                order: 2;
+                flex: 1 1 auto;
+                gap: 2em;
+                flex-flow: column;
+                display: flex;
+                input {
+                }
+                textarea {
+                    width: 80%;
+                }
+            }
+            .actions {
+                display: flex;
+                flex-flow: row wrap;
+
+                justify-content: center;
+                &--space {
+                    flex: 1 1 auto;
+                    order: 1;
+                }
+                &--salvar {
+                    flex: 0 0 auto;
+                    order: 2;
+                }
+            }
+        }
+        &--livrosContainer {
+            justify-content: space-around;
+            display: flex;
+            margin-left: 2em;
+            margin-top: 5em;
+        }
+    }
+}
+@media (min-width: 460px) and (max-width: 1400px) {
+    .content {
+        margin: 4em auto 0 auto;
+        flex-flow: column;
+
+        display: flex;
+        &--form:hover,
+        &--form:active {
+            background-image: radial-gradient(#cfd8dc30, #cfd8dc40, #cfd8dc50);
+            transition: all 0.1s;
+            box-shadow: 0px 10px 10px -8px;
+        }
+        &--form {
+            pointer-events: none;
+            border: 1px solid #bdbdbd90;
+            box-shadow: 0 10px 10px -12px;
+            border-radius: 4px;
+            transition: all 0.1s ease-out 0.5s;
+            flex-flow: row wrap;
+            display: flex;
             margin: auto;
             padding: 1em;
             &__left {
@@ -39,14 +111,8 @@
                 flex-flow: column;
                 display: flex;
 
-                .CKEditor {
-                    max-height: 25em;
-                    p {
-                        display: block;
-                    }
-                    display: flex;
-
-                    margin-left: 1em;
+                textarea {
+                    width: 80%;
                 }
             }
             .actions {
@@ -65,15 +131,79 @@
             }
         }
         &--livrosContainer {
+            margin: auto;
+            margin-top: 5em;
         }
     }
 }
-.mdc-text-field {
-    &--CKEditor {
-        margin-bottom: -3em;
-        margin-left: 1em;
+@media (min-width: 1400px) {
+    .content {
+        margin: 4em auto 0 auto;
+        flex-flow: column;
+        max-width: 60em;
+
+        display: flex;
+        &--form:hover,
+        &--form:active {
+            background-image: radial-gradient(#cfd8dc30, #cfd8dc40, #cfd8dc50);
+            transition: all 0.1s;
+            box-shadow: 0px 10px 10px -8px;
+        }
+        &--form {
+            pointer-events: none;
+            border: 1px solid #bdbdbd90;
+            box-shadow: 0 10px 10px -12px;
+            border-radius: 4px;
+            transition: all 0.1s ease-out 0.5s;
+            flex-flow: row wrap;
+            display: flex;
+            padding: 1em;
+            &__left {
+                flex: 0 0 15em;
+                order: 1;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+
+                .profile_picture {
+                    justify-content: center;
+                }
+            }
+            &__right {
+                pointer-events: auto;
+                order: 2;
+                flex: 1 1 auto;
+                gap: 2em;
+                flex-flow: column;
+                display: flex;
+                padding: 1em;
+                textarea {
+                    width: 80%;
+                }
+            }
+
+            .actions {
+                display: flex;
+                flex-flow: row wrap;
+                flex: 0 0 auto;
+                justify-content: flex-end;
+                &--space {
+                    flex: 1 1 auto;
+                    order: 1;
+                }
+                &--salvar {
+                    flex: 0 0 auto;
+                    order: 2;
+                }
+            }
+        }
+        &--livrosContainer {
+            margin: auto;
+            margin-top: 5em;
+        }
     }
 }
+
 .datepicker {
     height: 2.5em;
     padding: 0 1em 0 1em;

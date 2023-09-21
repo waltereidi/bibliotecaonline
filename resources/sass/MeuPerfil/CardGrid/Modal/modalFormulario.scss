@@ -1,0 +1,152 @@
+.errorLabel {
+    color: #d50000;
+}
+
+button {
+    margin-top: 2em;
+}
+.spacing {
+    margin-top: 2em;
+}
+
+.hide {
+    display: none;
+}
+@media (min-width: 320px) and (max-width: 460px) {
+    .showModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Cor de fundo com transparência */
+        z-index: 1000;
+        /* Coloque um valor alto para sobrepor outros elementos */
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+
+        .containerModalFormulario {
+            padding: 2em 0 2em 0;
+            overflow: auto;
+            display: flex;
+            flex-flow: row wrap;
+            background-color: white;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            &--left {
+                display: flex;
+                flex: 0 0 12em;
+                img {
+                    max-width: 12em;
+                }
+            }
+            &--right {
+                display: flex;
+                flex-flow: column;
+                display: flex;
+                gap: 2em;
+                z-index: 1000;
+                padding: 3em;
+            }
+            &--actions {
+                position: relative;
+                margin-top: 4em;
+                .confirmar {
+                    position: absolute;
+                    left: 1em;
+                    bottom: 2em;
+                }
+                .cancelar {
+                    position: absolute;
+                    right: 1em;
+                    bottom: 2em;
+                }
+            }
+        }
+    }
+}
+@media (min-width: 460px) {
+    .showModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Cor de fundo com transparência */
+        z-index: 1000;
+        /* Coloque um valor alto para sobrepor outros elementos */
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+
+        .containerModalFormulario {
+            box-shadow: 0 10px 10px -8px;
+            padding: 2em 0 2em 0;
+            overflow: auto;
+            display: flex;
+            flex-flow: row wrap;
+            background-color: white;
+            justify-content: center;
+            align-items: center;
+            max-width: 50vw;
+            max-height: 80vh;
+            &--left {
+                display: flex;
+                flex: 0 0 15em;
+                order: 1;
+                img {
+                    max-width: 15em;
+                }
+            }
+            &--right {
+                flex: 0 0 calc(100% - 20em);
+                order: 2;
+                flex-flow: column;
+                display: flex;
+                gap: 1em;
+                z-index: 1000;
+                padding: 3em;
+                &__doubledInputRow {
+                    display: flex;
+                    flex-flow: row wrap;
+                    justify-content: space-between;
+                    label {
+                        flex: 0 0 45%;
+                    }
+                }
+            }
+            &--actions {
+                flex: 1 1 100%;
+                display: flex;
+                order: 2;
+                justify-content: space-around;
+                .confirmar {
+                    flex: 0 0 auto;
+                    order: 2;
+                }
+                .cancelar {
+                    flex: 0 0 auto;
+                    order: 1;
+                }
+            }
+        }
+    }
+}
+.containerModalFormulario::-webkit-scrollbar {
+    width: 0.5em;
+    height: 0.5em;
+}
+
+.containerModalFormulario::-webkit-scrollbar-track {
+    background-color: #e0e0e0;
+}
+
+.containerModalFormulario::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #e91e63;
+}

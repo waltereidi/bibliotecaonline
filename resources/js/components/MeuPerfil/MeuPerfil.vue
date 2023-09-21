@@ -2,7 +2,7 @@
 import CKEditor from "@/components/Utils/CKEditor.vue";
 import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
 import config from "@/../json/bibliotecaconfig.json";
-
+import CardContainer from "@/components/MeuPerfil/CardGrid/CardContainer.vue";
 export default {
     data() {
 
@@ -19,8 +19,9 @@ export default {
         }
     },
     components: {
-        CKEditor,
         ModalImagem,
+        CardContainer
+
 
     }
 
@@ -59,16 +60,24 @@ export default {
                     </label>
                 </label>
 
+                <label
+                    class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea mdc-text-field--with-internal-counter">
+                    <span class="mdc-notched-outline">
+                        <span class="mdc-notched-outline__leading"></span>
 
-                <label class="mdc-text-field mdc-text-field--filled mdc-text-field--CKEditor">
-                    <span class="mdc-floating-label mdc-floating-label--float-above">
-                        Introdução do perfil
+                        <span class="mdc-notched-outline__trailing">Introdução do perfil</span>
                     </span>
-                </label>
-                <div class="CKEditor">
 
-                    <CKEditor :content="''" :width="'30em'"></CKEditor>
-                </div>
+
+                    <span class="mdc-text-field__resizer">
+                        <textarea v-model="dataSource.introducao" class="mdc-text-field__input"
+                            aria-labelledby="my-label-id" rows="5" maxlength="2048"></textarea>
+                        <span class="mdc-text-field-character-counter" v-if="dataSource.introducao !== undefined">{{
+                            dataSource.introducao.length }} /
+                            2048</span>
+                    </span>
+
+                </label>
                 <div class="actions">
                     <div class="actions--space">
 
@@ -82,11 +91,11 @@ export default {
 
             </div>
 
-            <div class="content--livrosContainer">
 
 
-            </div>
-
+        </div>
+        <div class="content--livrosContainer">
+            <CardContainer></CardContainer>
         </div>
     </div>
 </template>

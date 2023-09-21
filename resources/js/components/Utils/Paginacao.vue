@@ -84,13 +84,13 @@ export default {
                 </a>
             </li>
             <div v-for="pagina in seletorPaginas">
-                <li v-if="paginacaoAtual == pagina" @click="retornaPaginacao(pagina)" class="page-item active">
+                <li v-if="paginacaoAtual == pagina" @click="retornaPaginacao(pagina)" class="page-item active pagenumber">
                     <span class="page-link">
                         {{ pagina }}
 
                     </span>
                 </li>
-                <li class="page-item" @click="retornaPaginacao(pagina)" v-else>
+                <li class="page-item pagenumber" @click="retornaPaginacao(pagina)" v-else>
                     <a class="page-link">{{ pagina }}</a>
                 </li>
             </div>
@@ -106,5 +106,11 @@ export default {
 <style scoped>
 .borderless {
     border: 0;
+}
+
+@media(min-width:320px) and (max-width:460px) {
+    .pagenumber {
+        display: none;
+    }
 }
 </style>
