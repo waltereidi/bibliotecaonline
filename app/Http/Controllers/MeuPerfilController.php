@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MeuPerfil\DeleteLivrosRequest;
+use App\Http\Requests\MeuPerfil\PostLivrosRequest;
+use App\Http\Requests\MeuPerfil\PutLivrosRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
 use App\Models\Livros;
 use App\Models\MeuPerfil;
 use Illuminate\Http\JsonResponse;
@@ -173,5 +175,18 @@ class MeuPerfilController extends Controller
             $meuPerfil = new MeuPerfil();
             return $meuPerfil->editarMeuPerfil($dados);
         }
+    }
+
+    public function deleteLivros(DeleteLivrosRequest $request): JsonResponse
+    {
+        return response()->json('ok', 204);
+    }
+    public function postLivros(PostLivrosRequest $request): JsonResponse
+    {
+        return response()->json('ok', 204);
+    }
+    public function putLivros(PutLivrosRequest $request): JsonResponse
+    {
+        return response()->json('ok', 204);
     }
 }

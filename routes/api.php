@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\MensagensController;
 use App\Http\Controllers\MeuPerfilController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 
@@ -26,6 +25,12 @@ Route::prefix('meuperfil')->group(function () {
     Route::middleware('validartoken')->delete('removerLivros', [MeuPerfilController::class, 'removerLivros']);
     Route::middleware('validartoken')->put('editarMeuPerfil', [MeuPerfilController::class, 'editarMeuPerfil']);
     Route::middleware('validartoken')->post('getDadosMeuPerfil', [MeuPerfilController::class, 'getDadosMeuPerfil']);
+
+    //Requests
+
+    Route::middleware('validartoken')->delete('deleteLivros', [MeuPerfilController::class, 'deleteLivros']);
+    Route::middleware('validartoken')->post('postLivros', [MeuPerfilController::class, 'postLivros']);
+    Route::middleware('validartoken')->put('putLivros', [MeuPerfilController::class, 'putLivros']);
 });
 
 Route::prefix('mensagens')->group(function () {
