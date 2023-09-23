@@ -22,7 +22,7 @@ class PostLivrosRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'users_id' => ['required'],
+            'users_id' => ['required','integer'],
             'titulo' => ['required', 'string', 'max:60'],
             'descricao' => ['nullable', 'string', 'max:1024'],
             'visibilidade' => ['required', 'integer'],

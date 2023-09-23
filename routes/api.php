@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\MensagensController;
 use App\Http\Controllers\MeuPerfilController;
+use App\Http\Controllers\PaginaInicialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
+use Tests\Unit\PaginaInicialTest;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,7 @@ Route::prefix('meuperfil')->group(function () {
     Route::middleware('validartoken')->delete('deleteLivros', [MeuPerfilController::class, 'deleteLivros']);
     Route::middleware('validartoken')->post('postLivros', [MeuPerfilController::class, 'postLivros']);
     Route::middleware('validartoken')->put('putLivros', [MeuPerfilController::class, 'putLivros']);
+    Route::middleware('validartoken')->put('putMeuPerfil' , [MeuPerfilController::class , 'putMeuPerfil']);
 });
 
 Route::prefix('mensagens')->group(function () {
@@ -43,4 +46,10 @@ Route::prefix('mensagens')->group(function () {
 });
 Route::prefix('users')->group(function () {
     Route::post('getDadosUsers', [UsersController::class, 'getDadosUsers']);
+});
+
+Route::prefix('paginainicial')->group(function() {
+    Route::middleware('tokenaplicacao')->post('postBuscaIndice',[PaginaInicialController::class , 'postBuscaIndice']);
+    Route::middleware('tokenaplicacao')->post('postBusca',[PaginaInicialController::class , 'postBusca']);
+
 });

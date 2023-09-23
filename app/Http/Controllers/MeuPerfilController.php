@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MeuPerfil\DeleteLivrosRequest;
 use App\Http\Requests\MeuPerfil\PostLivrosRequest;
 use App\Http\Requests\MeuPerfil\PutLivrosRequest;
+use App\Http\Requests\MeuPerfil\PutMeuPerfilRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -188,5 +189,10 @@ class MeuPerfilController extends Controller
     public function putLivros(PutLivrosRequest $request): JsonResponse
     {
         return response()->json('ok', 204);
+    }
+    public function putMeuPerfil(PutMeuPerfilRequest $request ):JsonResponse
+    {
+        return response()->json('ok' , 204);
+
     }
 }

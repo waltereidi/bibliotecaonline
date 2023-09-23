@@ -55,4 +55,5 @@ class DeleteLivrosRequestTest extends TestCase
         $this->assertEquals(302, $retorno->getStatusCode());
         $retorno->assertSessionHasErrors(['id' => 'Campo obrigatório não preenchido']);
     }
+
 }

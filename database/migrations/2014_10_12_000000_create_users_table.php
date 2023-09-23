@@ -25,8 +25,8 @@ return new class extends Migration
         DB::table('users')->insert(array(['name' => 'TestCase' ,'email' =>'testCase@email.com' , 'password' => 'testCase']));
         DB::table('users')->insert(array(['name' => 'TestCaseAmigo' ,'email' =>'testCaseAmigo@email.com' , 'password' => 'testCase']));
     }
-        
-    
+
+
 
     /**
      * Reverse the migrations.

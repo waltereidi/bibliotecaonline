@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Paginainicial\PostBuscaIndiceRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PaginaInicialController extends Controller
@@ -25,5 +27,9 @@ class PaginaInicialController extends Controller
     public function index()
     {
         return view('paginainicial');
+    }
+    public function buscaIndice(PostBuscaIndiceRequest $request ) : JsonResponse
+    {
+        return response()->json('ok' , 204);
     }
 }

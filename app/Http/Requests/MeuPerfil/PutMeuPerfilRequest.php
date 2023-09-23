@@ -22,7 +22,19 @@ class PutMeuPerfilRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'id' => ['required' , 'integer'],
+            'introducao' => ['nullable' , 'max:2048' , 'string'] ,
+            'profile_picture' => ['nullable' , 'string' , 'url'] ,
+            'datanascimento' => ['nullable' ,'date_format:d/m/Y' ] ,
+        ];
+    }
+    public function messages():array
+    {
+        return[
+            'required' => 'Campo obrigatório não preenchido',
+          'max'=>'Limite de caracteres excedido',
+          'url'=>'Url inválida',
+          'date'=>'Data inválida'
         ];
     }
 }

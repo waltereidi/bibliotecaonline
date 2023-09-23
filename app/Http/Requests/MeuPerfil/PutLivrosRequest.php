@@ -22,7 +22,7 @@ class PutLivrosRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required'],
+            'id' => ['required','integer'],
             'users_id' => ['required'],
             'titulo' => ['required', 'string', 'max:60'],
             'descricao' => ['nullable', 'string', 'max:1024'],
