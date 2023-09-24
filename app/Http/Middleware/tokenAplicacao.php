@@ -27,7 +27,7 @@ class tokenAplicacao
         if (isset($api_token) &&  $aplicativo) {
             return $next($request);
         } else {
-
+            return response()->json('Token não autorizado, gere outro token novamente ', 401);
         }
     }
 }

@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MeuPerfilController;
-use App\Models\Livros;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -22,9 +21,9 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/paginainicial', [App\Http\Controllers\PaginaInicialController::class, 'index'])->name('paginainicial');
+Route::get('/paginainicial', [PaginaInicialController::class, 'index'])->name('paginainicial');
 
-Route::post('/meuPerfil', [App\Http\Controllers\MeuPerfilController::class, 'index'])->name('meuperfil');
+Route::post('/meuPerfil', [MeuPerfilController::class, 'index'])->name('meuperfil');
 
 Route::get('/livros', function () {
     return view('livros');
@@ -32,9 +31,3 @@ Route::get('/livros', function () {
 Route::get('/perfilusuario', function () {
     return view('perfilusuario');
 });
-
-
-
-// Route::get('/testpage', function () {
-//     return view('tests.testpage');
-// });

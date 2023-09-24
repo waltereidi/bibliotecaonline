@@ -5,7 +5,6 @@ use App\Http\Controllers\MeuPerfilController;
 use App\Http\Controllers\PaginaInicialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
-use Tests\Unit\PaginaInicialTest;
 
 /*
 |--------------------------------------------------------------------------

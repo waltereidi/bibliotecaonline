@@ -23,8 +23,16 @@ class PostBuscaRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'busca' => ['min:3' ,'required' , 'max:60' ,'string']
+        ];
 
-
+    }
+    public function messages():array
+    {
+        return [
+            'required' => 'Campo obrigatório não preenchido' ,
+            'min' =>'Campo deve possuir ao menos 3 caracteres' ,
+            'max' =>'Limite de caracteres excedido',
         ];
     }
 }

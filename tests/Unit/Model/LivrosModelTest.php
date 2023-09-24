@@ -2,28 +2,28 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\MeuPerfilController;
 use Tests\TestCase;
 use App\Models\Livros;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LivrosModelTest extends TestCase
 {
-    //SetUp
-    //Execução
-    //Assert
+    public $livros ;
+    public $user ;
 
-
+    public function setUp():void
+    {
+        parent::setUp();
+        $this->livros = new Livros() ;
+        $this->user = User::where('email' , 'testCase@email.com')->first();
+    }
     public function testeMeuPerfilLivrosDoUsuario_RetornaNull(): void
     {
         //SetUp
-        $livros = new Livros();
-        $user = User::where('email', 'testCase@email.com')->first();
+
         $id = 0;
         //Execução
-        $livrosDoUsuario = $livros->meuPerfilLivrosDoUsuario($id);
+        $livrosDoUsuario = $this->livros->meuPerfilLivrosDoUsuario($id);
 
         //Assert
         $this->assertNull($livrosDoUsuario);
@@ -31,11 +31,10 @@ class LivrosModelTest extends TestCase
     public function testeMeuPerfilLivrosDoUsuario_ComPaginacao_RetornaNull(): void
     {
         //SetUp
-        $livros = new Livros();
-        $user = User::where('email', 'testCase@email.com')->first();
+
         $id = 0;
         //Execução
-        $livrosDoUsuario = $livros->meuPerfilLivrosDoUsuario($id, 999);
+        $livrosDoUsuario = $this->livros->meuPerfilLivrosDoUsuario($id, 999);
         //Assert
         $this->assertNull($livrosDoUsuario);
     }
@@ -53,10 +52,10 @@ class LivrosModelTest extends TestCase
 
         //Execução
 
-        $livrosDataSource['users_id'] = $user->id;
-        $adicionarLivros = $livros->adicionarLivros($livrosDataSource);
+        $livrosDataSource['users_id'] = $this->user->id;
+        $adicionarLivros = $this->livros->adicionarLivros($livrosDataSource);
 
-        $livrosDoUsuario = $livros->meuPerfilLivrosDoUsuario($user->id);
+        $livrosDoUsuario = $this->livros->meuPerfilLivrosDoUsuario($this->user->id);
         $validarChaves = get_object_vars($livrosDoUsuario[0]);
         //Assert
         $this->assertNotEmpty($livrosDoUsuario);
@@ -85,8 +84,8 @@ class LivrosModelTest extends TestCase
 
         //Execução
 
-        $livrosDataSource['users_id'] = $user->id;
-        $adicionarLivros = $livros->adicionarLivros($livrosDataSource);
+        $livrosDataSource['users_id'] = $this->user->id;
+        $adicionarLivros = $this->livros->adicionarLivros($livrosDataSource);
         //Assert
         $this->assertInstanceOf(Livros::class, $adicionarLivros);
         $this->assertEquals($livrosDataSource['titulo'], $adicionarLivros->titulo);
@@ -103,16 +102,16 @@ class LivrosModelTest extends TestCase
         //Setup
         $livros = new Livros();
 
-        $user = User::where('email', 'testCase@email.com')->first();
+
         $livrosDataSource = [
             'titulo' => 'TestCase', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
             'capalivro' => null, 'editoras_nome' => 'TestCase',
             'autores_nome' => 'TestCase',
-            'users_id' => $user->id
+            'users_id' => $this->user->id
         ];
         //Execução
 
-        $adicionarLivros = $livros->adicionarLivros($livrosDataSource);
+        $adicionarLivros = $this->livros->adicionarLivros($livrosDataSource);
         $livrosDataSourceEditar = [
             'titulo' => 'TestCase Editar Model', 'descricao' => 'TestCase Editar Model', 'visibilidade' => 0, 'isbn' => null,
             'capalivro' => null, 'editoras_nome' => 'TestCase Editar Model',
@@ -120,7 +119,7 @@ class LivrosModelTest extends TestCase
             'id' => $adicionarLivros->id
         ];
 
-        $editarLivros = $livros->editarLivros($livrosDataSourceEditar);
+        $editarLivros = $this->livros->editarLivros($livrosDataSourceEditar);
 
         //Assert
         $this->assertEquals($livrosDataSourceEditar['titulo'], $editarLivros->titulo);
@@ -134,11 +133,10 @@ class LivrosModelTest extends TestCase
     public function testeMeuPerfilLivrosDoUsuarioQuantidade_RetornaInt(): void
     {
         //Setup
-        $livros = new Livros;
-        $user = User::where('email', 'testCase@email.com')->first();
+        
         //Execução
 
-        $meuPerfilLivrosDoUsuarioQuantidade = $livros->meuPerfilLivrosDoUsuarioQuantidade($user->id);
+        $meuPerfilLivrosDoUsuarioQuantidade = $this->livros->meuPerfilLivrosDoUsuarioQuantidade($this->user->id);
 
         //Assert
         $this->assertIsInt($meuPerfilLivrosDoUsuarioQuantidade);

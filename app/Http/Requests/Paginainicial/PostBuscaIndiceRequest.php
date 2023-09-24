@@ -22,15 +22,19 @@ class PostBuscaIndiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'busca'=>['array:indice,tipo' , 'nullable'],
-            'quantidade'=>['integer','nullable'],
-            'iniciopagina'=>['integer','nullable'],
+            'busca'=>['array' , 'required'],
+            'busca.*.indice' => ['required' , 'string' , 'max:30'] ,
+            'busca.*.tipo' => ['required' , 'string' ,'max:30'] ,
+            'quantidade'=>['integer','required'],
+            'iniciopagina'=>['integer','required'],
         ];
     }
     public function messages(): array
     {
         return [
-            'required' => 'Campo obrigatório não preenchido'
+            'required' => 'Campo obrigatório não preenchido',
+            'array' => 'Array de formato inválido',
+            'max' => 'Limite de caracteres excedido'
         ];
 
     }

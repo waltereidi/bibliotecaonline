@@ -19,7 +19,7 @@ return new class extends Migration
 
         });
         DB::table('aplicativo')->insert(array(['token_aplicacao'=> 'f53UhOaoMnMJUUqkWd4QO3aNy4aDaWGhWBYEWeoJPg7OyChLDIpaIb0ZTPkmF2zO' ,
-        'nome'=>'bibliotecaOnline']));
+        'nome'=>'bibliotecaonline']));
     }
 
     /**
