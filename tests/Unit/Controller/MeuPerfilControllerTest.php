@@ -13,22 +13,35 @@ use App\Models\MeuPerfil;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-
-use function PHPUnit\Framework\assertNotEmpty;
-
 class MeuPerfilControllerTest extends TestCase
 {
     //Setup
     //Execução
     //Assert
+    public $dados ;
+    public $meuPerfilController;
+    public $user ;
+
+    public function setUp():void
+    {
+        parent::setUp();
+        $this->dados =['titulo' => 'TestCase', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
+        'capalivro' => null, 'editoras_nome' => 'TestCase',
+        'autores_nome' => 'TestCase', 'genero' => 'Terror', 'idioma' => 'Português/Brasil',
+        'urldownload'=>'http://www.php.net'];
+        $this->meuPerfilController=new MeuPerfilController;
+        $this->user = User::where('email' , '=' ,'testCase@email.com')->first();
+
+
+    }
 
     public function testeIndex_SemAutenticacao_RetornaLoginView(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
 
         //Execução
-        $view = $meuPerfil->index();
+        $view = $this->meuPerfilController->index();
         //Assert
         $this->assertInstanceOf(View::class, $view);
         $this->assertEquals('auth.login', $view->getName());
@@ -37,10 +50,10 @@ class MeuPerfilControllerTest extends TestCase
     {
 
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         //Execução
-        $meuPerfil->setUsersId(0);
-        $view = $meuPerfil->index();
+        $this->meuPerfilController->setUsersId(0);
+        $view = $this->meuPerfilController->index();
         $viewDataSource = $view->getData();
         //Assert
         $this->assertInstanceOf(View::class, $view);
@@ -53,23 +66,22 @@ class MeuPerfilControllerTest extends TestCase
     public function testeAdicionarLivros_RetornaLivrosDataSource(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
-
         $livros = Request::create(
             'meuperfil/adicionarLivros',
             'POST',
             [
                 'titulo' => 'TestCase', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
                 'capalivro' => null, 'editoras_nome' => 'TestCase',
-                'autores_nome' => 'TestCase', 'genero' => 'Terror', 'idioma' => 'Português/Brasil'
+                'autores_nome' => 'TestCase', 'genero' => 'Terror', 'idioma' => 'Português/Brasil',
+                'urldownload'=>'http://www.php.net'
             ]
         );
 
         $user = User::where('email', 'testCase@email.com')->first();
 
-        $meuPerfil->setUsersId($user->id);
+        $this->meuPerfilController->setUsersId($user->id);
         //Execução
-        $adicionarLivros = $meuPerfil->adicionarLivros($livros);
+        $adicionarLivros = $this->meuPerfilController->adicionarLivros($livros);
         //Assert
         $this->assertInstanceOf(Livros::class, $adicionarLivros);
         $this->assertEquals($livros['titulo'], $adicionarLivros->titulo);
@@ -77,6 +89,7 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertEquals($livros['visibilidade'], $adicionarLivros->visibilidade);
         $this->assertEquals($livros['genero'], $adicionarLivros->genero);
         $this->assertEquals($livros['idioma'], $adicionarLivros->idioma);
+        $this->assertEquals($livros['urldownload'], $adicionarLivros->urldownload);
         $this->assertNotEmpty($adicionarLivros->autores_id);
         $this->assertNotEmpty($adicionarLivros->editoras_id);
         $this->assertNotEmpty($adicionarLivros->users_id);
@@ -85,19 +98,19 @@ class MeuPerfilControllerTest extends TestCase
     {
 
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $livros = Request::create(
             'meuperfil/adicionarLivros',
             'POST',
             [
                 'titulo' => 'TestCase', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
                 'capalivro' => null, 'editoras_nome' => 'TestCase',
-                'autores_nome' => 'TestCase'
+                'autores_nome' => 'TestCase','urldownload'=>'http://www.php.net'
             ]
         );
 
         //Execução
-        $adicionarLivros = $meuPerfil->adicionarLivros($livros);
+        $adicionarLivros = $this->meuPerfilController->adicionarLivros($livros);
 
         //Assert
         $this->assertStringContainsString('401', $adicionarLivros);
@@ -106,12 +119,12 @@ class MeuPerfilControllerTest extends TestCase
     {
 
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $user = User::where('email', 'testCase@email.com')->first();
 
-        $meuPerfil->setUsersId($user->id);
+        $this->meuPerfilController->setUsersId($user->id);
         //Execução
-        $meuPerfil->setUsersId(0);
+        $this->meuPerfilController->setUsersId(0);
         $livrosRequest = Request::create(
             'meuperfil/adicionarLivros',
             'POST',
@@ -121,7 +134,7 @@ class MeuPerfilControllerTest extends TestCase
                 'autores_nome' => 'TestCaseEditar'
             ]
         );
-        $adicionarLivros = $meuPerfil->adicionarLivros($livrosRequest);
+        $adicionarLivros = $this->meuPerfilController->adicionarLivros($livrosRequest);
 
         //Assert
         $this->assertIsObject($adicionarLivros);
@@ -131,7 +144,7 @@ class MeuPerfilControllerTest extends TestCase
     public function testeEditarLivros_RetornaLivrosDataSource(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $livros = Request::create(
             'meuperfil/adicionarLivros',
             'POST',
@@ -139,16 +152,17 @@ class MeuPerfilControllerTest extends TestCase
                 'titulo' => 'TestCase', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
                 'editoras_nome' => 'TestCase',
                 'autores_nome' => 'TestCase',
-                'capalivro' => 'https://img.freepik.com/free-psd/book-hardcover-mockup_125540-225.jpg?w=1060&t=st=1691442549~exp=1691443149~hmac=dcdee8ad230673bf52de12265b676387c937a4cf1f04434ed43a26ea2c051d48'
+                'capalivro' => 'https://img.freepik.com/free-psd/book-hardcover-mockup_125540-225.jpg?w=1060&t=st=1691442549~exp=1691443149~hmac=dcdee8ad230673bf52de12265b676387c937a4cf1f04434ed43a26ea2c051d48',
+                'urldownload'=>'http://www.php.net'
             ]
         );
 
         $user = User::where('email', 'testCase@email.com')->first();
 
-        $meuPerfil->setUsersId($user->id);
+        $this->meuPerfilController->setUsersId($user->id);
 
         //Execucao
-        $adicionarLivros = $meuPerfil->adicionarLivros($livros);
+        $adicionarLivros = $this->meuPerfilController->adicionarLivros($livros);
         $editarLivrosRequest = Request::create(
             'meuperfil/adicionarLivros',
             'POST',
@@ -156,10 +170,11 @@ class MeuPerfilControllerTest extends TestCase
                 'id' => $adicionarLivros->id,
                 'titulo' => 'TestCaseEditar', 'descricao' => 'TestCaseEditar', 'visibilidade' => 0, 'isbn' => null,
                 'capalivro' => null, 'editoras_nome' => 'TestCaseEditar',
-                'autores_nome' => 'TestCaseEditar', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Português do Brasil'
+                'autores_nome' => 'TestCaseEditar', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Português do Brasil',
+                'urldownload'=>'http://www.php.net'
             ]
         );
-        $editarLivros = $meuPerfil->editarLivros($editarLivrosRequest);
+        $editarLivros = $this->meuPerfilController->editarLivros($editarLivrosRequest);
         //Asssert
         $this->assertInstanceOf(Livros::class, $editarLivros);
         $this->assertEquals($editarLivrosRequest['titulo'], $editarLivros->titulo);
@@ -175,23 +190,23 @@ class MeuPerfilControllerTest extends TestCase
     public function testeRemoverLivros_RetornaTrue(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $livros = Request::create(
             'meuperfil/adicionarLivros',
             'POST',
             [
                 'titulo' => 'TestCase', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
                 'capalivro' => null, 'editoras_nome' => 'TestCase',
-                'autores_nome' => 'TestCase'
+                'autores_nome' => 'TestCase','urldownload'=>'http://www.php.net'
             ]
         );
 
         $user = User::where('email', 'testCase@email.com')->first();
-        $meuPerfil->setUsersId($user->id);
+        $this->meuPerfilController->setUsersId($user->id);
 
         //Execução
-        $adicionarLivros = $meuPerfil->adicionarLivros($livros);
-        $livro = $meuPerfil->removerLivros($adicionarLivros->id);
+        $adicionarLivros = $this->meuPerfilController->adicionarLivros($livros);
+        $livro = $this->meuPerfilController->removerLivros($adicionarLivros->id);
 
         //Assert
         $this->assertTrue($livro);
@@ -200,7 +215,7 @@ class MeuPerfilControllerTest extends TestCase
     public function testeRemoverLivros_RetornaFalse(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $livros = Request::create(
             'meuperfil/adicionarLivros',
             'POST',
@@ -211,10 +226,10 @@ class MeuPerfilControllerTest extends TestCase
             ]
         );
         $user = User::where('email', 'testCase@email.com')->first();
-        $meuPerfil->setUsersId($user->id);
+        $this->meuPerfilController->setUsersId($user->id);
 
         //Execução
-        $livro = $meuPerfil->removerLivros(0);
+        $livro = $this->meuPerfilController->removerLivros(0);
 
         //Assert
         $this->assertFalse($livro);
@@ -222,7 +237,7 @@ class MeuPerfilControllerTest extends TestCase
     public function testeGetPaginacao_retornaNull(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $user = User::where('email', 'testCase@email.com')->first();
         $request = Request::create(
             'meuperfil/getPaginacaoLivrosDoUsuario',
@@ -230,7 +245,7 @@ class MeuPerfilControllerTest extends TestCase
             ['users_id' => $user->id, 'paginacao' => 99999]
         );
         //Execução
-        $livrosDoUsuarioPaginacao = $meuPerfil->getPaginacaoLivrosDoUsuario($request);
+        $livrosDoUsuarioPaginacao = $this->meuPerfilController->getPaginacaoLivrosDoUsuario($request);
 
         //Assert
         $this->assertNull($livrosDoUsuarioPaginacao);
@@ -239,7 +254,7 @@ class MeuPerfilControllerTest extends TestCase
     public function testeValidarLivrosRequest_UrlInvalida_retornaErro(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $livros = Request::create(
             'meuperfil/adicionarLivros',
             'POST',
@@ -248,11 +263,12 @@ class MeuPerfilControllerTest extends TestCase
                 'editoras_nome' => 'TestCase',
                 'autores_nome' => 'TestCase',
                 'capalivro' => 'testeURLInvalida',
+                'urldownload'=>'testeURLInvalida'
             ]
         );
-        $meuPerfil->setUsersId(0);
+        $this->meuPerfilController->setUsersId(0);
         //Execução
-        $validator = $meuPerfil->validarLivrosRequest($livros);
+        $validator = $this->meuPerfilController->validarLivrosRequest($livros);
         $dados = $validator['dados'];
         $validador = $validator['validador'];
         //Assert
@@ -262,7 +278,7 @@ class MeuPerfilControllerTest extends TestCase
     public function testeValidarLivrosRequest_UrlInvalida_retornaTrue(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $livros = Request::create(
             'meuperfil/adicionarLivros',
             'POST',
@@ -270,23 +286,24 @@ class MeuPerfilControllerTest extends TestCase
                 'titulo' => 'TestCase', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
                 'editoras_nome' => 'TestCase',
                 'autores_nome' => 'TestCase',
-                'capalivro' => null,
+                'capalivro' => 'sdsd',
+                'urldownload'=>'sdsds'
             ]
         );
-        $meuPerfil->setUsersId(0);
+        $this->meuPerfilController->setUsersId(0);
 
         //Execução
-        $validator = $meuPerfil->validarLivrosRequest($livros);
+        $validator = $this->meuPerfilController->validarLivrosRequest($livros);
         $dados = $validator['dados'];
         $validador = $validator['validador'];
         //Assert
-        $this->assertFalse($validador->fails());
+        $this->assertTrue($validador->fails());
         $this->assertNotEmpty($dados);
     }
     public function testeEditarMeuPerfil_RetornaDataSource(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $user = User::where('email', '=', 'testCase@email.com')->first();
         $requestEditarMeuPerfil = Request::create(
             'meuperfil/editarMeuPerfil',
@@ -299,9 +316,9 @@ class MeuPerfilControllerTest extends TestCase
         );
         //Execução
 
-        $meuPerfil->setUsersId($user->id);
+        $this->meuPerfilController->setUsersId($user->id);
 
-        $editarMeuPerfil = $meuPerfil->editarMeuPerfil($requestEditarMeuPerfil);
+        $editarMeuPerfil = $this->meuPerfilController->editarMeuPerfil($requestEditarMeuPerfil);
 
         //Assert
         $this->assertInstanceOf(MeuPerfil::class, $editarMeuPerfil);
@@ -315,7 +332,7 @@ class MeuPerfilControllerTest extends TestCase
     public function testeEditarMeuPerfil_RetornaMensagemDeErro(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $user = User::where('email', '=', 'testCase@email.com')->first();
         $requestEditarMeuPerfil = Request::create(
             'meuperfil/editarMeuPerfil',
@@ -327,15 +344,15 @@ class MeuPerfilControllerTest extends TestCase
         );
 
         //Execução
-        $meuPerfil->setUsersId($user->id);
-        $editarMeuPerfil = $meuPerfil->editarMeuPerfil($requestEditarMeuPerfil);
+        $this->meuPerfilController->setUsersId($user->id);
+        $editarMeuPerfil = $this->meuPerfilController->editarMeuPerfil($requestEditarMeuPerfil);
         //Assert
         $this->assertEquals(417, $editarMeuPerfil->getStatusCode());
     }
     public function testeValidarMeuPerfilRequest_RetornaErroValidacao(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $user = User::where('email', '=', 'testCase@email.com')->first();
         $requestEditarMeuPerfil = Request::create(
             'meuperfil/editarMeuPerfil',
@@ -347,8 +364,8 @@ class MeuPerfilControllerTest extends TestCase
             ]
         );
         //Execução
-        $meuPerfil->setUsersId($user->id);
-        $validarMeuPerfilRequest = $meuPerfil->validarMeuPerfilRequest($requestEditarMeuPerfil);
+        $this->meuPerfilController->setUsersId($user->id);
+        $validarMeuPerfilRequest = $this->meuPerfilController->validarMeuPerfilRequest($requestEditarMeuPerfil);
         $validador = $validarMeuPerfilRequest['validador'];
         $dados = $validarMeuPerfilRequest['dados'];
 
@@ -361,7 +378,7 @@ class MeuPerfilControllerTest extends TestCase
     public function testeValidarMeuPerfilRequest_RetornaSucesso(): void
     {
         //Setup
-        $meuPerfil = new MeuPerfilController();
+
         $user = User::where('email', '=', 'testCase@email.com')->first();
         $requestEditarMeuPerfil = Request::create(
             'meuperfil/editarMeuPerfil',
@@ -374,8 +391,8 @@ class MeuPerfilControllerTest extends TestCase
         );
 
         //Execução
-        $meuPerfil->setUsersId($user->id);
-        $validarMeuPerfilRequest = $meuPerfil->validarMeuPerfilRequest($requestEditarMeuPerfil);
+        $this->meuPerfilController->setUsersId($user->id);
+        $validarMeuPerfilRequest = $this->meuPerfilController->validarMeuPerfilRequest($requestEditarMeuPerfil);
         $validador = $validarMeuPerfilRequest['validador'];
         $dados = $validarMeuPerfilRequest['dados'];
 
@@ -390,11 +407,10 @@ class MeuPerfilControllerTest extends TestCase
     {
         //Setup
         $user = User::where('email', '=', 'testCase@email.com')->first();
-        $meuPerfilController = new MeuPerfilController();
         Auth::loginUsingId($user->id);
         //Execução
 
-        $meuPerfil = $meuPerfilController->getDadosMeuPerfil();
+        $meuPerfil = $this->meuPerfilController->getDadosMeuPerfil();
         $meuPerfilDataSource = $meuPerfil->getData();
         //Assert
         $this->assertEquals(200, $meuPerfil->getStatusCode());

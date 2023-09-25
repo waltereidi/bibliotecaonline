@@ -60,9 +60,10 @@ class MeuPerfilController extends Controller
             'isbn' => 'nullable|string|max:20',
             'editoras_nome' => 'required|string|max:60',
             'autores_nome' => 'required|string|max:60',
-            'capalivro' => 'nullable|max:512|url',
+            'capalivro' => ['nullable','max:512','url'],
             'genero' => 'nullable|max:30|string',
             'idioma' => 'nullable|max:30|string',
+            'urldownload' => ['required','max:2048','url'],
         ];
 
 
@@ -73,7 +74,7 @@ class MeuPerfilController extends Controller
         ];
         $dados = [
             'users_id' => $this->users_id,
-            'titulo' => $livros['titulo'],
+            'titulo' => $livros->titulo,
             'descricao' => (empty($livros->descricao) ? null : $livros->descricao),
             'visibilidade' => $livros->visibilidade,
             'isbn' => (empty($livros->isbn) ? null : $livros->isbn),
@@ -82,6 +83,7 @@ class MeuPerfilController extends Controller
             'capalivro' => (empty($livros->capalivro) ? null : $livros->capalivro),
             'genero' => (empty($livros->genero) ? null : $livros->genero),
             'idioma' => (empty($livros->idioma) ? null : $livros->idioma),
+            'urldownload' => $livros->urldownload,
         ];
         if (isset($livros->id) && $livros->id != null) {
             $regras['id'] = 'required';

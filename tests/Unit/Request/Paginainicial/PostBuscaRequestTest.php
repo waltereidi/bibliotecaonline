@@ -18,9 +18,7 @@ class PostBuscaRequestTest extends TestCase
         $this->aplicativo = Aplicativo::where('nome', '=', 'bibliotecaonline')->first();
         $this->url = '/api/paginainicial/postBusca';
         $this->dados=['Authorization'=>'Bearer '.$this->aplicativo->token_aplicacao,
-        'quantidade'=>10 ,
-        'iniciopagina'=>0,
-        'busca'=>'TestCase' ];
+        'busca'=>'Test-/02' ];
     }
 
     public function testeBusca_TokenInvalido_Retorna401():void

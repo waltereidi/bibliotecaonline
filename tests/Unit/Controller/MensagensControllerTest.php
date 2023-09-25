@@ -28,7 +28,8 @@ class MensagensControllerTest extends TestCase
         $livrosDataSource = [
             'titulo' => 'TestCaseAdicionarMensagens', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
             'capalivro' => null, 'editoras_nome' => 'TestCaseAdicionarMensagens',
-            'autores_nome' => 'TestCaseAdicionarMensagens', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Inglês'
+            'autores_nome' => 'TestCaseAdicionarMensagens', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Inglês',
+            'urldownload'=>'http://www.php.net'
         ];
         $user = User::where('email', 'testCase@email.com')->first();
         Auth::loginUsingId($user->id, true);
@@ -59,7 +60,8 @@ class MensagensControllerTest extends TestCase
         $livrosDataSource = [
             'titulo' => 'TestCaseDeletarMensagens', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
             'capalivro' => null, 'editoras_nome' => 'TestCaseDeletarMensagens',
-            'autores_nome' => 'TestCaseDeletarMensagens', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Inglês'
+            'autores_nome' => 'TestCaseDeletarMensagens', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Inglês',
+            'urldownload'=>'http://www.php.net'
         ];
         $user = User::where('email', 'testCase@email.com')->first();
         Auth::loginUsingId($user->id, true);
@@ -93,7 +95,8 @@ class MensagensControllerTest extends TestCase
         $livrosDataSource = [
             'titulo' => 'TestCaseAdicionarMensagens', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
             'capalivro' => null, 'editoras_nome' => 'TestCaseAdicionarMensagens',
-            'autores_nome' => 'TestCaseAdicionarMensagens', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Inglês'
+            'autores_nome' => 'TestCaseAdicionarMensagens', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Inglês',
+            'urldownload'=>'http://www.php.net'
         ];
         $user = User::where('email', 'testCase@email.com')->first();
         Auth::loginUsingId($user->id, true);
@@ -132,7 +135,8 @@ class MensagensControllerTest extends TestCase
         $livrosDataSource = [
             'titulo' => 'TestCaseEditarMensagensVisualizado', 'descricao' => null, 'visibilidade' => 0, 'isbn' => null,
             'capalivro' => null, 'editoras_nome' => 'TestCaseEditarMensagensVisualizado',
-            'autores_nome' => 'TestCaseEditarMensagensVisualizado', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Inglês'
+            'autores_nome' => 'TestCaseEditarMensagensVisualizado', 'genero' => 'Ficção Ciêntifica', 'idioma' => 'Inglês',
+            'urldownload'=>'http://www.php.net'
         ];
         $user = User::where('email', 'testCase@email.com')->first();
         Auth::loginUsingId($user->id, true);
