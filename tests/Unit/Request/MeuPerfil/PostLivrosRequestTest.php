@@ -47,14 +47,14 @@ class PostLivrosRequestTest extends TestCase
         $this->assertEquals(401, $retorno->getStatusCode());
     }
 
-    public function testePostRequestLivrosRetorna204(): void
+    public function testePostRequestLivrosRetorna200(): void
     {
         //setup
         $dados = $this->dados;
         //execucao
         $request = $this->post($this->url, $dados);
         //assert
-        $this->assertEquals($request->getStatusCode(), 204);
+        $this->assertEquals($request->getStatusCode(), 201);
     }
     public function testePostRequestLivrosRetornaDadosIncorretos_naoespecificado_Retorna302(): void
     {

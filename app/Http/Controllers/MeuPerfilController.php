@@ -18,10 +18,11 @@ use Illuminate\Support\Carbon;
 class MeuPerfilController extends Controller
 {
     protected $users_id;
-
-    public function __construc()
+    public $livrosModel ;
+    public function __construct()
     {
         $this->users_id = Auth::id();
+        $this->livrosModel = new Livros ;
     }
     public function setUsersId($id)
     {
@@ -30,14 +31,14 @@ class MeuPerfilController extends Controller
 
     public function index()
     {
-        $livrosModel = new Livros;
+
         if ($this->users_id === null && Auth::id() === null) return view('auth.login');
 
         (Auth::id() === null) ? $this->setUsersId(Auth::id()) : null;
         $dataSourcePerfil = MeuPerfil::where('users_id', $this->users_id)->first();
 
-        $dataSourceLivros = $livrosModel->meuPerfilLivrosDoUsuario($this->users_id);
-        $dataSourceQuantidadeLivros = $livrosModel->meuPerfilLivrosDoUsuarioQuantidade($this->users_id);
+        $dataSourceLivros = $this->livrosModel->meuPerfilLivrosDoUsuario($this->users_id);
+        $dataSourceQuantidadeLivros = $this->livrosModel->meuPerfilLivrosDoUsuarioQuantidade($this->users_id);
 
         return view('meuperfil', [
             'dataSourceLivros' => $dataSourceLivros,
@@ -135,7 +136,7 @@ class MeuPerfilController extends Controller
 
     public function editarLivros(Request $livros)
     {
-        $livrosModel = new Livros;
+
         if ($this->users_id === null && Auth::id() === null) return response()->json(['erro' => 'Nao autenticado'], 401);
 
         $validaLivrosRequrest = $this->validarLivrosRequest($livros);
@@ -145,15 +146,15 @@ class MeuPerfilController extends Controller
         if ($validar->fails()) {
             return response()->json($validar->errors(), 417);
         } else {
-            $livro = $livrosModel->editarLivros($dados);
+            $livro = $this->livrosModel->editarLivros($dados);
             return $livro;
         }
     }
 
     public function removerLivros($id): Bool
     {
-        $livrosModel = new Livros;
-        $livro = $livrosModel->find($id);
+
+        $livro = $this->livrosModel->find($id);
         if ($livro) {
             return $livro->delete();
         } else {
@@ -162,9 +163,9 @@ class MeuPerfilController extends Controller
     }
     public function getPaginacaoLivrosDoUsuario(Request $request)
     {
-        $livros = new Livros;
+
         $parametros = $request->all();
-        return $livros->meuPerfilLivrosDoUsuario(Auth::id(), empty($request->paginacao) ? 0 : $request->paginacao);
+        return $this->livrosModel->meuPerfilLivrosDoUsuario(Auth::id(), empty($request->paginacao) ? 0 : $request->paginacao);
     }
     public function editarMeuPerfil(Request $request)
     {
@@ -182,11 +183,28 @@ class MeuPerfilController extends Controller
 
     public function deleteLivros(DeleteLivrosRequest $request): JsonResponse
     {
-        return response()->json('ok', 204);
+        $dados = $request->all();
+        $retorno = $this->removerLivros($dados['id']);
+        if(!$retorno){
+            return response()->json('Livro não encontrado', 204);
+        }
+        else
+        {
+            return response()->json('Livro deletado com sucesso' , 200);
+        }
     }
     public function postLivros(PostLivrosRequest $request): JsonResponse
     {
-        return response()->json('ok', 204);
+        $dados =$request->all();
+        $retorno = $this->livrosModel->adicionarLivros($dados);
+        if( !isset($retorno->id) )
+        {
+            return response()->json($retorno, 500 );
+        }
+        else
+        {
+            return response()->json($retorno , 201 );
+        }
     }
     public function putLivros(PutLivrosRequest $request): JsonResponse
     {

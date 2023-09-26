@@ -12,6 +12,12 @@ use App\Http\Controllers\MeuPerfilController;
 use App\Models\MeuPerfil;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\MeuPerfil\DeleteLivrosRequest;
+use App\Http\Requests\MeuPerfil\PostLivrosRequest;
+use App\Http\Requests\MeuPerfil\PutLivrosRequest;
+use App\Http\Requests\MeuPerfil\PutMeuPerfilRequest;
+use Mockery;
+use Mockery\MockInterface;
 
 class MeuPerfilControllerTest extends TestCase
 {
@@ -21,6 +27,7 @@ class MeuPerfilControllerTest extends TestCase
     public $dados ;
     public $meuPerfilController;
     public $user ;
+
 
     public function setUp():void
     {
@@ -426,5 +433,86 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertArrayHasKey('introducao', $validarChaves);
         $this->assertArrayHasKey('updated_at', $validarChaves);
         $this->assertArrayHasKey('created_at', $validarChaves);
+    }
+
+    public function testDeleteLivros_LivroNaoEncontrado_Retorna204(): void
+    {
+        //setup
+        $deleteLivrosRequest = new DeleteLivrosRequest([
+            'id'=>0
+        ]);
+        //execucao
+        $retorno = $this->meuPerfilController->deleteLivros($deleteLivrosRequest);
+
+        //assert
+        $this->assertEquals(204 , $retorno->getStatusCode());
+    }
+    public function testDeleteLivros_LivroDeletado_Retorna200():void
+    {
+        //setup
+        $livro = Livros::first();
+        $deleteLivrosRequest = new DeleteLivrosRequest([
+            'id' => $livro->id
+        ]);
+        //execucao
+        $retorno = $this->meuPerfilController->deleteLivros($deleteLivrosRequest);
+        //assert
+        $this->assertEquals(200  , $retorno->getStatusCode());
+    }
+
+    public function testPostLivros_insertRealizado_Retorna200()
+    {
+        //setup
+        $postLivrosRequest = new PostLivrosRequest([
+            'Authorization' => 'Bearer ' . $this->user->api_token,
+            'users_id' => 1,
+            'titulo' => 'TestCase Request',
+            'descricao' => 'TestCase Request',
+            'visibilidade' => 1,
+            'isbn' => 'TestCase',
+            'editoras_nome' => 'TestCase Request',
+            'autores_nome' => 'TestCase Request',
+            'capalivro' => null,
+            'genero' => null,
+            'idioma' => null,
+            'urldownload' => 'https://www.php.net/'
+        ]);
+
+        //execucao
+        $retorno = $this->meuPerfilController->postLivros($postLivrosRequest);
+
+        //assert
+        $this->assertEquals(201 , $retorno->getStatusCode() );
+
+    }
+    public function testPostLivros_mockSituacaoErro_Retorna226()
+    {
+        //setup
+        $postLivrosRequest = new PostLivrosRequest([
+            'Authorization' => 'Bearer ' . $this->user->api_token,
+            'users_id' => 1,
+            'titulo' => 'TestCase Request',
+            'descricao' => 'TestCase Request',
+            'visibilidade' => 1,
+            'isbn' => 'TestCase',
+            'editoras_nome' => 'TestCase Request',
+            'autores_nome' => 'TestCase Request',
+            'capalivro' => null,
+            'genero' => null,
+            'idioma' => null,
+            'urldownload' => 'https://www.php.net/'
+        ]);
+        $dados = $postLivrosRequest->all();
+
+        // Defina o comportamento esperado para o método indirectFunction()
+        $this->mock(Livros::class , function(MockInterface $mock){
+            $mock->shouldReceive('adicionarLivros')->andReturn(null);
+        });
+        //execucao
+        $retorno = $this->meuPerfilController->postLivros($postLivrosRequest);
+
+        //assert
+        $this->assertEquals(500 , $retorno->getStatusCode());
+
     }
 }

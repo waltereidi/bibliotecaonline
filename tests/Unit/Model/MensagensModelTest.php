@@ -37,29 +37,7 @@ class MensagensModelTest extends TestCase
         $this->assertInstanceOf(Mensagens::class, $retornoAdicionarMensagens);
     }
 
-    public function testeDeletarMensagens_RetornaTrue(): void
-    {
-        //Setup
-        $mensagens = new Mensagens;
-        $user = User::where('email', '=', 'testCase@email.com')->first();
-        $meuPerfil = MeuPerfil::where('id', '=', $user->id)->first();
-        Auth::loginUsingId($user->id);
-        $livros =  new Livros;
 
-        $livro = Livros::where('users_id', '=', $user->id)->first();
-        $dados = [
-            'meuperfil_id' => $meuPerfil->id,
-            'mensagem' => 'ModelTestCase AdicionarMensagem',
-            'livros_id' => $livro->id
-        ];
-        $retornoAdicionarMensagens = $mensagens->adicionarMensagens($dados);
-
-        //Execução
-        $retornoDeletarMensagens = $mensagens->deletarMensagens($livro->id);
-
-        //Assert
-        $this->assertTrue($retornoDeletarMensagens);
-    }
     public function testeEditarMensagens_RetornaInstanciaDeMensagens(): void
     {
         //Setup

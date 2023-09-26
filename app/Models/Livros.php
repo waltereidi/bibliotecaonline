@@ -51,7 +51,7 @@ class Livros extends Model
         return Livros::where('users_id', '=', $users_id)->count();
     }
 
-    public function adicionarLivros($livros)
+    public function adicionarLivros($livros) : ?Livros
     {
         DB::beginTransaction();
         try {
@@ -80,11 +80,11 @@ class Livros extends Model
             return $livro;
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json($e, 501);
+            return $e ;
         }
     }
 
-    public function editarLivros($livros)
+    public function editarLivros($livros) : ?Livros
     {
         try {
             DB::beginTransaction();
@@ -116,7 +116,7 @@ class Livros extends Model
             }
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json($e, 501);
+            return null;
         }
     }
     public function postBuscaIndice(int $quantidade ,int $iniciopagina , array $busca  ) : array
