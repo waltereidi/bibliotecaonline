@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Model;
 
 use App\Models\Mensagens;
 use App\Models\MeuPerfil;

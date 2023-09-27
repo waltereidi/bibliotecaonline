@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Controller;
 
 use App\Http\Controllers\ListaDeAmigosController;
 use App\Http\Requests\ListaDeAmigos\DeleteListaDeAmigosRequest;
@@ -18,45 +18,45 @@ class ListaDeAmigosControllerTest extends TestCase
      * A basic unit test example.
      */
    public $listaDeAmigosController ;
-   public $user; 
-   public $meuPerfil ; 
-   public $livros ; 
+   public $user;
+   public $meuPerfil ;
+   public $livros ;
    public $livro ;
    public function setUp() : void {
         parent::setUp();
-        
+
         $this->user = User::where('email' , '=' , 'testCase@email.com')->first();
-        Auth::loginUsingId($this->user->id ); 
+        Auth::loginUsingId($this->user->id );
         $this->listaDeAmigosController = new ListaDeAmigosController();
 
         $this->meuPerfil = MeuPerfil::where('users_id' , '=' , $this->user->id )->first();
-        $this->livros = new Livros(); 
-        
+        $this->livros = new Livros();
+
         $this->livro = Livros::where('users_id' , '=' , $this->user->id)->first();
    }
 
-   public function testeGetListaDeAmigos_RetornaDataSource() : void { 
-        //Setup 
+   public function testeGetListaDeAmigos_RetornaDataSource() : void {
+        //Setup
 
-        //Execução 
-        $getListaDeAmigosDataSource =  $this->listaDeAmigosController->getListaDeAmigos( ); 
+        //Execução
+        $getListaDeAmigosDataSource =  $this->listaDeAmigosController->getListaDeAmigos( );
 
-        //Assert 
-        $this->assertEquals(200 , $getListaDeAmigosDataSource->getStatusCode() ) ; 
-        
+        //Assert
+        $this->assertEquals(200 , $getListaDeAmigosDataSource->getStatusCode() ) ;
+
    }
 
-   public function testeAdicionarListaDeAmigos_RetornaDataSource() : void { 
+   public function testeAdicionarListaDeAmigos_RetornaDataSource() : void {
           //Setup
           $userAmigo = User::where('email' ,'=' , 'testCaseAmigo@email.com')->first();
-          
+
           $meuPerfilAmigo = MeuPerfil::where('users_id' , '=' , $userAmigo->id)->first();
-          
+
           $requestAdiconarListaDeAmigos = new PostListaDeAmigosRequest([
-               'meuperfil_id' => $meuPerfilAmigo->id  , 
+               'meuperfil_id' => $meuPerfilAmigo->id  ,
                'livros_id' => $this->livro->id ,
                ]);
-          
+
           //Execução
           $retornoAdicionaListaDeAmigos = $this->listaDeAmigosController->adicionarListaDeAmigos( $requestAdiconarListaDeAmigos );
           //Assert
@@ -64,27 +64,27 @@ class ListaDeAmigosControllerTest extends TestCase
 
 
    }
-   public function testeRemoverListaDeAmigos_RetornaBoolean() : void { 
+   public function testeRemoverListaDeAmigos_RetornaBoolean() : void {
 
-   
+
           //Setup
-          $userAmigo = User::where('email' , '=' ,'testCaseAmigo@email.com')->first(); 
-          $meuPerfilAmigo = MeuPerfil::where('users_id' , '=' , $userAmigo->id)->first(); 
-          
+          $userAmigo = User::where('email' , '=' ,'testCaseAmigo@email.com')->first();
+          $meuPerfilAmigo = MeuPerfil::where('users_id' , '=' , $userAmigo->id)->first();
+
           $listaDeAmigos = ListaDeAmigos::where('meuperfil_id' ,'=' , $this->meuPerfil->id )
           ->where('meuperfilamigo_id' , '=' , $meuPerfilAmigo->id )->first();
-          
+
           $deleteListaDeAmigosRequest = new DeleteListaDeAmigosRequest(
-               ['id' => $listaDeAmigos->id , 
-               'meuperfil_id' => $listaDeAmigos->meuperfil_id , 
-               'meuperfilamigo_id' => $listaDeAmigos->meuperfilamigo_id ,     
+               ['id' => $listaDeAmigos->id ,
+               'meuperfil_id' => $listaDeAmigos->meuperfil_id ,
+               'meuperfilamigo_id' => $listaDeAmigos->meuperfilamigo_id ,
                ]
           );
-          //Execução     
+          //Execução
           $removerListaDeAmigos = $this->listaDeAmigosController->removerListaDeAmigos( $deleteListaDeAmigosRequest );
 
-          //Assert 
-          $this->assertEquals(200 , $removerListaDeAmigos->getStatusCode()); 
+          //Assert
+          $this->assertEquals(200 , $removerListaDeAmigos->getStatusCode());
    }
 
 

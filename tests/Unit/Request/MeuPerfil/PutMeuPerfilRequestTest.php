@@ -20,6 +20,7 @@ class PutMeuPerfilRequestTest extends TestCase
         $this->dados = [
             'Authorization' => 'Bearer ' . $this->user->api_token,
             'id' => 0,
+            'users_id'=>0,
             'introducao' => 'testCase Request',
             'datanascimento' => '29/12/1993',
             'profile_picture' => 'http://www.php.net' ,
@@ -52,11 +53,13 @@ class PutMeuPerfilRequestTest extends TestCase
         //setup
         $dados= $this->dados;
         unset($dados['id']);
+        unset($dados['users_id']);
         //execucao
         $retorno = $this->put($this->url , $dados);
         //assert
         $this->assertEquals($retorno->getStatusCode() , 302);
         $retorno->assertSessionHasErrors('id' , 'Campo obrigatório não preenchido');
+        $retorno->assertSessionHasErrors('users_id' , 'Campo obrigatório não preenchido');
     }
     public function testePutMeuPerfil_CaracteresExcedidos_Retorna302():void
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Controller;
 
 use Illuminate\View\View;
 
@@ -9,16 +9,13 @@ use Illuminate\Http\Request;
 use App\Models\Livros;
 use App\Models\User;
 use App\Http\Controllers\MeuPerfilController;
-use App\Models\MeuPerfil;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\MeuPerfil\DeleteLivrosRequest;
 use App\Http\Requests\MeuPerfil\PostLivrosRequest;
 use App\Http\Requests\MeuPerfil\PutLivrosRequest;
 use App\Http\Requests\MeuPerfil\PutMeuPerfilRequest;
-use Mockery;
-use Mockery\MockInterface;
-
+use App\Models\MeuPerfil;
 class MeuPerfilControllerTest extends TestCase
 {
     //Setup
@@ -27,7 +24,7 @@ class MeuPerfilControllerTest extends TestCase
     public $dados ;
     public $meuPerfilController;
     public $user ;
-
+    public $meuPerfil ;
 
     public function setUp():void
     {
@@ -38,7 +35,7 @@ class MeuPerfilControllerTest extends TestCase
         'urldownload'=>'http://www.php.net'];
         $this->meuPerfilController=new MeuPerfilController;
         $this->user = User::where('email' , '=' ,'testCase@email.com')->first();
-
+        $this->meuPerfil = MeuPerfil::where('users_id' ,'=' ,$this->user->id)->first();
 
     }
 
@@ -90,7 +87,6 @@ class MeuPerfilControllerTest extends TestCase
         //Execução
         $adicionarLivros = $this->meuPerfilController->adicionarLivros($livros);
         //Assert
-        $this->assertInstanceOf(Livros::class, $adicionarLivros);
         $this->assertEquals($livros['titulo'], $adicionarLivros->titulo);
         $this->assertEquals($livros['descricao'], $adicionarLivros->descricao);
         $this->assertEquals($livros['visibilidade'], $adicionarLivros->visibilidade);
@@ -183,7 +179,6 @@ class MeuPerfilControllerTest extends TestCase
         );
         $editarLivros = $this->meuPerfilController->editarLivros($editarLivrosRequest);
         //Asssert
-        $this->assertInstanceOf(Livros::class, $editarLivros);
         $this->assertEquals($editarLivrosRequest['titulo'], $editarLivros->titulo);
         $this->assertEquals($editarLivrosRequest['descricao'], $editarLivros->descricao);
         $this->assertEquals($editarLivrosRequest['visibilidade'], $editarLivros->visibilidade);
@@ -318,7 +313,7 @@ class MeuPerfilControllerTest extends TestCase
             [
                 'profile_picture' => 'https://img.freepik.com/free-psd/book-hardcover-mockup_125540-225.jpg?w=1060&t=st=1691442549~exp=1691443149~hmac=dcdee8ad230673bf52de12265b676387c937a4cf1f04434ed43a26ea2c051d48',
                 'introducao' => 'TestCase',
-                'datanascimento' => Carbon::createfromDate(1993, 12, 29)->toDateString()
+                'datanascimento' =>'29/12/1993'
             ]
         );
         //Execução
@@ -326,15 +321,10 @@ class MeuPerfilControllerTest extends TestCase
         $this->meuPerfilController->setUsersId($user->id);
 
         $editarMeuPerfil = $this->meuPerfilController->editarMeuPerfil($requestEditarMeuPerfil);
-
         //Assert
-        $this->assertInstanceOf(MeuPerfil::class, $editarMeuPerfil);
         $this->assertEquals($editarMeuPerfil->profile_picture, $requestEditarMeuPerfil->profile_picture);
         $this->assertEquals($editarMeuPerfil->introducao, $requestEditarMeuPerfil->introducao);
-        $this->assertEquals(
-            Carbon::parse($editarMeuPerfil->datanascimento)->locale('pt_BR')->toDateString(),
-            Carbon::parse($requestEditarMeuPerfil->datanascimento)->locale('pt_BR')->toDateString()
-        );
+        $this->assertEquals( '1993-12-29',$editarMeuPerfil->datanascimento );
     }
     public function testeEditarMeuPerfil_RetornaMensagemDeErro(): void
     {
@@ -367,7 +357,7 @@ class MeuPerfilControllerTest extends TestCase
             [
                 'profile_picture' => 'URL',
                 'introducao' => 'TestCase',
-                'datanascimento' => Carbon::createFromDate(1993, 12, 29)->toDateString()
+                'datanascimento' => '29/12/1993'
             ]
         );
         //Execução
@@ -485,13 +475,13 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertEquals(201 , $retorno->getStatusCode() );
 
     }
-    public function testPostLivros_mockSituacaoErro_Retorna226()
+    public function testPostLivros_insertNaoRealizado_Retorna500()
     {
         //setup
         $postLivrosRequest = new PostLivrosRequest([
             'Authorization' => 'Bearer ' . $this->user->api_token,
-            'users_id' => 1,
-            'titulo' => 'TestCase Request',
+            'users_id' => 0,
+            'titulo' => 'TestCase Request Post Erro',
             'descricao' => 'TestCase Request',
             'visibilidade' => 1,
             'isbn' => 'TestCase',
@@ -502,17 +492,84 @@ class MeuPerfilControllerTest extends TestCase
             'idioma' => null,
             'urldownload' => 'https://www.php.net/'
         ]);
-        $dados = $postLivrosRequest->all();
 
-        // Defina o comportamento esperado para o método indirectFunction()
-        $this->mock(Livros::class , function(MockInterface $mock){
-            $mock->shouldReceive('adicionarLivros')->andReturn(null);
-        });
         //execucao
         $retorno = $this->meuPerfilController->postLivros($postLivrosRequest);
 
         //assert
-        $this->assertEquals(500 , $retorno->getStatusCode());
+        $this->assertEquals(500 , $retorno->getStatusCode() );
 
     }
+    public function testPutLivros_editRealizado_Retorna200():void
+    {
+        //setup
+        $livro = Livros::first();
+        $putLivrosRequest = new PutLivrosRequest([
+            'Authorization' => 'Bearer ' . $this->user->api_token,
+            'id' => $livro->id ,
+            'users_id' => $livro->users_id,
+            'titulo' => 'TestCase PutRequest',
+            'descricao' => 'TestCase PutRequest',
+            'visibilidade' => 1,
+            'isbn' => 'TestCase',
+            'editoras_nome' => 'TestCase PutRequest',
+            'autores_nome' => 'TestCase PutRequest',
+            'capalivro' => null,
+            'genero' => null,
+            'idioma' => null,
+            'urldownload' => 'https://www.php.net/'
+        ]);
+        //execucao
+        $retorno = $this->meuPerfilController->putLivros($putLivrosRequest);
+
+        //assert
+        $this->assertEquals(200 , $retorno->getStatusCode());
+
+    }
+
+    public function testPutLivros_editNaoRealizado_Retorna204():void
+    {
+        //setup
+        $putLivrosRequest = new PutLivrosRequest([
+            'Authorization' => 'Bearer ' . $this->user->api_token,
+            'id' => 0,
+            'users_id' => 0,
+            'titulo' => 'TestCase PutRequest',
+            'descricao' => 'TestCase PutRequest',
+            'visibilidade' => 1,
+            'isbn' => 'TestCase',
+            'editoras_nome' => 'TestCase PutRequest',
+            'autores_nome' => 'TestCase PutRequest',
+            'capalivro' => null,
+            'genero' => null,
+            'idioma' => null,
+            'urldownload' => 'https://www.php.net/'
+        ]);
+        //execucao
+        $retorno = $this->meuPerfilController->putLivros($putLivrosRequest);
+        //assert
+        $this->assertEquals(204 , $retorno->getStatusCode() );
+
+    }
+    public function testputMeuPerfil_EditarRealizado_Retorna200()
+    {
+        //setup
+
+        $putMeuPerfilRequest = new PutMeuPerfilRequest(
+            [
+                'Authorization' => 'Bearer ' . $this->user->api_token,
+                'users_id' => $this->meuPerfil->users_id ,
+                'id' => $this->meuPerfil->id ,
+                'introducao' => 'testCase EditarRealizadoRequest',
+                'datanascimento' => '29/12/1993',
+                'profile_picture' => 'http://www.php.net' ,
+            ]
+            );
+        //execucao
+        $retorno = $this->meuPerfilController->putMeuPerfil($putMeuPerfilRequest);
+        //assert
+        $this->assertEquals(200 , $retorno->getStatusCode());
+    }
+
+
 }

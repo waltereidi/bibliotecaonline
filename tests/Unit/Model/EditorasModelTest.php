@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Model;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Editoras;
@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class EditorasModelTest extends TestCase
 {
-    //Setup 
+    //Setup
     //Execucao
     //Assert
     public $editoras ;
@@ -19,10 +19,10 @@ class EditorasModelTest extends TestCase
 
     }
 
-   
+
     public function testeAdicionarAutorInexistente_retornaEntidade(){
-        
-    //Setup 
+
+    //Setup
         $nomeEditora = 'TestCase';
     //Execucao
         $editora = $this->editoras->adicionarEditoraInexistente($nomeEditora);

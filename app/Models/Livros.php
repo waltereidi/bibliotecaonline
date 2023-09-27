@@ -51,7 +51,7 @@ class Livros extends Model
         return Livros::where('users_id', '=', $users_id)->count();
     }
 
-    public function adicionarLivros($livros) : ?Livros
+    public function adicionarLivros($livros)
     {
         DB::beginTransaction();
         try {
@@ -84,17 +84,20 @@ class Livros extends Model
         }
     }
 
-    public function editarLivros($livros) : ?Livros
+    public function editarLivros($livros)
     {
         try {
             DB::beginTransaction();
+            $livroUpdate = Livros::find($livros['id']);
+
             $autores = new Autores();
             $autor = $autores->adicionarAutorInexistente($livros['autores_nome']);
 
             $editoras = new Editoras();
             $editora = $editoras->adicionarEditoraInexistente($livros['editoras_nome']);
 
-            $livro = Livros::find($livros['id'])->update([
+            if($livroUpdate){
+            $livro = $livroUpdate->update([
                 'titulo' => $livros['titulo'],
                 'descricao' => empty($livros['descricao']) ? null : $livros['descricao'],
                 'isbn' => empty($livros['isbn']) ? null : $livros['isbn'],
@@ -107,11 +110,12 @@ class Livros extends Model
                 'urldownload'=>$livros['urldownload'],
                 'updated_at' => now(),
             ]);
+            }
             if ($livro) {
                 DB::commit();
                 return Livros::find($livros['id']);
             } else {
-                DB::commit();
+                DB::rollBack();
                 return $livro;
             }
         } catch (Exception $e) {
@@ -119,7 +123,7 @@ class Livros extends Model
             return null;
         }
     }
-    public function postBuscaIndice(int $quantidade ,int $iniciopagina , array $busca  ) : array
+    public function postBuscaIndice(int $quantidade ,int $iniciopagina , array $busca  ) : ?array
     {
 
         $query =DB::table('livros')
@@ -160,7 +164,7 @@ class Livros extends Model
     $retorno = ['quantidadeTotal'=>$query->count() , 'livros'=>$query->get()];
     return $retorno ;
     }
-    public function getIndices() : object
+    public function getIndices() : ?object
     {
         $editoras = DB::table('livros')
             ->join('editoras' , 'editoras.id' ,'=' ,'livros.editoras_id')
@@ -189,7 +193,7 @@ class Livros extends Model
 
             return $todos;
     }
-    public function postBusca(string $busca) : array
+    public function postBusca(string $busca) : ?array
     {
         $query =DB::table('livros')
         ->join('editoras' , 'editoras.id' ,'=' , 'livros.editoras_id' )

@@ -26,6 +26,7 @@ class PutMeuPerfilRequest extends FormRequest
             'introducao' => ['nullable' , 'max:2048' , 'string'] ,
             'profile_picture' => ['nullable' , 'string' , 'url'] ,
             'datanascimento' => ['nullable' ,'date_format:d/m/Y' ] ,
+            'users_id' => ['required' , 'integer'] ,
         ];
     }
     public function messages():array

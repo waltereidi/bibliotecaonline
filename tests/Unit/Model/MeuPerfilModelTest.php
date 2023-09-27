@@ -1,12 +1,9 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Model;
 
 use App\Models\MeuPerfil;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class MeuPerfilModelTest extends TestCase
@@ -14,20 +11,34 @@ class MeuPerfilModelTest extends TestCase
     /**
      * A basic feature test example.
      */
-   public function testeEditarMeuPerfil_RetornaDataSource(){
-    //Setup 
-    $meuPerfil = new MeuPerfil;
-    $user = User::where('email' , '=' , 'testCase@email.com')->first(); 
-    $dados = ['introducao' => '' , 'profile_picture' => null , 
-            'datanascimento' => Carbon::createFromDate(1993 , 12 , 29 )->toDateString() , 
-            'users_id' => $user->id ];
-    
-    //Execução 
-    $editarMeuPerfil = $meuPerfil->editarMeuPerfil($dados); 
-    //Assert 
+    protected $meuPerfil ;
+    public function SetUp():void
+    {
+        parent::SetUp();
+        $this->meuPerfil = new MeuPerfil;
+    }
+   public function testeEditarMeuPerfil_RetornaDataSource(): void
+   {
+    //Setup
 
-    $this->assertInstanceOf(MeuPerfil::class , $editarMeuPerfil);
-    $this->assertEquals( $dados['datanascimento'] ,  $editarMeuPerfil->datanascimento);
-    
+    $user = User::where('email' , '=' , 'testCase@email.com')->first();
+    $dados = ['introducao' => '' , 'profile_picture' => null ,
+            'datanascimento' => '29/12/1993' ,
+            'users_id' => $user->id ];
+
+    //Execução
+    $editarMeuPerfil = $this->meuPerfil->editarMeuPerfil($dados);
+    //Assert
+    $this->assertEquals( '1993-12-29' , $editarMeuPerfil->datanascimento);
+
+   }
+   public function testEditarMeuPerfil_FormatarData():void
+   {
+    //setup
+    $data = '29/12/1993';
+    //execucao
+    $retorno = $this->meuPerfil->formatarData($data);
+    //assert
+    $this->assertEquals($retorno , '1993-12-29');
    }
 }

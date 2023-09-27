@@ -13,16 +13,17 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Livros;
 use App\Models\MeuPerfil;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Carbon;
 
 class MeuPerfilController extends Controller
 {
     protected $users_id;
-    public $livrosModel ;
+    protected $livrosModel;
+    protected $meuPerfil;
     public function __construct()
     {
         $this->users_id = Auth::id();
-        $this->livrosModel = new Livros ;
+        $this->livrosModel = new Livros;
+        $this->meuPerfil = new MeuPerfil;
     }
     public function setUsersId($id)
     {
@@ -61,10 +62,10 @@ class MeuPerfilController extends Controller
             'isbn' => 'nullable|string|max:20',
             'editoras_nome' => 'required|string|max:60',
             'autores_nome' => 'required|string|max:60',
-            'capalivro' => ['nullable','max:512','url'],
+            'capalivro' => ['nullable', 'max:512', 'url'],
             'genero' => 'nullable|max:30|string',
             'idioma' => 'nullable|max:30|string',
-            'urldownload' => ['required','max:2048','url'],
+            'urldownload' => ['required', 'max:2048', 'url'],
         ];
 
 
@@ -97,10 +98,10 @@ class MeuPerfilController extends Controller
     {
 
         $regras = [
-            'profile_picture' => 'url|string|max:1024',
-            'introducao' => 'string|max:1024',
+            'profile_picture' => 'url|string|max:2048',
+            'introducao' => 'string|max:2048',
             'users_id' => 'required|integer',
-            'datanascimento' => 'nullable|date',
+            'datanascimento' => 'nullable',
         ];
         $mensagens = [
             'url' => 'URL inválida',
@@ -110,7 +111,7 @@ class MeuPerfilController extends Controller
             'users_id' => $this->users_id,
             'profile_picture' => (empty($meuPerfil->profile_picture) ? null : $meuPerfil->profile_picture),
             'introducao' => (empty($meuPerfil->introducao) ? null : $meuPerfil->introducao),
-            'datanascimento' => (empty($meuPerfil->datanascimento) ? null : Carbon::parse($meuPerfil->datanascimento)->locale('pt_BR')->toDateString()),
+            'datanascimento' => (empty($meuPerfil->datanascimento) ? null : $meuPerfil->datanascimento ),
         ];
 
         return ['validador' => Validator::make($dados, $regras, $mensagens), 'dados' => $dados];
@@ -185,34 +186,50 @@ class MeuPerfilController extends Controller
     {
         $dados = $request->all();
         $retorno = $this->removerLivros($dados['id']);
-        if(!$retorno){
+        if (!$retorno) {
             return response()->json('Livro não encontrado', 204);
-        }
-        else
-        {
-            return response()->json('Livro deletado com sucesso' , 200);
+        } else {
+            return response()->json('Livro deletado com sucesso', 200);
         }
     }
     public function postLivros(PostLivrosRequest $request): JsonResponse
     {
-        $dados =$request->all();
+        $dados = $request->all();
         $retorno = $this->livrosModel->adicionarLivros($dados);
-        if( !isset($retorno->id) )
-        {
-            return response()->json($retorno, 500 );
-        }
-        else
-        {
-            return response()->json($retorno , 201 );
+        if (!isset($retorno->id)) {
+            return response()->json($retorno, 500);
+        } else {
+            return response()->json($retorno, 201);
         }
     }
     public function putLivros(PutLivrosRequest $request): JsonResponse
     {
-        return response()->json('ok', 204);
+        $dados = $request->all();
+        $retorno = $this->livrosModel->editarLivros($dados);
+        if (!isset($retorno->id)) {
+            if ($retorno == false) {
+                return response()->json('Livro não encontrado', 204);
+            } else {
+                return response()->json($retorno, 500);
+            }
+        } else {
+            return response()->json($retorno, 200);
+        }
     }
-    public function putMeuPerfil(PutMeuPerfilRequest $request ):JsonResponse
+    public function putMeuPerfil(PutMeuPerfilRequest $request): JsonResponse
     {
-        return response()->json('ok' , 204);
-
+        $dados = $request->all();
+        $retorno = $this->meuPerfil->editarMeuPerfil($dados);
+        if (!isset($retorno->id)) {
+            if($retorno == null ){
+                return response()->json('MeuPerfil não encontrado.', 204);
+            }else{
+                response()->json($retorno , 500);
+            }
+        }
+        else
+        {
+            return response()->json($retorno, 200);
+        }
     }
 }

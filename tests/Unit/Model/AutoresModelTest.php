@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Model;
 
 use App\Models\Autores;
 use Illuminate\Support\Facades\DB;
- 
+
 use Tests\TestCase;
 
 class AutoresModelTest extends TestCase
 {
-    //Setup 
+    //Setup
     //Execucao
     //Assert
     public $autores ;
@@ -18,12 +18,12 @@ class AutoresModelTest extends TestCase
         $this->autores = new Autores();
 
     }
-   
+
 
 
     public function testeAdicionarAutorInexistente_retornaEntidade(){
-        
-    //Setup 
+
+    //Setup
         $nomeAutor = 'TestCase';
     //Execucao
         $autor = $this->autores->adicionarAutorInexistente($nomeAutor);
