@@ -6,7 +6,7 @@
 
 
 <div id="paginainicial">
-    <PaginaInicial></PaginaInicial>
+    <PaginaInicial :token_aplicativo="'sdsd'"></PaginaInicial>
 </div>
 
 @endsection

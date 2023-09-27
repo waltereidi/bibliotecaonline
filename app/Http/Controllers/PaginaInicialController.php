@@ -9,6 +9,10 @@ use Illuminate\Http\JsonResponse;
 
 class PaginaInicialController extends Controller
 {
+    private $livros ;
+    public function __construct(){
+        $this->livros = new Livros ;
+    }
 
     public function index()
     {
@@ -17,9 +21,8 @@ class PaginaInicialController extends Controller
     public function postBuscaIndice(PostBuscaIndiceRequest $request ) : JsonResponse
     {
         $dados = $request->all();
-        $livros = new Livros;
 
-        $retorno = $livros->postBuscaIndice($dados['quantidade'] , $dados['iniciopagina'] , $dados['busca']);
+        $retorno = $this->livros->postBuscaIndice($dados['quantidade'] , $dados['iniciopagina'] , $dados['busca']);
         if($retorno['quantidadeTotal'] ==0 ){
             return response()->json('Busca sem resultados.' , 204);
         }
@@ -33,8 +36,8 @@ class PaginaInicialController extends Controller
     public function postBusca(PostBuscaRequest $request ) : JsonResponse
     {
         $dados = $request->all();
-        $livros = new Livros ;
-        $retorno = $livros->postBusca($dados['busca']);
+
+        $retorno = $this->livros->postBusca($dados['busca']);
         if($retorno['quantidadeTotal'] == 0){
             return response()->json ('Busca sem resultados.' , 204);
         }
@@ -42,5 +45,11 @@ class PaginaInicialController extends Controller
         {
             return response()->json($retorno , 200 );
         }
+    }
+
+    public function getIndices() : JsonResponse
+    {
+        $retorno =$this->livros->getIndices() ;
+        return response()->json($retorno, 200);
     }
 }

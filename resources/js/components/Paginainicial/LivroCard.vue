@@ -19,15 +19,7 @@ export default {
 
     },
     mounted() {
-        if (/drive\.google/.test(this.dataSource.urldownload)) {
-            this.downloadIcon = 'icons\\icons8-google-drive.svg';
-        } else if (/1drv\.ms/.test(this.dataSource.urldownload)) {
-            this.downloadIcon = 'icons\\icons8-onedrive.svg';
-        } else if (/dropbox/.test(this.dataSource.urldownload)) {
-            this.downloadIcon = 'icons\\icons8-dropbox.svg';
-        } else {
-            this.downloadIcon = '';
-        }
+
     },
     components: {
         ModalImagem,

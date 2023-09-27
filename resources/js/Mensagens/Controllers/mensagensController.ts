@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { Users } from '@/Utils/Entidades/users';
 import { ApiRequest } from '@/Utils/ApiRequest';
-import { MensagensCaixa } from '@/Mensagens/Entidades/mensagensCaixa';
-import { PostMensagensLivros } from '@/Mensagens/Entidades/postMensagensLivros';
-import { Mensagens } from '@/Mensagens/Entidades/mensagens';
-import { GetMensagensLivros } from '../Entidades/getMensagensLivros';
+import { MensagensCaixa } from '@/Entidades/mensagensCaixa';
+import { PostMensagensLivros } from '@/Entidades/postMensagensLivros';
+import { Mensagens } from '@/Entidades/mensagens';
+import { GetMensagensLivros } from '@/Entidades/getMensagensLivros';
 export class MensagensController {
     public api_token: string;
     private apiRequest: ApiRequest;

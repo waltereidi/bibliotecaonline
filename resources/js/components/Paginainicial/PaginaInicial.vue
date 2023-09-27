@@ -2,13 +2,21 @@
 import LivroCard from "./LivroCard.vue";
 import LivrosDataSource from "@/../json/livrosdoperfils.json";
 import Paginacao from "@/components/Utils/Paginacao.vue";
+import { PaginainicialController } from "@/Paginainicial/paginainicialController";
 export default {
+    props:{
+        token_aplicativo :{
+            required:true ,
+            type:String,
+        }
+    },
     components: {
         LivroCard,
         Paginacao,
     },
     data() {
         return {
+            paginainicialController : null ,
             dataSource: LivrosDataSource,
             searchBar: '',
             modal: false,
@@ -25,34 +33,7 @@ export default {
         buscar() {
         },
         getIndices() {
-            return [
-                {
-                    "nomeIndice": "Todos",
-                    "quantidade": 4,
-                    "tipo": "todos"
-                },
-                {
-                    "nomeIndice": "Ficção cientifica",
-                    "quantidade": 3,
-                    "tipo": "genero"
-                },
-                {
-                    "nomeIndice": "Biografia",
-                    "quantidade": 4,
-                    "tipo": "genero"
-                },
-                {
-                    "nomeIndice": "Tecnologia da informação do b",
-                    "quantidade": 4,
-                    "tipo": "genero"
-                },
-                {
-                    "nomeIndice": "Românce",
-                    "quantidade": 4,
-                    "tipo": "genero"
-                }
-
-            ];
+            return this.indicesDataSource;
 
 
 
@@ -97,7 +78,14 @@ export default {
         childRetornaPaginacao(paginaAtual: number, multiplicador: number) {
 
         }
+
     },
+    beforeMount(){
+        this.paginainicialController = new PaginainicialController(this.token_aplicativo);
+        this.paginainicialController.getIndices().then(request => this.indicesDataSource=request.data);
+        
+
+    }
 
 
 }
@@ -137,10 +125,10 @@ export default {
                     <h5>Indices</h5>
                 </div>
                 <div class="menuGrid">
-                    <div v-for=" menuIndice  in   this.getIndices() ">
-                        <div :class="{ 'menuContent': !(menuIndice.nomeIndice === indiceAtivo), 'menuContent ativo': (menuIndice.nomeIndice === indiceAtivo) }"
-                            @click="getDataSourceIndices(menuIndice.nomeIndice, menuIndice.tipo)">
-                            <p>{{ menuIndice.nomeIndice }}</p><em> {{ menuIndice.quantidade }}</em>
+                    <div v-for=" menuIndice  in indicesDataSource ">
+                        <div :class="{ 'menuContent': !(menuIndice.indice === indiceAtivo), 'menuContent ativo': (menuIndice.indice === indiceAtivo) }"
+                            @click="getDataSourceIndices(menuIndice.indice, menuIndice.tipo)">
+                            <p>{{ menuIndice.indice }}</p><em> {{ menuIndice.quantidade }}</em>
                         </div>
                     </div>
                 </div>

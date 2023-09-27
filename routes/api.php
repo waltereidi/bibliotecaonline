@@ -50,5 +50,5 @@ Route::prefix('users')->group(function () {
 Route::prefix('paginainicial')->group(function() {
     Route::middleware('tokenaplicacao')->post('postBuscaIndice',[PaginaInicialController::class , 'postBuscaIndice']);
     Route::middleware('tokenaplicacao')->post('postBusca',[PaginaInicialController::class , 'postBusca']);
-
+    Route::get('getIndices',[PaginaInicialController::class , 'getIndices']);
 });

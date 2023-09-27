@@ -40,3 +40,4 @@ if ( users.api_token != null) {
 
 <h1>TestPage</h1>
 </template>
+@/MeuPerfil/meuperfilController

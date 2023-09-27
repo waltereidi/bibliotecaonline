@@ -1,7 +1,7 @@
-import { MeuPerfilDados } from "@/MeuPerfil/Entidades/meuperfilDados";
+import { MeuPerfilDados } from "@/Entidades/meuperfilDados";
 import axios from "axios";
 import { ApiRequest } from "@/Utils/ApiRequest";
-import { LivrosMeuPerfil } from "@/MeuPerfil/Entidades/livrosMeuperfil";
+import { LivrosMeuPerfil } from "@/Entidades/livrosMeuperfil";
 export class MeuPerfilController{
     public api_token: string;
     private apiRequest: ApiRequest;
