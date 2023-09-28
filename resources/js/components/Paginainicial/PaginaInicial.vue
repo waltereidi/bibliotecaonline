@@ -4,89 +4,59 @@ import LivrosDataSource from "@/../json/livrosdoperfils.json";
 import Paginacao from "@/components/Utils/Paginacao.vue";
 import { PaginainicialController } from "@/Paginainicial/paginainicialController";
 export default {
-    props:{
-        token_aplicativo :{
-            required:true ,
-            type:String,
+    props: {
+        token_aplicativo: {
+            required: true,
+            type: String,
         }
     },
+
     components: {
         LivroCard,
         Paginacao,
     },
     data() {
         return {
-            paginainicialController : null ,
+            paginainicialController: {
+                type: typeof PaginainicialController
+            },
             dataSource: LivrosDataSource,
             searchBar: '',
             modal: false,
             indiceAtivo: 'Todos',
-            indicesDataSource: {
-                type: Object
-            },
-
+            indicesDataSource: [] as {
+                indice: string,
+                quantidade: number,
+                tipo: string,
+            }[],
         }
-
     },
-
     methods: {
         buscar() {
         },
-        getIndices() {
-            return this.indicesDataSource;
-
-
-
-        },
-        getIndicesMobile() {
-            return [
-                {
-                    "nomeIndice": "Todos",
-                    "quantidade": 4,
-                    "tipo": "todos"
-                },
-                {
-                    "nomeIndice": "Ficção cientifica",
-                    "quantidade": 3,
-                    "tipo": "genero"
-                },
-                {
-                    "nomeIndice": "Biografia",
-                    "quantidade": 4,
-                    "tipo": "genero"
-                },
-                {
-                    "nomeIndice": "Tecnologia da informação do b",
-                    "quantidade": 4,
-                    "tipo": "genero"
-                },
-                {
-                    "nomeIndice": "Românce",
-                    "quantidade": 4,
-                    "tipo": "genero"
-                }
-
-            ];
-
-
-
-        },
-
         getDataSourceIndices(nomeIndice: string, tipo: string) {
             this.indiceAtivo = nomeIndice;
         },
         childRetornaPaginacao(paginaAtual: number, multiplicador: number) {
 
+        },
+    },
+    beforeCreate() {
+        this.paginainicialController = new PaginainicialController(this.token_aplicativo);
+        this.paginainicialController.getIndices().then(response => {
+            this.indicesDataSource = response.data;
         }
+        );
+
+        const dados =this.paginainicialController.getDadosBuscaIndice(20, 0 , [{'tipo':'Todos' , 'indice':'todos'}]);
+        const dadosRequest = this.paginainicialController.getDadosBuscaIndiceRequest(dados);
+
+        this.paginainicialController.postBuscaIndice(dadosRequest).then(response =>{
+            this.dataSource = response.data;
+            console.log(this.dataSource);
+        });
 
     },
-    beforeMount(){
-        this.paginainicialController = new PaginainicialController(this.token_aplicativo);
-        this.paginainicialController.getIndices().then(request => this.indicesDataSource=request.data);
-        
-
-    }
-
 
 }
 </script>
@@ -108,15 +78,11 @@ export default {
             </div>
             <div class="indexBar">
 
-                <div v-for="indice in getIndicesMobile()"
-                    :class="{ 'index ativo': indice.nomeIndice === indiceAtivo, 'index': indice.nomeIndice !== indiceAtivo }"
-                    @click="getDataSourceIndices(indice.nomeIndice, indice.tipo, index)">
-                    {{ indice.nomeIndice }}
+                <div v-for="menu in indicesDataSource"
+                    :class="{ 'index ativo': menu.indice === indiceAtivo, 'index': menu.indice !== indiceAtivo }"
+                    @click="getDataSourceIndices(menu.indice, menu.tipo)">
+                    {{ menu.indice }}
                 </div>
-
-
-
-
             </div>
         </div>
         <div class="conteudo">
@@ -125,10 +91,11 @@ export default {
                     <h5>Indices</h5>
                 </div>
                 <div class="menuGrid">
-                    <div v-for=" menuIndice  in indicesDataSource ">
-                        <div :class="{ 'menuContent': !(menuIndice.indice === indiceAtivo), 'menuContent ativo': (menuIndice.indice === indiceAtivo) }"
-                            @click="getDataSourceIndices(menuIndice.indice, menuIndice.tipo)">
-                            <p>{{ menuIndice.indice }}</p><em> {{ menuIndice.quantidade }}</em>
+                    <div v-if="indicesDataSource != null" v-for="(menu, index)  in indicesDataSource" :key="index">
+                        <div :class="{ 'menuContent': !(menu.indice === indiceAtivo), 'menuContent ativo': (menu.indice === indiceAtivo) }"
+                            @click="getDataSourceIndices(menu.indice, menu.tipo)">
+                            <p>{{ (menu.indice.length > 22) ? (menu.indice.substring(0, 22)) + '...' : menu.indice }}</p><em>
+                                {{ menu.quantidade }}</em>
                         </div>
                     </div>
                 </div>
@@ -142,7 +109,7 @@ export default {
                         <div class="paginacaoContainer--left">
                         </div>
                         <div class="paginacaoContainer--right">
-                            <Paginacao :multiplicador="8" :quantidade="35" :limitePaginacao="5" :travarPaginacao="false"
+                            <Paginacao :multiplicador="500" :quantidade="dataSource.quantidadeTotal" :limitePaginacao="5" :travarPaginacao="false"
                                 @retornaPaginacao="childRetornaPaginacao">
                             </Paginacao>
                         </div>
@@ -151,7 +118,7 @@ export default {
                     </div>
                 </div>
                 <div class="conteudo--mainContent__livro">
-                    <div v-for="         livro          in          dataSource         ">
+                    <div v-for="livro in dataSource.livros">
                         <LivroCard :dataSource="livro"></LivroCard>
                     </div>
 

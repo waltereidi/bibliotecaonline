@@ -7,6 +7,5 @@ import {store} from "@/store.ts";
 const paginainicial = createApp();
 paginainicial.component('paginainicial' , Paginainicial);
 
-
 paginainicial.use(store);
 paginainicial.mount('#paginainicial');

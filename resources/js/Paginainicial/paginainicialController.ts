@@ -47,4 +47,8 @@ export class PaginainicialController{
     {
         return  await axios.get('/api/paginainicial/getIndices');
     }
+    async postBuscaIndice(request:object): Promise<object>
+    {
+        return await axios.post<object>('/api/paginainicial/postBuscaIndice' , request );
+    }
 }

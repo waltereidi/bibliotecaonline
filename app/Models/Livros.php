@@ -179,6 +179,7 @@ class Livros extends Model
             ->select('genero as indice')
             ->selectRaw("'genero' as tipo")
             ->selectRaw('count(*) as quantidade')
+            ->whereNotNull('genero')
             ->groupBy('genero')
             ->orderBy('quantidade')
             ->orderBy('genero')

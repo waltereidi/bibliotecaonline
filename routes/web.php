@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MeuPerfilController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PaginaInicialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('paginainicial');
-});
+Route::get('/', [PaginaInicialController::class, 'index'])  ;
 
 Auth::routes(['verify' => true]);
 

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Paginainicial\PostBuscaIndiceRequest;
 use App\Http\Requests\Paginainicial\PostBuscaRequest;
 use Illuminate\Http\JsonResponse;
-
+use App\Models\Aplicativo;
 class PaginaInicialController extends Controller
 {
     private $livros ;
@@ -16,7 +16,9 @@ class PaginaInicialController extends Controller
 
     public function index()
     {
-        return view('paginainicial');
+        $token_aplicativo = Aplicativo::where('nome' ,'=' ,'bibliotecaonline')->select('token_aplicacao')->first();
+        return view('paginainicial' )->with('token_aplicativo' , $token_aplicativo->token_aplicacao);
+
     }
     public function postBuscaIndice(PostBuscaIndiceRequest $request ) : JsonResponse
     {

@@ -222,12 +222,22 @@ class LivrosModelTest extends TestCase
         $indices = $this->livros->getIndices();
         //execucao
         $validarChaves = get_object_vars($indices[0]);
+        $notNull = true;
+        for( $i = 0 ; count($indices) < $i ; $i++)
+        {
+            if($indices[$i]->indice == null || $indices[$i]->quantidade == null )
+            {
+                $notNull=false ;
+            }
+
+        }
         //asserts
         $this->assertNotEmpty($indices);
         $this->assertIsObject($indices);
         $this->assertArrayHasKey('quantidade' , $validarChaves);
         $this->assertArrayHasKey('tipo' , $validarChaves);
         $this->assertArrayHasKey('indice' , $validarChaves);
+        $this->assertTrue($notNull);
     }
     public function testePaginainicial_postBusca_retornaDataSource():void
     {

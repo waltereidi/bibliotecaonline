@@ -3,10 +3,9 @@
 @vite('resources/js/Paginainicial/paginainicial.ts')
 
 @section('content')
-
-
 <div id="paginainicial">
-    <PaginaInicial :token_aplicativo="'sdsd'"></PaginaInicial>
+
+    <PaginaInicial :token_aplicativo="{{json_encode($token_aplicativo)}}"></PaginaInicial>
 </div>
 
 @endsection

@@ -5,13 +5,16 @@ namespace Tests\Unit\Controller;
 use App\Http\Controllers\PaginaInicialController;
 use App\Http\Requests\Paginainicial\PostBuscaIndiceRequest;
 use App\Http\Requests\Paginainicial\PostBuscaRequest;
+use App\Models\Aplicativo;
 use Tests\TestCase;
+use Illuminate\View\View;
 
 class PaginaInicialControllerTest extends TestCase
 {
     public $paginaInicialController;
     public $dadosBuscaIndice;
     public $dadosBusca;
+    public $aplicativo ;
     public function setUp() :void
     {
         parent::setUp();
@@ -22,9 +25,22 @@ class PaginaInicialControllerTest extends TestCase
             'busca'=>[['indice'=>'testCase' , 'tipo'=>'testCase'],
             ['indice'=>'testCase2' , 'tipo'=>'testCase']] ]);
         $this->dadosBusca = new PostBuscaRequest(['busca'=>'test/01']);
+        $this->aplicativo = Aplicativo::where('nome' ,'=' ,'bibliotecaonline')->first();
 
     }
+    public function testIndex_RetornaViewComTokenAplicativo(){
+        //setup
 
+        $PaginaInicial = new PaginaInicialController();
+        $view = $PaginaInicial->index();
+        $viewDataSource = $view->getData();
+
+        $this->assertInstanceOf(View::class , $view );
+        $this->assertEquals('paginainicial' , $view->getName() );
+        $this->assertEquals($viewDataSource['token_aplicativo'] ,$this->aplicativo->token_aplicacao);
+
+
+    }
      public function testePostBuscaIndice_BuscaSemResultados_Retorna204()
      {
          //setup
