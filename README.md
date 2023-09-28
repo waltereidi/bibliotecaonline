@@ -14,12 +14,9 @@ Model de mensagens com exemplo de SQL Avançado , funções de janela e filtro d
 
 </p>
 
-<img src="https://github.com/waltereidi/bibliotecaonline/assets/6370415/622489db-4e43-4e46-8474-2f1e985d5ed6"/>
+<img src="https://github.com/waltereidi/bibliotecaonline/assets/6370415/49e97f11-1c4a-43bd-b882-560eae81be0b"/>
+<img src="https://github.com/waltereidi/bibliotecaonline/assets/6370415/a64e5150-2d7c-4ee3-83b7-3769930a6aa7" />
 
-
-
-
-<img src="https://github.com/waltereidi/bibliotecaonline/assets/6370415/34f63f9f-70d0-4e99-86e7-09d424fecb7e"/>
 
 <img src="https://github.com/waltereidi/bibliotecaonline/assets/6370415/336f68a1-34bc-4367-a1c4-fffbc8568ee2" />
 
