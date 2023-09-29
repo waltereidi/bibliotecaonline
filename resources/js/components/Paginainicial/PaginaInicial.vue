@@ -1,8 +1,9 @@
 <script lang="ts">
 import LivroCard from "./LivroCard.vue";
-import LivrosDataSource from "@/../json/livrosdoperfils.json";
 import Paginacao from "@/components/Utils/Paginacao.vue";
 import { PaginainicialController } from "@/Paginainicial/paginainicialController";
+import Carregando from "@/components/Utils/Carregando.vue";
+
 export default {
     props: {
         token_aplicativo: {
@@ -10,20 +11,24 @@ export default {
             type: String,
         }
     },
-
     components: {
         LivroCard,
         Paginacao,
+        Carregando,
     },
     data() {
         return {
-            paginainicialController: {
-                type: typeof PaginainicialController
+            dataSource: {
+                type : {
+                    livros: {type:Object , required:true },
+                    quantidadeTotal : {type:Number , required:true},
+                },
+
             },
-            dataSource: LivrosDataSource,
+            travarPaginacao : false ,
             searchBar: '',
             modal: false,
-            indiceAtivo: 'Todos',
+            indiceAtivo:{ 'indice':'Todos' ,'tipo':'todos'},
             indicesDataSource: [] as {
                 indice: string,
                 quantidade: number,
@@ -35,28 +40,50 @@ export default {
         buscar() {
         },
         getDataSourceIndices(nomeIndice: string, tipo: string) {
-            this.indiceAtivo = nomeIndice;
+            if(!this.travarPaginacao)
+            this.indiceAtivo = {'indice':nomeIndice ,'tipo': tipo};
+            this.travarPaginacao=true;
+
+            const paginainicialController = new PaginainicialController(this.token_aplicativo);
+            const dados =paginainicialController.getDadosBuscaIndice(20, 0 , [this.indiceAtivo] );
+            const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
+            paginainicialController.postBuscaIndice(dadosRequest).then(response =>{
+                this.dataSource = response.data;
+            this.travarPaginacao=false;
+        }).catch( (error) => {
+            this.travarPaginacao=false;
+            this.dataSource.livros= null ;
+            this.dataSource.quantidadeTotal=0;
+        });
         },
         childRetornaPaginacao(paginaAtual: number, multiplicador: number) {
-
+            if(this.indiceAtivo){
+                this.travarPaginacao = true;
+                const paginainicialController = new PaginainicialController(this.token_aplicativo);
+                const dados =paginainicialController.getDadosBuscaIndice(multiplicador, (paginaAtual*multiplicador) , [{'tipo':'Todos' , 'indice':'todos'}]);
+                const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
+                paginainicialController.postBuscaIndice(dadosRequest).then(response =>{
+                this.dataSource = response.data;
+                this.travarPaginacao=false;
+        });
+            }
         },
     },
     beforeCreate() {
-        this.paginainicialController = new PaginainicialController(this.token_aplicativo);
-        this.paginainicialController.getIndices().then(response => {
+        const paginainicialController = new PaginainicialController(this.token_aplicativo);
+        paginainicialController.getIndices().then(response => {
             this.indicesDataSource = response.data;
         }
         );
-
-        const dados =this.paginainicialController.getDadosBuscaIndice(20, 0 , [{'tipo':'Todos' , 'indice':'todos'}]);
-        const dadosRequest = this.paginainicialController.getDadosBuscaIndiceRequest(dados);
-
-        this.paginainicialController.postBuscaIndice(dadosRequest).then(response =>{
+        const dados =paginainicialController.getDadosBuscaIndice(20, 0 , [{'tipo':'todos' , 'indice':'Todos'}]);
+        const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
+        paginainicialController.postBuscaIndice(dadosRequest).then(response =>{
             this.dataSource = response.data;
-            console.log(this.dataSource);
         });
 
+
     },
+
 
 }
 </script>
@@ -79,7 +106,7 @@ export default {
             <div class="indexBar">
 
                 <div v-for="menu in indicesDataSource"
-                    :class="{ 'index ativo': menu.indice === indiceAtivo, 'index': menu.indice !== indiceAtivo }"
+                    :class="{ 'index ativo': ( menu.indice== indiceAtivo.indice && menu.tipo == indiceAtivo.tipo), 'index':  !( menu.indice== indiceAtivo.indice && menu.tipo == indiceAtivo.tipo) }"
                     @click="getDataSourceIndices(menu.indice, menu.tipo)">
                     {{ menu.indice }}
                 </div>
@@ -92,10 +119,10 @@ export default {
                 </div>
                 <div class="menuGrid">
                     <div v-if="indicesDataSource != null" v-for="(menu, index)  in indicesDataSource" :key="index">
-                        <div :class="{ 'menuContent': !(menu.indice === indiceAtivo), 'menuContent ativo': (menu.indice === indiceAtivo) }"
+                        <div :class="{ 'menuContent': ! ( menu.indice== indiceAtivo.indice && menu.tipo == indiceAtivo.tipo), 'menuContent ativo': ( menu.indice== indiceAtivo.indice && menu.tipo == indiceAtivo.tipo) }"
                             @click="getDataSourceIndices(menu.indice, menu.tipo)">
-                            <p>{{ (menu.indice.length > 22) ? (menu.indice.substring(0, 22)) + '...' : menu.indice }}</p><em>
-                                {{ menu.quantidade }}</em>
+                            <p>{{ (menu.indice.length > 22) ? (menu.indice.substring(0, 22)) + '...' : menu.indice }}</p>
+                            <em>{{ menu.quantidade }}</em>
                         </div>
                     </div>
                 </div>
@@ -109,16 +136,16 @@ export default {
                         <div class="paginacaoContainer--left">
                         </div>
                         <div class="paginacaoContainer--right">
-                            <Paginacao :multiplicador="500" :quantidade="dataSource.quantidadeTotal" :limitePaginacao="5" :travarPaginacao="false"
+                            <Paginacao :multiplicador="20" :quantidade="dataSource.quantidadeTotal" :limitePaginacao="5" :travarPaginacao="travarPaginacao" v-if="dataSource.quantidadeTotal"
                                 @retornaPaginacao="childRetornaPaginacao">
                             </Paginacao>
                         </div>
-
+                        {{ dataSource.quantidadeTotal }}
 
                     </div>
                 </div>
                 <div class="conteudo--mainContent__livro">
-                    <div v-for="livro in dataSource.livros">
+                    <div v-if="dataSource.livros" v-for="livro in dataSource.livros">
                         <LivroCard :dataSource="livro"></LivroCard>
                     </div>
 
@@ -130,7 +157,7 @@ export default {
 
             </div>
 
-
+            <Carregando :carregando="travarPaginacao"></Carregando>
         </div>
 
 

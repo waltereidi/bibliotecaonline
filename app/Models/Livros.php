@@ -145,7 +145,7 @@ class Livros extends Model
             'livros.capalivro as capalivro',
             'livros.urldownload as urldownload'
         )
-        ->offset($iniciopagina)->limit($quantidade);
+        ->limit($quantidade);
         if(!(count($busca) == 1 && strtolower($busca[0]['tipo'])  == 'todos'))
         {
         foreach( $busca as $filtro){
@@ -161,7 +161,7 @@ class Livros extends Model
             }
         }}
 
-    $retorno = ['quantidadeTotal'=>$query->count() , 'livros'=>$query->get()];
+    $retorno = ['quantidadeTotal'=>$query->count() , 'livros'=>$query->offset($iniciopagina)->get()];
     return $retorno ;
     }
     public function getIndices() : ?object
@@ -221,7 +221,8 @@ class Livros extends Model
         ->orWhereRaw(" ( livros.genero <-> ? ) <= 0.2 " , $busca )
         ->orWhereRaw(" ( livros.isbn <-> ? ) <= 0.2 " , $busca )
         ->limit(30);
-        $retorno = ['quantidadeTotal'=>$query->count() , 'livros'=>$query->get()];
+        $quantidadeTotal = $query->count();
+        $retorno = ['quantidadeTotal'=>$quantidadeTotal , 'livros'=>$query->get()];
         return $retorno;
 
     }

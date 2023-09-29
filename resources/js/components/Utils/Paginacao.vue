@@ -37,7 +37,7 @@ export default {
     },
     beforeMount() {
         this.arrayPaginas = [];
-        for (var i = 1, k = 1; i < this.quantidade; i += this.multiplicador, k++) {
+        for (var i = 1, k = 1; (i* this.multiplicador) < this.quantidade; i ++, k++) {
             this.arrayPaginas.push(k);
         }
 
