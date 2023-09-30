@@ -9,13 +9,13 @@
     }
 </script>
 <template>
-    <div v-if="show" class="carregando">
-        <p>Carregando...</p>
+    <div v-if="show" class="erro">
+        <p>Erro ao processar a busca</p>
     </div>
 </template>
 <style scoped>
-    .carregando{
-        background-color:#64B5F6;
+    .erro{
+        background-color:#F44336;
         opacity: 80%;
         height: 3em;
         width:50%;

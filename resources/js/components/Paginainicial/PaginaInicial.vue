@@ -3,7 +3,7 @@ import LivroCard from "./LivroCard.vue";
 import Paginacao from "@/components/Utils/Paginacao.vue";
 import { PaginainicialController } from "@/Paginainicial/paginainicialController";
 import Carregando from "@/components/Utils/Carregando.vue";
-
+import Erro from "@/components/Utils/Erro.vue";
 export default {
     props: {
         token_aplicativo: {
@@ -15,6 +15,8 @@ export default {
         LivroCard,
         Paginacao,
         Carregando,
+        Erro,
+
     },
     data() {
         return {
@@ -26,9 +28,10 @@ export default {
 
             },
             travarPaginacao : false ,
+            mensagemErro: false,
             searchBar: '',
             modal: false,
-            indiceAtivo:{ 'indice':'Todos' ,'tipo':'todos'},
+            indiceAtivo:{ 'indice':'Todos' ,'tipo':'Todos'},
             indicesDataSource: [] as {
                 indice: string,
                 quantidade: number,
@@ -39,52 +42,58 @@ export default {
     methods: {
         buscar() {
         },
-        getDataSourceIndices(nomeIndice: string, tipo: string) {
-            if(!this.travarPaginacao)
-            this.indiceAtivo = {'indice':nomeIndice ,'tipo': tipo};
-            this.travarPaginacao=true;
-
-            const paginainicialController = new PaginainicialController(this.token_aplicativo);
-            const dados =paginainicialController.getDadosBuscaIndice(20, 0 , [this.indiceAtivo] );
-            const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
-            paginainicialController.postBuscaIndice(dadosRequest).then(response =>{
-                this.dataSource = response.data;
-            this.travarPaginacao=false;
-        }).catch( (error) => {
-            this.travarPaginacao=false;
-            this.dataSource.livros= null ;
-            this.dataSource.quantidadeTotal=0;
-        });
-        },
         childRetornaPaginacao(paginaAtual: number, multiplicador: number) {
             if(this.indiceAtivo){
                 this.travarPaginacao = true;
+
                 const paginainicialController = new PaginainicialController(this.token_aplicativo);
-                const dados =paginainicialController.getDadosBuscaIndice(multiplicador, (paginaAtual*multiplicador) , [{'tipo':'Todos' , 'indice':'todos'}]);
+
+                const dados =paginainicialController.getDadosBuscaIndice(multiplicador, (paginaAtual*multiplicador) , [this.indiceAtivo]);
                 const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
-                paginainicialController.postBuscaIndice(dadosRequest).then(response =>{
-                this.dataSource = response.data;
-                this.travarPaginacao=false;
-        });
+
+                const buscaIndicePromise = new Promise(async (resolve) =>{
+                    await resolve(paginainicialController.postBuscaIndice(dadosRequest));
+                });
+                buscaIndicePromise.then((resolve) => {
+                    this.dataSource = resolve.data;
+                    this.travarPaginacao = false ;
+                })
             }
         },
     },
     beforeCreate() {
-        const paginainicialController = new PaginainicialController(this.token_aplicativo);
-        paginainicialController.getIndices().then(response => {
+        this.paginainicialController= new PaginainicialController(this.token_aplicativo)
+        this.paginainicialController.getIndices().then(response => {
             this.indicesDataSource = response.data;
         }
         );
-        const dados =paginainicialController.getDadosBuscaIndice(20, 0 , [{'tipo':'todos' , 'indice':'Todos'}]);
-        const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
-        paginainicialController.postBuscaIndice(dadosRequest).then(response =>{
+        const dados =this.paginainicialController.getDadosBuscaIndice(20, 0 , [{'tipo':'todos' , 'indice':'Todos'}]);
+        const dadosRequest = this.paginainicialController.getDadosBuscaIndiceRequest(dados);
+        this.paginainicialController.postBuscaIndice(dadosRequest).then(response =>{
             this.dataSource = response.data;
         });
-
-
     },
+    watch:{
+        indiceAtivo(newVal){
+            if(!this.travarPaginacao)
+                this.travarPaginacao=true;
+
+                const paginainicialController = new PaginainicialController(this.token_aplicativo);
+                const dados =paginainicialController.getDadosBuscaIndice(20, 0 , [this.indiceAtivo] );
+                const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
+
+                const buscaIndicePromise = new Promise(async (resolve) =>{
+                    await resolve(paginainicialController.postBuscaIndice(dadosRequest));
+                });
+                buscaIndicePromise.then((resolve) => {
+                    this.dataSource = resolve.data;
+                    this.travarPaginacao = false ;
+                })
+
+    }
 
 
+}
 }
 </script>
 <template>
@@ -107,7 +116,7 @@ export default {
 
                 <div v-for="menu in indicesDataSource"
                     :class="{ 'index ativo': ( menu.indice== indiceAtivo.indice && menu.tipo == indiceAtivo.tipo), 'index':  !( menu.indice== indiceAtivo.indice && menu.tipo == indiceAtivo.tipo) }"
-                    @click="getDataSourceIndices(menu.indice, menu.tipo)">
+                    @click="indiceAtivo ={'indice':menu.indice, 'tipo':menu.tipo}">
                     {{ menu.indice }}
                 </div>
             </div>
@@ -120,7 +129,7 @@ export default {
                 <div class="menuGrid">
                     <div v-if="indicesDataSource != null" v-for="(menu, index)  in indicesDataSource" :key="index">
                         <div :class="{ 'menuContent': ! ( menu.indice== indiceAtivo.indice && menu.tipo == indiceAtivo.tipo), 'menuContent ativo': ( menu.indice== indiceAtivo.indice && menu.tipo == indiceAtivo.tipo) }"
-                            @click="getDataSourceIndices(menu.indice, menu.tipo)">
+                            @click="indiceAtivo ={'indice':menu.indice, 'tipo':menu.tipo}">
                             <p>{{ (menu.indice.length > 22) ? (menu.indice.substring(0, 22)) + '...' : menu.indice }}</p>
                             <em>{{ menu.quantidade }}</em>
                         </div>
@@ -136,7 +145,7 @@ export default {
                         <div class="paginacaoContainer--left">
                         </div>
                         <div class="paginacaoContainer--right">
-                            <Paginacao :multiplicador="20" :quantidade="dataSource.quantidadeTotal" :limitePaginacao="5" :travarPaginacao="travarPaginacao" v-if="dataSource.quantidadeTotal"
+                            <Paginacao :multiplicador="20" :quantidade="dataSource.quantidadeTotal" :limitePaginacao="5" :travarPaginacao="travarPaginacao" v-if="dataSource.quantidadeTotal && !this.travarPaginacao"
                                 @retornaPaginacao="childRetornaPaginacao">
                             </Paginacao>
                         </div>
@@ -157,7 +166,8 @@ export default {
 
             </div>
 
-            <Carregando :carregando="travarPaginacao"></Carregando>
+            <Carregando :show="travarPaginacao"></Carregando>
+            <Erro :show="mensagemErro"></Erro>
         </div>
 
 
