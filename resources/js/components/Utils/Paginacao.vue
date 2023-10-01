@@ -23,13 +23,13 @@ export default {
             }
         },
         proximaPagina() {
-            if (!this.travarPaginacao) {
+            if (!this.travarPaginacao && (this.paginacaoAtual !== this.arrayPaginas[this.arrayPaginas.length-1]) ) {
                 this.paginacaoAtual = this.paginacaoAtual < this.arrayPaginas.length ? this.paginacaoAtual + 1 : this.paginacaoAtual;
                 this.retornaPaginacao(this.paginacaoAtual);
             }
         },
         voltarPagina() {
-            if (!this.travarPaginacao) {
+            if (!this.travarPaginacao && (this.paginacaoAtual !== this.arrayPaginas[0]) ) {
                 this.paginacaoAtual = this.paginacaoAtual > 1 ? this.paginacaoAtual - 1 : this.paginacaoAtual;
                 this.retornaPaginacao(this.paginacaoAtual);
             }
@@ -76,10 +76,10 @@ export default {
 }
 </script>
 <template>
-    <nav class="paginacao">
+    <nav class="paginacao" v-if="quantidade > multiplicador">
         <ul class="pagination pagination-sm">
-            <li class="page-item" v-if="quantidade > multiplicador">
-                <a class="page-link" @click="voltarPagina" aria-label="Previous">
+            <li class="page-item" >
+                <a :class="{'page-link enabled':  !(paginacaoAtual===arrayPaginas[0]) , 'page-link disabled' :(paginacaoAtual===arrayPaginas[0])}" @click="voltarPagina" aria-label="Previous">
                     Anterior
                 </a>
             </li>
@@ -95,8 +95,8 @@ export default {
                 </li>
             </div>
 
-            <li class="page-item" v-if="quantidade > multiplicador">
-                <a class="page-link" @click="proximaPagina" aria-label="Next">
+            <li class="page-item" >
+                <a :class="{'page-link enabled':  !(paginacaoAtual===arrayPaginas[arrayPaginas.length-1]) , 'page-link disabled' :(paginacaoAtual===arrayPaginas[arrayPaginas.length-1])}" @click="proximaPagina" aria-label="Next">
                     Próximo
                 </a>
             </li>
@@ -107,7 +107,19 @@ export default {
 .borderless {
     border: 0;
 }
+.enabled{
+    cursor:pointer;
+    box-sizing: border-box;
 
+}
+.enabled:hover,.enabled:active{
+    transition: all 0.1s;
+    scale:1.01;
+    border:1px solid #C5CAE9;
+}
+.disabled {
+    color : #bdbdbd;
+}
 @media(min-width:320px) and (max-width:460px) {
     .pagenumber {
         display: none;

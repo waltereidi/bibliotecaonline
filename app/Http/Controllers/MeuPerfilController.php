@@ -13,17 +13,19 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Livros;
 use App\Models\MeuPerfil;
 use Illuminate\Http\JsonResponse;
-
+use App\Models\Aplicativo;
 class MeuPerfilController extends Controller
 {
     protected $users_id;
     protected $livrosModel;
     protected $meuPerfil;
+    protected $aplicativo;
     public function __construct()
     {
         $this->users_id = Auth::id();
         $this->livrosModel = new Livros;
         $this->meuPerfil = new MeuPerfil;
+        $this->aplicativo = Aplicativo::where('nome' , '=' ,'bibliotecaonline')->first();
     }
     public function setUsersId($id)
     {
@@ -231,5 +233,19 @@ class MeuPerfilController extends Controller
         {
             return response()->json($retorno, 200);
         }
+    }
+
+    public function getMeuPerfil(int $id)
+    {
+        $perfilusuario = $this->meuPerfil->getMeuPerfil($id);
+        if($perfilusuario){
+            return view('perfilusuario')->with('meuperfil' , $perfilusuario);
+        }
+        else{
+            return view('paginainicial')->with('token_aplicativo' , $this->aplicativo->token_aplicacao );
+        }
+
+
+
     }
 }

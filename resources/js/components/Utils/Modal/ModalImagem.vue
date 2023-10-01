@@ -42,7 +42,7 @@ export default {
 }
 </script>
 <template>
-    <img class="img-thumbnail cursor" :src="srcImagem" @click="abrirModal" loading="lazy" style="width: 100%;">
+    <img class="cursor" :src="srcImagem" @click="abrirModal" loading="lazy" style="width: 100%;">
     <div :class="{ 'showModal': showModal, 'hide': !showModal }" @click="fecharModal">
         <div class="row">
             <button id="modalButton" type="button" class="btn-close btn-close-white" aria-label="Close"

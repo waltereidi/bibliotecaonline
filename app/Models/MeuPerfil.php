@@ -5,6 +5,7 @@ namespace App\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 class MeuPerfil extends Model
 {
     use HasFactory;
@@ -49,5 +50,26 @@ class MeuPerfil extends Model
     public function formatarData(string $data):string{
         $arr = explode('/',$data );
         return $arr[2].'-'.$arr[1].'-'.$arr[0];
+    }
+
+    public function getMeuPerfil($id ) : ?object
+    {
+        return DB::table('meuperfil')
+        ->join('users' , 'users.id' , '=' ,'meuperfil.users_id')
+        ->leftjoin('livros' , 'livros.users_id' , '=' ,'users.id')
+        ->select(
+                'meuperfil.id as id',
+                'meuperfil.introducao as introducao' ,
+                'meuperfil.profile_picture as profile_picture' ,
+                'meuperfil.datanascimento as datanascimento' ,
+                'meuperfil.users_id as users_id' ,
+                'users.name as users_nome'
+        )
+        ->selectRaw('count(livros.id) over( partition by livros.id ) as quantidadelivros')
+        ->where('meuperfil.id' , '=' , $id)
+        ->first();
+
+
+
     }
 }

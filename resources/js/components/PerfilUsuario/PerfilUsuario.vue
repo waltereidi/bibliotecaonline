@@ -4,6 +4,12 @@ import LivrosDoPerfil from "@/../json/livrosdoperfils.json";
 import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
 import config from "@/../json/bibliotecaconfig.json";
 export default {
+    props:{
+        datasource:{
+            required:true ,
+            type: Object ,
+        }
+    },
     data() {
         return {
             meuPerfilDataSource: MeuPerfilDataSource,
@@ -15,8 +21,9 @@ export default {
     components: {
         ModalImagem,
     },
-
-
+    mounted(){
+        console.log(this.datasource);
+    }
 }
 </script>
 
@@ -24,17 +31,17 @@ export default {
     <div class="container">
         <div class="container--header">
             <div class="container--header__blackline">
-                <h3>{{ meuPerfilDataSource.nome }}</h3>
+                <h3>{{ datasource.users_nome }}</h3>
                 <div class="containerProfilePicture">
                     <ModalImagem
-                        :srcImagem="meuPerfilDataSource.profile_picture ?? configDataSource.profile_pictureDefault">
+                        :srcImagem="datasource.profile_picture ?? configDataSource.profile_pictureDefault">
                     </ModalImagem>
                 </div>
             </div>
             <div class="container--header__headerbottom">
                 <div class="scores">
                     <div class="scores--card">
-                        <h4>15</h4>
+                        <h4>{{ datasource.quantidadelivros }}</h4>
                         <p>Livros cadastrados</p>
                     </div>
 
@@ -46,7 +53,7 @@ export default {
         </div>
         <div class="container--conteudo">
             <h5>Introdução</h5>
-            <p>{{ meuPerfilDataSource.introducao }}</p>
+            <p>{{ datasource.introducao }}</p>
 
         </div>
         <div class="container--containerLivros" v-if="windowSize > 460">

@@ -41,4 +41,33 @@ class MeuPerfilModelTest extends TestCase
     //assert
     $this->assertEquals($retorno , '1993-12-29');
    }
+
+   public function testGetMeuPerfil_RetornaNull() : void
+   {
+    //setup
+    $id = 0 ;
+    //execucao
+    $retorno = $this->meuPerfil->getMeuPerfil($id);
+
+    //assert
+    $this->assertNull($retorno);
+
+   }
+   public function testGetMeuPerfil_RetornaDataSource(): void
+   {
+        //setup
+        $meuPerfil = MeuPerfil::first() ;
+        //execucao
+        $retorno = $this->meuPerfil->getMeuPerfil($meuPerfil->id);
+
+        //assert
+        $this->assertEquals($meuPerfil->id , $retorno->id);
+        $this->assertEquals($meuPerfil->introducao , $retorno->introducao);
+        $this->assertEquals($meuPerfil->profile_picture , $retorno->profile_picture);
+        $this->assertEquals($meuPerfil->users_id , $retorno->users_id);
+        $this->assertNotEmpty($retorno->users_nome);
+        $this->assertNotNull($retorno->quantidadelivros);
+
+
+   }
 }

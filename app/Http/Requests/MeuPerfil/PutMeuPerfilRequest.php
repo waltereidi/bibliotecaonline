@@ -32,7 +32,7 @@ class PutMeuPerfilRequest extends FormRequest
     public function messages():array
     {
         return[
-            'required' => 'Campo obrigatório não preenchido',
+          'required' => 'Campo obrigatório não preenchido',
           'max'=>'Limite de caracteres excedido',
           'url'=>'Url inválida',
           'date'=>'Data inválida'

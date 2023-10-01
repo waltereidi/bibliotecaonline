@@ -77,8 +77,9 @@ export default {
         indiceAtivo(newVal){
             if(!this.travarPaginacao)
                 this.travarPaginacao=true;
-
+                this.dataSource.quantidadeTotal= null ;
                 const paginainicialController = new PaginainicialController(this.token_aplicativo);
+                console.log(this.indiceAtivo);
                 const dados =paginainicialController.getDadosBuscaIndice(20, 0 , [this.indiceAtivo] );
                 const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
 
@@ -86,6 +87,7 @@ export default {
                     await resolve(paginainicialController.postBuscaIndice(dadosRequest));
                 });
                 buscaIndicePromise.then((resolve) => {
+
                     this.dataSource = resolve.data;
                     this.travarPaginacao = false ;
                 })
@@ -145,12 +147,10 @@ export default {
                         <div class="paginacaoContainer--left">
                         </div>
                         <div class="paginacaoContainer--right">
-                            <Paginacao :multiplicador="20" :quantidade="dataSource.quantidadeTotal" :limitePaginacao="5" :travarPaginacao="travarPaginacao" v-if="dataSource.quantidadeTotal && !this.travarPaginacao"
+                            <Paginacao :multiplicador="20" :quantidade="dataSource.quantidadeTotal" :limitePaginacao="5" :travarPaginacao="travarPaginacao" v-if="dataSource.quantidadeTotal!=null"
                                 @retornaPaginacao="childRetornaPaginacao">
                             </Paginacao>
                         </div>
-                        {{ dataSource.quantidadeTotal }}
-
                     </div>
                 </div>
                 <div class="conteudo--mainContent__livro">

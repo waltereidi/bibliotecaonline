@@ -2,13 +2,10 @@
 
 namespace Tests\Unit\Controller;
 
-use Illuminate\View\View;
-
+use App\Http\Controllers\MeuPerfilController;
 use Tests\TestCase;
 use Illuminate\Http\Request;
-use App\Models\Livros;
-use App\Models\User;
-use App\Http\Controllers\MeuPerfilController;
+use Illuminate\View\View;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\MeuPerfil\DeleteLivrosRequest;
@@ -16,6 +13,10 @@ use App\Http\Requests\MeuPerfil\PostLivrosRequest;
 use App\Http\Requests\MeuPerfil\PutLivrosRequest;
 use App\Http\Requests\MeuPerfil\PutMeuPerfilRequest;
 use App\Models\MeuPerfil;
+use App\Models\Aplicativo;
+use App\Models\Livros;
+use App\Models\User;
+
 class MeuPerfilControllerTest extends TestCase
 {
     //Setup
@@ -25,6 +26,7 @@ class MeuPerfilControllerTest extends TestCase
     public $meuPerfilController;
     public $user ;
     public $meuPerfil ;
+    public $aplicativo ;
 
     public function setUp():void
     {
@@ -36,7 +38,7 @@ class MeuPerfilControllerTest extends TestCase
         $this->meuPerfilController=new MeuPerfilController;
         $this->user = User::where('email' , '=' ,'testCase@email.com')->first();
         $this->meuPerfil = MeuPerfil::where('users_id' ,'=' ,$this->user->id)->first();
-
+        $this->aplicativo = Aplicativo::where('nome' ,'=' ,'bibliotecaonline')->first();
     }
 
     public function testeIndex_SemAutenticacao_RetornaLoginView(): void
@@ -400,7 +402,7 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertEquals($dados['profile_picture'], $requestEditarMeuPerfil->profile_picture);
         $this->assertEquals($dados['datanascimento'], $requestEditarMeuPerfil->datanascimento);
     }
-    public function testeGetDadosMeuPerfil_Retorna200eDataSource()
+    public function testeGetDadosMeuPerfil_Retorna200eDataSource() : void
     {
         //Setup
         $user = User::where('email', '=', 'testCase@email.com')->first();
@@ -450,7 +452,7 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertEquals(200  , $retorno->getStatusCode());
     }
 
-    public function testPostLivros_insertRealizado_Retorna200()
+    public function testPostLivros_insertRealizado_Retorna200() :void
     {
         //setup
         $postLivrosRequest = new PostLivrosRequest([
@@ -475,7 +477,7 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertEquals(201 , $retorno->getStatusCode() );
 
     }
-    public function testPostLivros_insertNaoRealizado_Retorna500()
+    public function testPostLivros_insertNaoRealizado_Retorna500() : void
     {
         //setup
         $postLivrosRequest = new PostLivrosRequest([
@@ -551,7 +553,7 @@ class MeuPerfilControllerTest extends TestCase
         $this->assertEquals(204 , $retorno->getStatusCode() );
 
     }
-    public function testputMeuPerfil_EditarRealizado_Retorna200()
+    public function testputMeuPerfil_EditarRealizado_Retorna200():void
     {
         //setup
 
@@ -570,6 +572,32 @@ class MeuPerfilControllerTest extends TestCase
         //assert
         $this->assertEquals(200 , $retorno->getStatusCode());
     }
+    public function testGetMeuPerfil_RetornaViePaginainicialComToken(){
+        //setup
 
+        $view = $this->meuPerfilController->getMeuPerfil(0);
+        $viewDataSource = $view->getData();
+
+        $this->assertInstanceOf(View::class , $view );
+        $this->assertEquals('paginainicial' , $view->getName() );
+        $this->assertEquals($viewDataSource['token_aplicativo'] ,$this->aplicativo->token_aplicacao);
+
+
+
+    }
+    public function testGetMeuPerfil_RetornaViewComLivro() :void
+    {
+        //setup
+        $meuPerfil = MeuPerfil::first();
+
+        $view = $this->meuPerfilController->getMeuPerfil($meuPerfil->id);
+        $viewDataSource = $view->getData();
+
+        $this->assertInstanceOf(View::class , $view );
+        $this->assertEquals('perfilusuario' , $view->getName() );
+        $this->assertNotEmpty($viewDataSource['meuperfil']);
+
+
+    }
 
 }

@@ -5,8 +5,7 @@
 @section('content')
 
 <div id="livros">
-    <livros>
-        </livros>
+    <livros :datasource="{{json_encode($livro)}}"></livros>
 
 </div>
 

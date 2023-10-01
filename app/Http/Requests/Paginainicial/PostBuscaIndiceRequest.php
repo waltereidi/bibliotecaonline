@@ -23,7 +23,7 @@ class PostBuscaIndiceRequest extends FormRequest
     {
         return [
             'busca'=>['array' , 'required'],
-            'busca.*.indice' => ['required' , 'string' , 'max:30'] ,
+            'busca.*.indice' => ['required' , 'string' , 'max:60'] ,
             'busca.*.tipo' => ['required' , 'string' ,'max:30'] ,
             'quantidade'=>['integer','required'],
             'iniciopagina'=>['integer','required'],

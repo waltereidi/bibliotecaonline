@@ -83,7 +83,7 @@ class PostBuscaIndiceRequestTest extends TestCase
     {
         //setup
         $dados = $this->dados ;
-        $dados['busca'][0]['indice']=Str::random(31);
+        $dados['busca'][0]['indice']=Str::random(61);
         $dados['busca'][0]['tipo']=Str::random(31);
 
         //execução

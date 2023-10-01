@@ -9,7 +9,7 @@ export class ApiRequest {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br',
-            'Connection': 'keep-alive'
+            'Connection': 'keep-alive',
         }
     }
     async getTestToken(email: string, password: string) :Users {

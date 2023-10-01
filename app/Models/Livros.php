@@ -226,4 +226,31 @@ class Livros extends Model
         return $retorno;
 
     }
+    public function getLivro(int $id) : ?object
+    {
+        return DB::table('livros')
+        ->join('autores' , 'autores.id' , '=' ,'livros.autores_id')
+        ->join('editoras' ,'editoras.id' , '=' , 'livros.editoras_id')
+        ->join('users','users.id' , '=' , 'users_id' )
+        ->select(
+            'livros.id as id',
+            'livros.users_id as users_id',
+            'livros.titulo as titulo',
+            'livros.isbn as isbn',
+            'livros.descricao as descricao',
+            'livros.visibilidade as visibilidade',
+            'editoras.id as editoras_id',
+            'editoras.nome as editoras_nome',
+            'autores.id as autores_id',
+            'autores.nome as autores_nome',
+            'livros.idioma as idioma',
+            'livros.genero as genero',
+            'livros.capalivro as capalivro',
+            'livros.urldownload as urldownload',
+            'livros.users_id as users_id',
+            'users.name as users_nome'
+        )
+        ->where('livros.id' , '=' ,$id)->first();
+
+    }
 }

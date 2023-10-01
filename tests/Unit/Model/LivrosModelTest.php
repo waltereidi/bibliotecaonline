@@ -262,5 +262,41 @@ class LivrosModelTest extends TestCase
         $this->assertArrayHasKey('urldownload' , $validarChaves);
         $this->assertTrue($postBusca['quantidadeTotal'] > 0 );
     }
+    public function testeGetLivro_RetornaLivroDataSource(): void
+    {
+        //setup
+        $livro = Livros::first();
 
+        //execucao
+        $getLivro = $this->livros->getLivro($livro->id);
+        //assert
+        $this->assertIsObject($getLivro);
+        $this->assertEquals($getLivro->id, $livro->id);
+        $this->assertEquals($getLivro->titulo, $livro->titulo);
+        $this->assertEquals($getLivro->descricao, $livro->descricao);
+        $this->assertEquals($getLivro->visibilidade, $livro->visibilidade);
+        $this->assertEquals($getLivro->isbn, $livro->isbn);
+        $this->assertEquals($getLivro->editoras_id, $livro->editoras_id);
+        $this->assertEquals($getLivro->autores_id, $livro->autores_id);
+        $this->assertEquals($getLivro->capalivro, $livro->capalivro);
+        $this->assertEquals($getLivro->genero, $livro->genero);
+        $this->assertEquals($getLivro->idioma, $livro->idioma);
+        $this->assertEquals($getLivro->urldownload ,$livro->urldownload);
+        $this->assertEquals($getLivro->users_id , $livro->users_id);
+        $this->assertNotEmpty($getLivro->editoras_nome);
+        $this->assertNotEmpty($getLivro->autores_nome);
+        $this->assertNotEmpty($getLivro->users_nome);
+
+
+    }
+    public function testeGetLivro_IdInvalido_RetornaNull():void
+    {
+        //Setup
+        $id = 0 ;
+        //execucao
+        $getLivro = $this->livros->getLivro($id);
+        //assert
+        $this->assertNull($getLivro);
+
+    }
 }

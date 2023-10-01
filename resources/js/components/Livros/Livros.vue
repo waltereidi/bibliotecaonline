@@ -1,11 +1,10 @@
 <script lang="ts">
 import config from "@/../json/bibliotecaconfig.json";
-import LivroDataSource from "@/../json/livroDataSource.json";
 import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
 import ModalDownload from "@/components/Utils/Modal/ModalDownload.vue";
 export default {
     props: {
-        dataSource: {
+        datasource: {
             type: Object,
             required: true,
         }
@@ -13,7 +12,6 @@ export default {
     data() {
         return {
             configDataSource: config,
-            livroDataSource: LivroDataSource,
 
         }
     },
@@ -21,7 +19,8 @@ export default {
         ModalImagem,
         ModalDownload,
 
-    }
+    },
+
 }
 </script>
 <template>
@@ -32,56 +31,56 @@ export default {
         <div class="mainContent">
             <div class="mainContent--left">
                 <div class="mainContent--left__capalivro">
-                    <ModalImagem :srcImagem="livroDataSource.capalivro ?? configDataSource.capaLivroDefault"></ModalImagem>
+                    <ModalImagem :srcImagem="datasource.capalivro ?? configDataSource.capaLivroDefault"></ModalImagem>
                 </div>
             </div>
             <div class="mainContent--right">
                 <div class="mainContent--right__titulo">
-                    <h3> {{ livroDataSource.titulo }}
+                    <h3> {{ datasource.titulo }}
 
                     </h3>
-                    <p><span v-if="livroDataSource.idioma.length > 0">Edição
-                            {{ livroDataSource.idioma }}
+                    <p><span v-if="datasource.idioma">Edição
+                            {{ datasource.idioma }}
                             <span class="pipeLineSeparator">|</span></span>Por
-                        {{ livroDataSource.autores_nome }}
+                        {{ datasource.autores_nome }}
                         <span class="pipeLineSeparator">|</span>Doador: <a
-                            :href="'/perfilusuario/' + livroDataSource.users_id">{{ livroDataSource.users_name }}</a>
+                            :href="'/perfilusuario/' + datasource.users_id">{{ datasource.users_nome }}</a>
 
                     </p>
                     <hr>
                 </div>
                 <div class="mainContent--right__informacao">
-                    <details v-if="livroDataSource.descricao.length > 400">
+                    <details v-if="datasource.descricao.length > 400">
 
                         <summary>Leia mais...
                             <blockquote>
-                                {{ livroDataSource.descricao.substring(0, 400) }}<span>...</span>
+                                {{ datasource.descricao.substring(0, 400) }}<span>...</span>
                             </blockquote>
 
                         </summary>
-                        {{ livroDataSource.descricao }}
+                        {{ datasource.descricao }}
                     </details>
 
                     <blockquote v-else>
-                        {{ livroDataSource.descricao }}
+                        {{ datasource.descricao }}
                     </blockquote>
 
                     <div class="containerInformacao border rounded">
                         <div class="containerInformacao--item">Autor
-                            <div class="containerInformacao--itemDescricao">{{ livroDataSource.autores_nome }}</div>
+                            <div class="containerInformacao--itemDescricao">{{ datasource.autores_nome }}</div>
                         </div>
                         <div class="containerInformacao--item">Editora
-                            <div class="containerInformacao--itemDescricao">{{ livroDataSource.editoras_nome }}</div>
+                            <div class="containerInformacao--itemDescricao">{{ datasource.editoras_nome }}</div>
                         </div>
                         <div class="containerInformacao--item">ISBN
-                            <div class="containerInformacao--itemDescricao">{{ livroDataSource.isbn }}</div>
+                            <div class="containerInformacao--itemDescricao">{{ datasource.isbn }}</div>
                         </div>
                         <div class="containerInformacao--item">Gênero
-                            <div class="containerInformacao--itemDescricao">{{ livroDataSource.genero }}</div>
+                            <div class="containerInformacao--itemDescricao">{{ datasource.genero }}</div>
                         </div>
                         <div class="containerInformacao--item-last">Idioma
                             <div class="containerInformacao--itemDescricao containerInformacao--itemDescricao__last">{{
-                                livroDataSource.idioma }}</div>
+                                datasource.idioma }}</div>
                         </div>
                     </div>
 
@@ -91,7 +90,7 @@ export default {
                         Download:
                     </div>
                     <div class="icon">
-                        <ModalDownload :urldownload="livroDataSource.urldownload"></ModalDownload>
+                        <ModalDownload :urldownload="datasource.urldownload"></ModalDownload>
                     </div>
                 </div>
 
