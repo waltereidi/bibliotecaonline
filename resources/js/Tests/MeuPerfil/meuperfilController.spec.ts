@@ -8,21 +8,21 @@ const meuperfilController = new MeuPerfilController();
 const apiRequest = new ApiRequest;
 
 
-test('getEditarMeuPerfil', () => {
+test('getPutMeuPerfil', () => {
     const dados: object = {
         id: 1,
         users_id: 1,
         introducao: 'nova intro',
         profile_picture: null,
-        datanascimento: null,
+        datanascimento: '1993-12-29',
     };
-    const retorno: MeuPerfilDados = meuperfilController.getEditarMeuPerfil(dados);
+    const retorno: MeuPerfilDados = meuperfilController.getPutMeuPerfil(dados);
 
     expect(retorno.id).toBe(1);
     expect(retorno.users_id).toBe(1);
     expect(retorno.introducao).toBe('nova intro');
     expect(retorno.profile_picture).toBeNull();
-    expect(retorno.datanascimento).toBeNull();
+    expect(retorno.datanascimento).toBe('29/12/1993');
     expect(retorno['Content-Type']).toBe('application/json');
     expect(retorno['Authorization']).toBe('Bearer ');
     expect(retorno['Accept']).toBe('application/json');
@@ -30,7 +30,7 @@ test('getEditarMeuPerfil', () => {
     expect(retorno['Connection']).toBe('keep-alive');
 });
 
-test('getPostLivros', () => {
+test('getDadosLivros', () => {
     const dados: object = {
         id: 1 ,
         titulo: 'testCaseFrontEnd',
@@ -42,19 +42,37 @@ test('getPostLivros', () => {
         capalivro: null,
         genero: null,
         idioma: null,
+        urldownload: 'http://www.php.net',
     };
 
-    const retorno: LivrosMeuPerfil = meuperfilController.getPostLivros(dados);
+    const retorno: LivrosMeuPerfil = meuperfilController.getDadosLivros(dados);
+        expect(retorno.id).toBe(1 );
+        expect(retorno.titulo).toBe('testCaseFrontEnd');
+        expect(retorno.descricao).toBe(null);
+        expect(retorno.visibilidade).toBe(0);
+        expect(retorno.isbn).toBe(null);
+        expect(retorno.editoras_nome).toBe('TestCaseFrontEnd');
+        expect(retorno.autores_nome).toBe('TestCaseFrontEnd');
+        expect(retorno.capalivro).toBe(null);
+        expect(retorno.genero).toBe(null);
+        expect(retorno.idioma).toBe(null);
+        expect(retorno.urldownload).toBe('http://www.php.net');
+        expect(retorno['Content-Type']).toBe('application/json');
+        expect(retorno['Authorization']).toBe('Bearer ');
+        expect(retorno['Accept']).toBe('application/json');
+        expect(retorno['Accept-Encoding']).toBe('gzip, deflate, br');
+        expect(retorno['Connection']).toBe('keep-alive');
+});
+
+test('getDeletelivros' , () => {
+    const id = 1 ;
+    const retorno = meuperfilController.getDeleteLivros(id);
     expect(retorno.id).toBe(1);
-    expect(retorno.mensagem).toBe();
-    expect(retorno.livros_id).toBe();
-    expect(retorno.meuperfil_id).toBe();
     expect(retorno['Content-Type']).toBe('application/json');
     expect(retorno['Authorization']).toBe('Bearer ');
     expect(retorno['Accept']).toBe('application/json');
     expect(retorno['Accept-Encoding']).toBe('gzip, deflate, br');
     expect(retorno['Connection']).toBe('keep-alive');
 
-});
-
+})
 

@@ -253,4 +253,41 @@ class Livros extends Model
         ->where('livros.id' , '=' ,$id)->first();
 
     }
+    public function postLivrosMeuPerfil($dados) : ?object
+    {
+        $offset = $dados['quantidade']*$dados['pagina'];
+        $retorno = DB::table('livros')
+        ->join('autores' , 'autores.id' , '=' ,'livros.autores_id')
+        ->join('editoras' ,'editoras.id' , '=' , 'livros.editoras_id')
+        ->join('meuperfil' , 'meuperfil.users_id' ,'=' ,'livros.users_id')
+        ->select(
+            'livros.id as id',
+            'livros.users_id as users_id',
+            'livros.titulo as titulo',
+            'livros.isbn as isbn',
+            'livros.descricao as descricao',
+            'livros.visibilidade as visibilidade',
+            'editoras.id as editoras_id',
+            'editoras.nome as editoras_nome',
+            'autores.id as autores_id',
+            'autores.nome as autores_nome',
+            'livros.idioma as idioma',
+            'livros.genero as genero',
+            'livros.capalivro as capalivro',
+            'livros.urldownload as urldownload',
+            'livros.users_id as users_id',
+        )
+        ->where('meuperfil.id' , '=' , $dados['meuperfil_id'])
+        ->limit($dados['quantidade'])
+        ->offset($offset)
+        ->get();
+        if(!count($retorno) > 0 )
+        {
+            return null ;
+        }
+        else
+        {
+            return $retorno ;
+        }
+    }
 }

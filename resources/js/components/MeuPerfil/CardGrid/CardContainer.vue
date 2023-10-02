@@ -1,18 +1,28 @@
 <script lang="ts">
 import Card from "@/components/MeuPerfil/CardGrid/Card.vue";
-import LivrosDataSource from "@/../json/gridContainerDataSource.json";
 import ModalFormularioAdicionar from "./Opcoes/ModalFormularioAdicionar.vue";
 import Paginacao from "@/components/Utils/Paginacao.vue";
+import Carregando from "@/components/Utils/Carregando.vue";
 
 export default {
+    props : {
+        datasourcelivros : {
+            type : Object ,
+            required : true ,
+        },
+        quantidadelivros : {
+            type: Number ,
+            required : true ,
+        }
+    },
     components: {
         Card,
         ModalFormularioAdicionar,
         Paginacao,
+        Carregando ,
     },
     data() {
         return {
-            livrosDataSource: LivrosDataSource,
             searchBar: '',
         }
     },
@@ -29,26 +39,27 @@ export default {
 }
 </script>
 <template>
-    <div class="container">
+    <div class="Container" >
 
-        <div class="container--cardGridHeader">
+        <div class="Container--cardGridHeader">
 
-            <div class="container--cardGridHeader__left">
-                <Paginacao :quantidade="30" :multiplicador="6" :limitePaginacao="10" :travarPaginacao="false"
+            <div class="Container--cardGridHeader__left">
+                <Paginacao :quantidade="quantidadelivros" :multiplicador="6" :limitePaginacao="8" :travarPaginacao="false"
+                    v-if="quantidadelivros>0"
                     @retornaPaginacao="childRetornaPaginacao"></Paginacao>
             </div>
-            <div class="container--cardGridHeader__right">
+            <div class="Container--cardGridHeader__right">
                 <ModalFormularioAdicionar></ModalFormularioAdicionar>
             </div>
 
         </div>
-        <div class="container--cardContainer">
+        <div class="Container--cardContainer">
 
-            <div v-for="livro in livrosDataSource">
-                <Card :dataSource="livro"></Card>
+            <div v-for="livro in datasourcelivros" v-if="quantidadelivros>6">
+                <Card :datasource="livro"></Card>
             </div>
         </div>
-        <div class="container--cardContainerFooter">
+        <div class="Container--cardContainerFooter">
 
 
         </div>

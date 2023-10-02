@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MeuPerfil\DeleteLivrosRequest;
+use App\Http\Requests\MeuPerfil\PostLivrosMeuPerfilRequest;
 use App\Http\Requests\MeuPerfil\PostLivrosRequest;
 use App\Http\Requests\MeuPerfil\PutLivrosRequest;
 use App\Http\Requests\MeuPerfil\PutMeuPerfilRequest;
@@ -14,6 +15,8 @@ use App\Models\Livros;
 use App\Models\MeuPerfil;
 use Illuminate\Http\JsonResponse;
 use App\Models\Aplicativo;
+use App\Models\User;
+
 class MeuPerfilController extends Controller
 {
     protected $users_id;
@@ -22,6 +25,7 @@ class MeuPerfilController extends Controller
     protected $aplicativo;
     public function __construct()
     {
+
         $this->users_id = Auth::id();
         $this->livrosModel = new Livros;
         $this->meuPerfil = new MeuPerfil;
@@ -36,17 +40,24 @@ class MeuPerfilController extends Controller
     {
 
         if ($this->users_id === null && Auth::id() === null) return view('auth.login');
-
         (Auth::id() === null) ? $this->setUsersId(Auth::id()) : null;
-        $dataSourcePerfil = MeuPerfil::where('users_id', $this->users_id)->first();
-
-        $dataSourceLivros = $this->livrosModel->meuPerfilLivrosDoUsuario($this->users_id);
+        $dataSourcePerfil = MeuPerfil::where('users_id','=', Auth::id() )->first();
+        if($dataSourcePerfil == null )
+        {
+            $dataSourcePerfil = MeuPerfil::create(['users_id' => Auth::id()]);
+        }
+        $dadosLivrosMeuPerfil = [
+            'meuperfil_id' => $dataSourcePerfil->id ,
+            'quantidade' => 20 ,
+            'pagina' => 0 ,
+        ];
+        $dataSourceLivros = $this->livrosModel->postLivrosMeuPerfil($dadosLivrosMeuPerfil);
         $dataSourceQuantidadeLivros = $this->livrosModel->meuPerfilLivrosDoUsuarioQuantidade($this->users_id);
 
         return view('meuperfil', [
-            'dataSourceLivros' => $dataSourceLivros,
-            'dataSourceUsers' => $dataSourcePerfil,
-            'dataSourceQuantidadeLivros' => $dataSourceQuantidadeLivros
+            'datasourcelivros' => $dataSourceLivros,
+            'datasourcemeuperfil' => $dataSourcePerfil,
+            'quantidadelivros' => $dataSourceQuantidadeLivros,
         ]);
     }
     public function getDadosMeuPerfil(): JsonResponse
@@ -246,6 +257,26 @@ class MeuPerfilController extends Controller
         }
 
 
+
+    }
+    public function postLivrosMeuPerfil(PostLivrosMeuPerfilRequest $request) :JsonResponse
+    {
+        $dados = $request->all();
+        $retorno = $this->livrosModel->postLivrosMeuPerfil($dados);
+        if($retorno == null )
+        {
+            return response()->json($retorno , 204);
+        }
+        else
+        {   if(!isset($retorno[0]->id) )
+            {
+                return response()->json($retorno , 500);
+            }
+            else
+            {
+                return response()->json($retorno , 200 );
+            }
+        }
 
     }
 }

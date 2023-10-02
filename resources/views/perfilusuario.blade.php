@@ -12,7 +12,7 @@
         @extends('layouts.app')
         @section('content')
             <div id="perfilUsuario">
-                <perfilusuario :dataSource="{{json_encode($meuperfil)}}">
+                <perfilusuario :datasource="{{json_encode($meuperfil)}}">
 
                 </perfilusuario>
             </div>

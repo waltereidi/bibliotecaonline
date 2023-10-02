@@ -2,6 +2,7 @@ import { MeuPerfilDados } from "@/Entidades/meuperfilDados";
 import axios from "axios";
 import { ApiRequest } from "@/Utils/ApiRequest";
 import { LivrosMeuPerfil } from "@/Entidades/livrosMeuperfil";
+import { putMeuPerfil } from "@/Entidades/putMeuPerfil";
 export class MeuPerfilController{
     public api_token: string;
     private apiRequest: ApiRequest;
@@ -15,62 +16,67 @@ export class MeuPerfilController{
     somar( a:number , b:number ) : number {
         return a+b ;
     }
-    async getDadosMeuPerfil() :Promise<MeuPerfilDados> {
-        return await axios.post<MeuPerfilDados>('/api/meuperfil/getDadosMeuPerfil',
-            this.headers
-        );
-    }
 
-    async getLivrosMeuPerfil(paginacao:number = 0): Promise<LivrosMeuPerfil> {
-        let body: object = this.headers;
-        body["paginacao"] = paginacao;
-        return await axios.post<LivrosMeuPerfil>('/api/meuperfil/getPaginacaoLivrosDoUsuario',
-        body  );
-    }
-    getEditarMeuPerfil( dados ):object {
-        return {
-            id : dados.id??null ,
-            users_id : dados.users_id??null ,
-            introducao : dados.introducao??null ,
-            profile_picture : dados.profile_picture??null ,
-            datanascimento : dados.datanascimento??null ,
-            ...this.headers
+    getPutMeuPerfil( dados :object):object {
+        if(dados.datanascimento!==undefined && dados.datanascimento !== null)
+        {
+            const data = dados.datanascimento.split('-');
+            var dataFormatada = data[2]+'/'+data[1]+'/'+data[0] ;
         }
 
+        return {
+            id : dados.id ,
+            users_id : dados.users_id ,
+            introducao : dados.introducao??null ,
+            profile_picture : dados.profile_picture??null ,
+            datanascimento :dataFormatada,
+            ...this.headers
+        }
     }
-    async editarMeuPerfil(body: object ): Promise<MeuPerfilDados> {
-
-        return await axios.post<MeuPerfilDados>('/api/meuperfil/editarMeuPerfil',
-        this.headers ,body );
-    }
-    getPostLivros(dados): object{
+    getDadosLivros(dados:object): object{
 
         return {
             id: dados.id??null ,
-            titulo: dados.titulo??null,
+            titulo: dados.titulo,
             descricao: dados.descricao??null,
             visibilidade: dados.visibilidade??null,
             isbn: dados.isbn??null,
-            editoras_nome: dados.editoras_nome??null,
-            autores_nome: dados.autores_nome??null,
+            editoras_nome: dados.editoras_nome,
+            autores_nome: dados.autores_nome,
             capalivro: dados.capalivro??null,
             genero: dados.genero??null,
             idioma: dados.idioma??null,
+            urldownload: dados.urldownload,
             ...this.headers
         };
     }
+    getDeleteLivros(id : number) : object {
+        return {
+            id : id ,
+            ...this.headers
+        }
+    }
 
-    async adicionarLivros(body: object): Promise<LivrosMeuPerfil>{
-        return await axios.post<LivrosMeuPerfil>('/api/meuperfil/adicionarLivros',
-            body
-        );
+    async postLivros(body: object): Promise<LivrosMeuPerfil>
+    {
+        return await axios.post<LivrosMeuPerfil>('/api/meuperfil/postLivros', body );
     }
-    async editarLivros(body: object): Promise<LivrosMeuPerfil>{
-        return await axios.put<LivrosMeuPerfil>('/api/meuperfil/editarLivros',
-            body );
+    async putLivros(body: object): Promise<LivrosMeuPerfil>
+    {
+        return await axios.put<LivrosMeuPerfil>('/api/meuperfil/putLivros', body );
     }
-    async deletarLivros(id): Promise<boolean>{
-        return await axios.delete<boolean>(`/api/meuperfil / removerLivros / ${id}`);
+    async deleteLivros( body : object): Promise<boolean>
+    {
+        return await axios.delete<boolean>(`/api/meuperfil/deleteLivros` , body );
+    }
+    async putMeuPerfil(body : object ) :Promise<putMeuPerfil>
+    {
+        return await axios.put<putMeuPerfil>('/api/meuperfil/putMeuPerfil', body );
+    }
+
+    async postLivrosMeuPerfil(dados : object) : Promise<Array<LivrosMeuPerfil>> {
+
+        return await axios.post<LivrosMeuPerfil>('/api/meuperfil/postLivrosDoUsuario' , body  );
     }
 
 }

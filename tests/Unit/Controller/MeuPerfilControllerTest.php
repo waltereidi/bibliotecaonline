@@ -56,18 +56,20 @@ class MeuPerfilControllerTest extends TestCase
     {
 
         //Setup
-
+        Auth::loginUsingId($this->user->id);
         //Execução
-        $this->meuPerfilController->setUsersId(0);
+
+        $this->meuPerfilController->setUsersId($this->meuPerfil->users_id);
         $view = $this->meuPerfilController->index();
         $viewDataSource = $view->getData();
         //Assert
         $this->assertInstanceOf(View::class, $view);
         $this->assertEquals('meuperfil', $view->getName());
         $this->assertNotEmpty($viewDataSource);
-        $this->assertNull($viewDataSource['dataSourceLivros']);
-        $this->assertNull($viewDataSource['dataSourceUsers']);
-        $this->assertIsInt($viewDataSource['dataSourceQuantidadeLivros']);
+        $this->assertNotEmpty($viewDataSource['datasourcelivros']);
+        $this->assertNotEmpty($viewDataSource['datasourcemeuperfil']);
+        $this->assertIsInt($viewDataSource['quantidadelivros']);
+        $this->assertTrue($viewDataSource['datasourcemeuperfil']->id > 0);
     }
     public function testeAdicionarLivros_RetornaLivrosDataSource(): void
     {

@@ -1,29 +1,58 @@
 <script lang="ts">
-import CKEditor from "@/components/Utils/CKEditor.vue";
 import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
 import config from "@/../json/bibliotecaconfig.json";
 import CardContainer from "@/components/MeuPerfil/CardGrid/CardContainer.vue";
+import { MeuPerfilController } from "@/MeuPerfil/meuperfilController";
+import Carregando from "../Utils/Carregando.vue";
 export default {
+    props:{
+        api_token:{
+            required : true ,
+            type:String ,
+        },
+        datasourcelivros: {
+            required:true ,
+            type:Object ,
+        },
+        datasourcemeuperfil : {
+            required : true ,
+            type:Object
+        },
+        quantidadelivros : {
+            required : true ,
+            type : Object ,
+        }
+    },
     data() {
-
         return {
             configDataSource: config,
             dataSource: {
-                type: Object,
-                default: {
-                    profile_picture: '',
-                    datanascimento: '',
-                    introducao: ''
-                },
+                    profile_picture: this.datasourcemeuperfil['profile_picture'] ?? '',
+                    datanascimento: this.datasourcemeuperfil['datanascimento'] ?? '',
+                    introducao: this.datasourcemeuperfil['introducao'] ?? '',
+                    id : this.datasourcemeuperfil['id'],
+                    users_id : this.datasourcemeuperfil['users_id'],
             },
+            loading : false ,
         }
     },
     components: {
         ModalImagem,
-        CardContainer
+        CardContainer,
+        Carregando,
+    },
+    methods:{
+        salvar(){
+            const meuperfilController= new MeuPerfilController(this.api_token);
+            const dados = meuperfilController.getPutMeuPerfil(this.dataSource);
 
+            const retorno = meuperfilController.putMeuPerfil(dados).then( response=>{
+                console.log(response);
+            });
 
+        }
     }
+
 
 }
 </script>
@@ -42,7 +71,7 @@ export default {
                         <span class="mdc-floating-label mdc-floating-label--float-above">
                             Url da imagem do perfil
                         </span>
-                        <input class="mdc-text-field__input" type="text" aria-label="profile_picture">
+                        <input class="mdc-text-field__input" v-model="dataSource.profile_picture" type="text" aria-label="profile_picture">
                         <span class="mdc-line-ripple"></span>
                     </label>
                 </label>
@@ -54,8 +83,8 @@ export default {
                         <span class="mdc-floating-label mdc-floating-label--float-above">
                             Data de nascimento
                         </span>
-                        <input type="date" class="mdc-text-field__date datepicker" max="2013-12-31"
-                            aria-label="datanascimento">
+                        <input type="date" v-model="dataSource.datanascimento" class="mdc-text-field__date datepicker"
+                            aria-label="datanascimento"  min="1937-01-01" max="2015-12-31" >
                         <span class="mdc-line-ripple"></span>
                     </label>
                 </label>
@@ -83,19 +112,17 @@ export default {
 
                     </div>
                     <div class="actions--salvar">
-                        <button class="mdc-button mdc-button--raised">Salvar</button>
-
+                        <button :disabled="loading" @click="salvar" class="mdc-button mdc-button--raised">Salvar</button>
                     </div>
-
                 </div>
-
+                <Carregando :show="loading"></Carregando>
             </div>
 
 
 
         </div>
         <div class="content--livrosContainer">
-            <CardContainer></CardContainer>
+            <CardContainer :datasource="datasourcelivros" :quantidadelivros="quantidadelivros"></CardContainer>
         </div>
     </div>
 </template>

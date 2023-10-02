@@ -13,4 +13,5 @@ export interface LivrosMeuPerfil {
     idioma? : string ,
     genero? : string ,
     capalivro? : string ,
+    urldownload: string ,
 }

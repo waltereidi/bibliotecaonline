@@ -33,6 +33,8 @@ Route::prefix('meuperfil')->group(function () {
     Route::middleware('validartoken')->post('postLivros', [MeuPerfilController::class, 'postLivros']);
     Route::middleware('validartoken')->put('putLivros', [MeuPerfilController::class, 'putLivros']);
     Route::middleware('validartoken')->put('putMeuPerfil' , [MeuPerfilController::class , 'putMeuPerfil']);
+    Route::middleware('validartoken')->post('postLivrosMeuPerfil' , [MeuPerfilController::class , 'postLivrosMeuPerfil'] );
+
 });
 
 Route::prefix('mensagens')->group(function () {

@@ -5,7 +5,7 @@ import ModalExcluir from './Opcoes/ModalExcluir.vue';
 export default {
     props:
     {
-        dataSource: {
+        datasource: {
             type: Object,
             required: true,
 
@@ -30,15 +30,15 @@ export default {
 <template>
     <div class="card">
         <div class="card--titulo">
-            <h4>{{ dataSource.titulo }}</h4>
+            <h4>{{ datasource.titulo }}</h4>
 
         </div>
         <div class="card--autor">
-            <p class="text-muted">{{ dataSource.autores_nome }}</p>
+            <p class="text-muted">{{ datasource.autores_nome }}</p>
         </div>
         <div class="card--media">
 
-            <img :src="dataSource.capalivro ?? configDataSource.capaLivroDefault" />
+            <img :src="datasource.capalivro ?? configDataSource.capaLivroDefault" />
         </div>
         <div class="card--actions">
             <div class="card--actions__left">

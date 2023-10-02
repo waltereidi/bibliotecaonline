@@ -20,6 +20,9 @@ export default {
         ModalDownload,
 
     },
+    mounted(){
+
+    }
 
 }
 </script>
@@ -50,7 +53,7 @@ export default {
                     <hr>
                 </div>
                 <div class="mainContent--right__informacao">
-                    <details v-if="datasource.descricao.length > 400">
+                    <details v-if="(datasource.descricao !=null) && (datasource.descricao.length > 400)">
 
                         <summary>Leia mais...
                             <blockquote>

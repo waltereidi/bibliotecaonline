@@ -22,7 +22,6 @@ export default {
         ModalImagem,
     },
     mounted(){
-        console.log(this.datasource);
     }
 }
 </script>
@@ -62,7 +61,7 @@ export default {
                     <img :src="livro.capalivro ?? configDataSource.capaLivroDefault">
                 </div>
 
-                <h5 class="titulo"><a :href="'livros/' + livro.id">{{ livro.titulo }}</a></h5>
+                <h5 class="titulo"><a :href="'/livros/' + livro.id">{{ livro.titulo }}</a></h5>
                 <p class="informacao">{{ livro.autores_nome }}</p>
             </div>
 
@@ -70,7 +69,7 @@ export default {
         <div class="container--containerLivros" v-else>
 
             <div v-for="livro in livrosDataSource" class="container--containerLivros__livro">
-                <a :href="'livros/' + livro.id">
+                <a :href="'/livros/' + livro.id">
                     <div class="capalivro">
                         <img :src="livro.capalivro ?? configDataSource.capaLivroDefault">
                     </div>

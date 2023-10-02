@@ -12,7 +12,12 @@
         @extends('layouts.app')
         @section('content')
             <div id="meuPerfil">
-                <meuperfil :authentication="{{ json_encode(Auth::user()->api_token) }}"></meuperfil>
+                <meuperfil
+                    :api_token="{{ json_encode(Auth::user()->api_token) }}"
+                    :datasourcelivros="{{ json_encode($datasourcelivros) }}"
+                    :datasourcemeuperfil="{{ json_encode($datasourcemeuperfil)}}"
+                    :quantidadelivros="{{ json_encode($quantidadelivros )}}"
+                    ></meuperfil>
 
             </div>
 

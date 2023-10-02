@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Livros;
 use App\Models\Aplicativo;
 class LivrosController extends Controller
@@ -17,9 +16,9 @@ class LivrosController extends Controller
     }
 
     public function getLivro(int $id)
-    {
-        if($id > 0 ){
-            $livro = $this->livrosModel->getLivro($id);
+    {   $livro = $this->livrosModel->getLivro($id);
+        if($livro->id){
+
             return view('livros')->with('livro', $livro);
         }
         else{

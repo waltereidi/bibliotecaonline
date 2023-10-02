@@ -1,11 +1,9 @@
-.container {
+.Container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 3em;
-    border: 1px solid #bdbdbd;
-    padding: 1em;
-
+    width: 100%;
     &--cardGridHeader {
         height: 3.5em;
         width: 100%;
@@ -13,6 +11,10 @@
         padding: 0.2em;
         display: flex;
         flex-flow: row wrap;
+        border: solid 1px #E0E0E090;
+
+        border-radius: 5px;
+        box-shadow: 8px 8px 8px -10px;
 
         &__left {
             order: 1;
@@ -25,6 +27,11 @@
             display: flex;
             flex: 1 1 auto;
         }
+    }
+    &--cardGridHeader:hover{
+        transition: all 0.3s ;
+        background-color:#E0E0E095;
+
     }
     &--cardContainerFooter {
         height: 3em;

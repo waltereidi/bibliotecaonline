@@ -2,8 +2,10 @@
 
 namespace Tests\Unit\Model;
 
+use App\Http\Requests\MeuPerfil\PostLivrosMeuPerfilRequest;
 use Tests\TestCase;
 use App\Models\Livros;
+use App\Models\MeuPerfil;
 use App\Models\User;
 
 class LivrosModelTest extends TestCase
@@ -11,6 +13,7 @@ class LivrosModelTest extends TestCase
     public $livros ;
     public $user ;
     public $dadosBuscaIndice ;
+    public $meuPerfil ;
 
     public function setUp():void
     {
@@ -22,6 +25,7 @@ class LivrosModelTest extends TestCase
             'iniciopagina'=>0,
             'busca'=>[['indice'=>'testCase' , 'tipo'=>'testCase'],
             ['indice'=>'testCase2' , 'tipo'=>'testCase']] ];
+        $this->meuPerfil = MeuPerfil::where('users_id' , '=' , $this->user->id)->first() ;
     }
     public function testeMeuPerfilLivrosDoUsuario_RetornaNull(): void
     {
@@ -286,8 +290,6 @@ class LivrosModelTest extends TestCase
         $this->assertNotEmpty($getLivro->editoras_nome);
         $this->assertNotEmpty($getLivro->autores_nome);
         $this->assertNotEmpty($getLivro->users_nome);
-
-
     }
     public function testeGetLivro_IdInvalido_RetornaNull():void
     {
@@ -297,6 +299,44 @@ class LivrosModelTest extends TestCase
         $getLivro = $this->livros->getLivro($id);
         //assert
         $this->assertNull($getLivro);
+
+    }
+    public function testPostLivrosMeuPerfil_RetornaDataSource():void
+    {
+        //Setup
+        $dados =['quantidade' => 20 ,
+                 'pagina' => 0 ,
+                 'meuperfil_id' => $this->meuPerfil->id] ;
+        //execucao
+        $retorno = $this->livros->postLivrosMeuPerfil($dados);
+        $validarChaves = get_object_vars($retorno[0]);
+        //assert
+        $this->assertIsObject($retorno );
+        $this->assertArrayHasKey('id', $validarChaves);
+        $this->assertArrayHasKey('titulo', $validarChaves);
+        $this->assertArrayHasKey('descricao', $validarChaves);
+        $this->assertArrayHasKey('visibilidade', $validarChaves);
+        $this->assertArrayHasKey('isbn', $validarChaves);
+        $this->assertArrayHasKey('editoras_id', $validarChaves);
+        $this->assertArrayHasKey('editoras_nome', $validarChaves);
+        $this->assertArrayHasKey('autores_id' , $validarChaves);
+        $this->assertArrayHasKey('autores_nome', $validarChaves);
+        $this->assertArrayHasKey('capalivro', $validarChaves);
+        $this->assertArrayHasKey('genero', $validarChaves);
+        $this->assertArrayHasKey('idioma', $validarChaves);
+        $this->assertArrayHasKey('urldownload' , $validarChaves);
+    }
+    public function testPostLivrosMeuPerfil_RetornaNull():void
+    {
+        //Setup
+        $dados =['quantidade' => 20 ,
+                 'pagina' => 0 ,
+                 'meuperfil_id' => 0] ;
+        //Execucao
+        $retorno = $this->livros->postLivrosMeuPerfil($dados) ;
+
+        //assert
+        $this->assertNull($retorno);
 
     }
 }
