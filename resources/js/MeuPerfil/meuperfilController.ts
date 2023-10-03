@@ -18,10 +18,12 @@ export class MeuPerfilController{
     }
 
     getPutMeuPerfil( dados :object):object {
-        if(dados.datanascimento!==undefined && dados.datanascimento !== null)
+        let dataFormatada= null;
+
+        if( Date(dados.datanascimento) != 'Invalid Date' && dados.datanascimento !=='' )
         {
             const data = dados.datanascimento.split('-');
-            var dataFormatada = data[2]+'/'+data[1]+'/'+data[0] ;
+            dataFormatada = data[2]+'/'+data[1]+'/'+data[0] ;
         }
 
         return {
@@ -47,6 +49,7 @@ export class MeuPerfilController{
             genero: dados.genero??null,
             idioma: dados.idioma??null,
             urldownload: dados.urldownload,
+            users_id : dados.users_id,
             ...this.headers
         };
     }

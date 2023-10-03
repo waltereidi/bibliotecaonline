@@ -3,16 +3,25 @@ import Card from "@/components/MeuPerfil/CardGrid/Card.vue";
 import ModalFormularioAdicionar from "./Opcoes/ModalFormularioAdicionar.vue";
 import Paginacao from "@/components/Utils/Paginacao.vue";
 import Carregando from "@/components/Utils/Carregando.vue";
+import Sucesso from "@/components/Utils/Sucesso.vue";
 
 export default {
     props : {
         datasourcelivros : {
             type : Object ,
-            required : true ,
+            required : false ,
         },
         quantidadelivros : {
             type: Number ,
             required : true ,
+        },
+        api_token : {
+            type: String ,
+            required : true ,
+        },
+        users_id : {
+            type : Number ,
+            required : true,
         }
     },
     components: {
@@ -21,17 +30,15 @@ export default {
         Paginacao,
         Carregando ,
     },
-    data() {
-        return {
-            searchBar: '',
-        }
-    },
     methods: {
         buscar() {
 
         },
         childRetornaPaginacao(paginacao, multiplicador) {
 
+
+        }
+        childModalAdicionarSucesso( retorno ){
 
         }
     }
@@ -49,7 +56,7 @@ export default {
                     @retornaPaginacao="childRetornaPaginacao"></Paginacao>
             </div>
             <div class="Container--cardGridHeader__right">
-                <ModalFormularioAdicionar></ModalFormularioAdicionar>
+                <ModalFormularioAdicionar :api_token="api_token" :users_id="users_id" @modalAdicionarSucesso="childModalAdicionarSucesso"></ModalFormularioAdicionar>
             </div>
 
         </div>

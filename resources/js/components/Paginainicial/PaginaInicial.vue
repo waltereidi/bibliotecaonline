@@ -1,4 +1,5 @@
 <script lang="ts">
+import { ref } from 'vue/dist/vue.esm-bundler';
 import LivroCard from "./LivroCard.vue";
 import Paginacao from "@/components/Utils/Paginacao.vue";
 import { PaginainicialController } from "@/Paginainicial/paginainicialController";
@@ -37,6 +38,7 @@ export default {
                 quantidade: number,
                 tipo: string,
             }[],
+            paginainicialController : ref(new PaginainicialController(this.token_aplicativo)),
         }
     },
     methods: {
@@ -46,13 +48,13 @@ export default {
             if(this.indiceAtivo){
                 this.travarPaginacao = true;
 
-                const paginainicialController = new PaginainicialController(this.token_aplicativo);
 
-                const dados =paginainicialController.getDadosBuscaIndice(multiplicador, (paginaAtual*multiplicador) , [this.indiceAtivo]);
-                const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
+
+                const dados =this.paginainicialController.getDadosBuscaIndice(multiplicador, (paginaAtual*multiplicador) , [this.indiceAtivo]);
+                const dadosRequest = this.paginainicialController.getDadosBuscaIndiceRequest(dados);
 
                 const buscaIndicePromise = new Promise(async (resolve) =>{
-                    await resolve(paginainicialController.postBuscaIndice(dadosRequest));
+                    await resolve(this.paginainicialController.postBuscaIndice(dadosRequest));
                 });
                 buscaIndicePromise.then((resolve) => {
                     this.dataSource = resolve.data;
@@ -61,8 +63,7 @@ export default {
             }
         },
     },
-    beforeCreate() {
-        this.paginainicialController= new PaginainicialController(this.token_aplicativo)
+    created() {
         this.paginainicialController.getIndices().then(response => {
             this.indicesDataSource = response.data;
         }
@@ -78,13 +79,12 @@ export default {
             if(!this.travarPaginacao)
                 this.travarPaginacao=true;
                 this.dataSource.quantidadeTotal= null ;
-                const paginainicialController = new PaginainicialController(this.token_aplicativo);
-                console.log(this.indiceAtivo);
-                const dados =paginainicialController.getDadosBuscaIndice(20, 0 , [this.indiceAtivo] );
-                const dadosRequest = paginainicialController.getDadosBuscaIndiceRequest(dados);
+
+                const dados =this.paginainicialController.getDadosBuscaIndice(20, 0 , [this.indiceAtivo] );
+                const dadosRequest = this.paginainicialController.getDadosBuscaIndiceRequest(dados);
 
                 const buscaIndicePromise = new Promise(async (resolve) =>{
-                    await resolve(paginainicialController.postBuscaIndice(dadosRequest));
+                    await resolve(this.paginainicialController.postBuscaIndice(dadosRequest));
                 });
                 buscaIndicePromise.then((resolve) => {
 

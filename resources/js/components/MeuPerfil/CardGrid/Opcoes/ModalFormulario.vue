@@ -1,6 +1,5 @@
 <script lang="ts">
 import config from "@/../json/bibliotecaconfig.json";
-import MensagemErro from '@/components/Utils/MensagemErro.vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, url, minLength } from '@vuelidate/validators'
 
@@ -20,7 +19,6 @@ export default {
         return {
             configDataSource: config,
             showModal: false,
-            mensagemErro: [],
             dataSource: {
                 id: this.parentDataSource == null ? '' : this.parentDataSource.id,
                 titulo: this.parentDataSource == null ? '' : this.parentDataSource.titulo,
@@ -75,9 +73,7 @@ export default {
 
         }
     },
-    components: {
-        MensagemErro
-    },
+
 
 }
 

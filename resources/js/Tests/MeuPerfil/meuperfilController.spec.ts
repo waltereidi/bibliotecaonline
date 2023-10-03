@@ -43,6 +43,7 @@ test('getDadosLivros', () => {
         genero: null,
         idioma: null,
         urldownload: 'http://www.php.net',
+        users_id: 1,
     };
 
     const retorno: LivrosMeuPerfil = meuperfilController.getDadosLivros(dados);
@@ -57,6 +58,7 @@ test('getDadosLivros', () => {
         expect(retorno.genero).toBe(null);
         expect(retorno.idioma).toBe(null);
         expect(retorno.urldownload).toBe('http://www.php.net');
+        expect(retorno.users_id).toBe(1);
         expect(retorno['Content-Type']).toBe('application/json');
         expect(retorno['Authorization']).toBe('Bearer ');
         expect(retorno['Accept']).toBe('application/json');

@@ -1,11 +1,22 @@
 <script lang="ts">
 import config from "@/../json/bibliotecaconfig.json";
-import MensagemErro from '@/components/Utils/MensagemErro.vue'
+import { MeuPerfilController } from "@/MeuPerfil/meuperfilController";
 import { useVuelidate } from '@vuelidate/core'
 import { required, url, minLength } from '@vuelidate/validators'
-
-
+import { ref } from 'vue/dist/vue.esm-bundler';
+import Erro from "@/components/Utils/Erro.vue";
+import Carregando from "@/components/Utils/Carregando.vue";
 export default {
+    props:{
+        api_token:{
+            type:String ,
+            required: true ,
+        },
+        users_id:{
+            type:Number ,
+            required : true,
+        }
+    },
     setup() {
         return { v$: useVuelidate() }
     },
@@ -14,7 +25,9 @@ export default {
         return {
             configDataSource: config,
             showModal: false,
-            mensagemErro: [],
+            showErro : false,
+            loading : false ,
+            meuPerfilController: ref(new MeuPerfilController(this.api_token)),
             dataSource: {
                 titulo: '',
                 descricao: '',
@@ -25,6 +38,8 @@ export default {
                 autores_nome: '',
                 idioma: '',
                 genero: '',
+                visibilidade : 1 ,
+                users_id : 0 ,
             }
         }
     },
@@ -33,19 +48,40 @@ export default {
             dataSource: {
                 titulo: { required, minLength: minLength(4) },
                 capalivro: { url },
-                urldownload: { url },
+                urldownload: { url ,required},
                 editoras_nome: { required, minLength: minLength(4) },
                 autores_nome: { required, minLength: minLength(4) },
             }
         }
     },
-    emits: ['enviarModalFormularioAdicionar'],
+    emits: ['modalAdicionarSucesso'],
     methods: {
 
         enviarModalFormulario(): void {
-            this.$emit('enviarModalFormularioAdicionar', this.dataSource)
+            this.loading=true ;
+            this.dataSource.users_id = this.users_id;
+            const dados = this.meuPerfilController.getDadosLivros(this.dataSource);
+            this.meuPerfilController.postLivros(dados).then( response => {
+                console.log(response);
+            if(response.status!==201){
+                this.showErro = true;
+                setTimeout(()=>{
+                    this.showErro = false;
+                },2000);
+            }else{
+                this.cancelarFormulario();
+                this.$emit('modalAdicionarSucesso', response);
+            }
+          }).finally(()=>{
+            this.loading=false;
+          });
+
         },
         cancelarFormulario(): void {
+            this.limparFormulario();
+            this.showModal = false;
+        },
+        limparFormulario(): void {
             this.dataSource = {
                 titulo: '',
                 descricao: '',
@@ -57,17 +93,18 @@ export default {
                 idioma: '',
                 genero: ''
             };
-            this.showModal = false;
         }
     },
-    components: {
-        MensagemErro,
-    },
-
+    components:{
+        Erro,
+        Carregando,
+    }
 }
 
 </script>
 <template>
+    <Erro :show="showErro"></Erro>
+    <Carregando :show:="loading"></Carregando>
     <button class="mdc-button mdc-card__action mdc-card__action--button mdc-button--adicionar" @click="showModal = true">
         Adicionar
     </button>
@@ -264,7 +301,7 @@ export default {
                 </div>
 
                 <div class="confirmar">
-                    <button @click="cancelarFormulario()" :disabled="v$.dataSource.$invalid"
+                    <button @click="enviarModalFormulario()" :disabled="v$.dataSource.$invalid"
                         class="mdc-button mdc-button--confirmar">Confirmar
                     </button>
                 </div>

@@ -3,15 +3,22 @@ import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
 import config from "@/../json/bibliotecaconfig.json";
 import CardContainer from "@/components/MeuPerfil/CardGrid/CardContainer.vue";
 import { MeuPerfilController } from "@/MeuPerfil/meuperfilController";
-import Carregando from "../Utils/Carregando.vue";
+import { ref } from 'vue/dist/vue.esm-bundler';
+import { useVuelidate } from '@vuelidate/core';
+import { required, url } from '@vuelidate/validators';
+import Carregando from "@/components/Utils/Carregando.vue";
+import Sucesso from  "@/components/Utils/Sucesso.vue";
 export default {
+    setup(){
+        return { v$ : useVuelidate() }
+    },
     props:{
         api_token:{
             required : true ,
             type:String ,
         },
         datasourcelivros: {
-            required:true ,
+            required:false ,
             type:Object ,
         },
         datasourcemeuperfil : {
@@ -20,7 +27,7 @@ export default {
         },
         quantidadelivros : {
             required : true ,
-            type : Object ,
+            type : Number ,
         }
     },
     data() {
@@ -33,35 +40,62 @@ export default {
                     id : this.datasourcemeuperfil['id'],
                     users_id : this.datasourcemeuperfil['users_id'],
             },
-            loading : false ,
+            messages : {
+                loading : false ,
+                sucesso : false ,
+            },
+            meuperfilModificado : false ,
+            meuPerfilController: ref(new MeuPerfilController(this.api_token))
+        }
+    },
+    validations(){
+        return {
+            dataSource : {
+                    profile_picture : { url } ,
+                    id : { required },
+                    users_id : { required },
+            }
         }
     },
     components: {
         ModalImagem,
         CardContainer,
         Carregando,
+        Sucesso ,
     },
     methods:{
-        salvar(){
-            const meuperfilController= new MeuPerfilController(this.api_token);
-            const dados = meuperfilController.getPutMeuPerfil(this.dataSource);
 
-            const retorno = meuperfilController.putMeuPerfil(dados).then( response=>{
-                console.log(response);
-            });
+        async salvar(){
+            const dados = this.meuPerfilController.getPutMeuPerfil(this.dataSource);
+            this.messages.loading = true ;
+            this.meuPerfilController.putMeuPerfil(dados).then( response =>{
+                if(response.status == 200){
+                    this.messages.sucesso = true ;
+                    setTimeout( ()=> {
+                        this.messages.sucesso = false ;
+                    },2000);
+                };
+            }).finally(() =>{
+                this.messages.loading= false ;
+            }
+            );
 
         }
-    }
-
+    },
 
 }
 </script>
 <template>
+    <Carregando :show="messages.loading"></Carregando>
+    <Sucesso :show="messages.sucesso"></Sucesso>
     <div class="content">
         <div class="content--form">
             <div class="content--form__left">
                 <div class="profile_picture">
-                    <ModalImagem :srcImagem="configDataSource.profile_pictureDefault"></ModalImagem>
+                    <ModalImagem
+                        :srcImagem="(v$.dataSource.profile_picture.$invalid || dataSource.profile_picture==='' || dataSource.profile_picture ===null )
+                        ? configDataSource.profile_pictureDefault : dataSource.profile_picture">
+                    </ModalImagem>
                 </div>
             </div>
             <div class="content--form__right">
@@ -69,10 +103,15 @@ export default {
                     <label class="mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
                         <span class="mdc-text-field__ripple"></span>
                         <span class="mdc-floating-label mdc-floating-label--float-above">
-                            Url da imagem do perfil
+                            <span
+                            :class="{ 'errorLabel': v$.dataSource.profile_picture.$invalid, '': !v$.dataSource.profile_picture.$invalid }">Url da imagem do perfil</span>
                         </span>
                         <input class="mdc-text-field__input" v-model="dataSource.profile_picture" type="text" aria-label="profile_picture">
                         <span class="mdc-line-ripple"></span>
+                        <span class="mdc-text-field-character-counter label-erro" >
+                            <span v-if="v$.dataSource.profile_picture.$invalid"
+                                class="errorLabel">Url
+                                inválida</span></span>
                     </label>
                 </label>
 
@@ -112,17 +151,22 @@ export default {
 
                     </div>
                     <div class="actions--salvar">
-                        <button :disabled="loading" @click="salvar" class="mdc-button mdc-button--raised">Salvar</button>
+                        <button :disabled="(messages.loading || messages.sucesso || v$.dataSource.$invalid)" @click="salvar" class="mdc-button mdc-button--raised">Salvar</button>
                     </div>
                 </div>
-                <Carregando :show="loading"></Carregando>
+
             </div>
 
 
 
         </div>
         <div class="content--livrosContainer">
-            <CardContainer :datasource="datasourcelivros" :quantidadelivros="quantidadelivros"></CardContainer>
+            <CardContainer
+                :datasourcelivros="datasourcelivros"
+                :quantidadelivros="quantidadelivros"
+                :api_token="api_token"
+                :users_id="datasourcemeuperfil.users_id"
+            ></CardContainer>
         </div>
     </div>
 </template>
