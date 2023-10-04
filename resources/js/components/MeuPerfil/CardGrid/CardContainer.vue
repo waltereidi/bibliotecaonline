@@ -4,6 +4,9 @@ import ModalFormularioAdicionar from "./Opcoes/ModalFormularioAdicionar.vue";
 import Paginacao from "@/components/Utils/Paginacao.vue";
 import Carregando from "@/components/Utils/Carregando.vue";
 import Sucesso from "@/components/Utils/Sucesso.vue";
+import {MeuPerfilController} from "@/MeuPerfil/meuperfilController";
+import { ref } from 'vue/dist/vue.esm-bundler';
+
 
 export default {
     props : {
@@ -19,9 +22,17 @@ export default {
             type: String ,
             required : true ,
         },
-        users_id : {
-            type : Number ,
+        datasourcemeuperfil : {
+            type : Object ,
             required : true,
+        }
+    },
+    data(){
+        return {
+            sucesso : false ,
+            dataSource : this.datasourcelivros,
+            meuperfilController : ref(new MeuPerfilController(this.api_token)),
+            quantidadeLivros:this.quantidadelivros,
         }
     },
     components: {
@@ -29,6 +40,7 @@ export default {
         ModalFormularioAdicionar,
         Paginacao,
         Carregando ,
+        Sucesso ,
     },
     methods: {
         buscar() {
@@ -37,15 +49,38 @@ export default {
         childRetornaPaginacao(paginacao, multiplicador) {
 
 
-        }
+        },
         childModalAdicionarSucesso( retorno ){
 
+            this.sucesso = true ;
+            const dados  =this.meuperfilController.getDadosLivrosMeuPerfil({
+                quantidade : 20 ,
+                pagina : 0 ,
+                meuperfil_id : this.datasourcemeuperfil.id
+            });
+
+            this.meuperfilController.postLivrosMeuPerfil(dados).then(result => {
+                if(result.status === 200)
+                {
+                    console.log(result);
+                    this.dataSource = result.data.livros ;
+                    this.quantidadeLivros = result.data.quantidadeTotal ;
+                }
+            }
+            );
+            setTimeout(() => {
+                this.sucesso = false ;
+            },2000);
+
         }
-    }
+    },
+
+
 
 }
 </script>
 <template>
+    <Sucesso :show="sucesso"></Sucesso>
     <div class="Container" >
 
         <div class="Container--cardGridHeader">
@@ -56,13 +91,13 @@ export default {
                     @retornaPaginacao="childRetornaPaginacao"></Paginacao>
             </div>
             <div class="Container--cardGridHeader__right">
-                <ModalFormularioAdicionar :api_token="api_token" :users_id="users_id" @modalAdicionarSucesso="childModalAdicionarSucesso"></ModalFormularioAdicionar>
+                <ModalFormularioAdicionar :api_token="api_token" :users_id="datasourcemeuperfil.users_id" @modalAdicionarSucesso="childModalAdicionarSucesso"></ModalFormularioAdicionar>
             </div>
 
         </div>
         <div class="Container--cardContainer">
 
-            <div v-for="livro in datasourcelivros" v-if="quantidadelivros>6">
+            <div v-for="livro in dataSource" v-if="quantidadeLivros>6">
                 <Card :datasource="livro"></Card>
             </div>
         </div>

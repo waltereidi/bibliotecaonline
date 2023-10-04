@@ -1,4 +1,3 @@
-import { MeuPerfilDados } from "@/Entidades/meuperfilDados";
 import axios from "axios";
 import { ApiRequest } from "@/Utils/ApiRequest";
 import { LivrosMeuPerfil } from "@/Entidades/livrosMeuperfil";
@@ -59,6 +58,14 @@ export class MeuPerfilController{
             ...this.headers
         }
     }
+    getDadosLivrosMeuPerfil(dados : object) : object {
+         return {
+            quantidade : dados.quantidade,
+            pagina : dados.paginacao ,
+            meuperfil_id : dados.meuperfil_id ,
+            ...this.headers
+         }
+    }
 
     async postLivros(body: object): Promise<LivrosMeuPerfil>
     {
@@ -79,7 +86,7 @@ export class MeuPerfilController{
 
     async postLivrosMeuPerfil(dados : object) : Promise<Array<LivrosMeuPerfil>> {
 
-        return await axios.post<LivrosMeuPerfil>('/api/meuperfil/postLivrosDoUsuario' , body  );
+        return await axios.post<LivrosMeuPerfil>('/api/meuperfil/postLivrosMeuPerfil' , dados  );
     }
 
 }

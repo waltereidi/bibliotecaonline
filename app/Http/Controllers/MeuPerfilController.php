@@ -52,7 +52,7 @@ class MeuPerfilController extends Controller
             'pagina' => 0 ,
         ];
         $dataSourceLivros = $this->livrosModel->postLivrosMeuPerfil($dadosLivrosMeuPerfil);
-        $dataSourceQuantidadeLivros = $this->livrosModel->meuPerfilLivrosDoUsuarioQuantidade($this->users_id);
+        $dataSourceQuantidadeLivros = $this->livrosModel->meuPerfilLivrosDoUsuarioQuantidade(Auth::id());
 
         return view('meuperfil', [
             'datasourcelivros' => $dataSourceLivros,

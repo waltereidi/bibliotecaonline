@@ -281,7 +281,7 @@ class Livros extends Model
         ->limit($dados['quantidade'])
         ->offset($offset)
         ->get();
-        if(!count($retorno) > 0 )
+        if(!(count($retorno) > 0) )
         {
             return null ;
         }

@@ -82,6 +82,9 @@ export default {
 
         }
     },
+    mounted(){
+        console.log(this.quantidadelivros);
+    }
 
 }
 </script>
@@ -165,7 +168,7 @@ export default {
                 :datasourcelivros="datasourcelivros"
                 :quantidadelivros="quantidadelivros"
                 :api_token="api_token"
-                :users_id="datasourcemeuperfil.users_id"
+                :datasourcemeuperfil="datasourcemeuperfil"
             ></CardContainer>
         </div>
     </div>
