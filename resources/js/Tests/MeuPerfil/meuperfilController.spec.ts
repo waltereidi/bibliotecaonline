@@ -4,7 +4,7 @@ import { ApiRequest } from '@/Utils/ApiRequest';
 import { MeuPerfilDados } from '@/Entidades/meuperfilDados';
 import { LivrosMeuPerfil } from '@/Entidades/livrosMeuperfil';
 
-const meuperfilController = new MeuPerfilController();
+const meuperfilController = new MeuPerfilController('');
 const apiRequest = new ApiRequest;
 
 
@@ -50,7 +50,7 @@ test('getDadosLivros', () => {
         expect(retorno.id).toBe(1 );
         expect(retorno.titulo).toBe('testCaseFrontEnd');
         expect(retorno.descricao).toBe(null);
-        expect(retorno.visibilidade).toBe(0);
+        expect(retorno.visibilidade).toBe(1);
         expect(retorno.isbn).toBe(null);
         expect(retorno.editoras_nome).toBe('TestCaseFrontEnd');
         expect(retorno.autores_nome).toBe('TestCaseFrontEnd');
@@ -79,13 +79,9 @@ test('getDeletelivros' , () => {
 })
 
 test('getDadosPostLivrosQuantidadeTotal' , () => {
-    const meuperfil_id = 1 ;
-    const retorno = meuperfilController.getDadosPostLivrosQuantidadeTotal(meuperfil_id);
+    const users_id = 1 ;
+    const retorno = meuperfilController.getDadosGetMeuPerfilLivrosDoUsuarioQuantidade(users_id);
 
-    expect(retorno.meuperfil_id).toBe(meuperfil_id);
-    expect(retorno['Content-Type']).toBe('application/json');
-    expect(retorno['Authorization']).toBe('Bearer ');
-    expect(retorno['Accept']).toBe('application/json');
-    expect(retorno['Accept-Encoding']).toBe('gzip, deflate, br');
-    expect(retorno['Connection']).toBe('keep-alive');
+    expect(retorno).toBe('/api/meuperfil/getMeuPerfilLivrosDoUsuarioQuantidade/Bearer /1');
+
 })
