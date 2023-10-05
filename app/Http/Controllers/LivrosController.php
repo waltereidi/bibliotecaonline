@@ -17,7 +17,7 @@ class LivrosController extends Controller
 
     public function getLivro(int $id)
     {   $livro = $this->livrosModel->getLivro($id);
-        if($livro->id){
+        if( isset($livro->id)){
 
             return view('livros')->with('livro', $livro);
         }

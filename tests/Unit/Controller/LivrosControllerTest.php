@@ -19,7 +19,7 @@ class LivrosControllerTest extends TestCase
         $this->aplicativo = Aplicativo::where('nome' ,'=' ,'bibliotecaonline')->first();
     }
 
-    public function testGetLivro_RetornaViePaginainicialComToken(){
+    public function testGetLivro_RetornaViewPaginainicialComToken(){
         //setup
 
         $view = $this->livrosController->getLivro(0);
