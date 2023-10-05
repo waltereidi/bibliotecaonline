@@ -1,8 +1,11 @@
 <script lang="ts">
 import config from "@/../json/bibliotecaconfig.json";
 import { useVuelidate } from '@vuelidate/core'
+import { MeuPerfilController } from "@/MeuPerfil/meuperfilController";
 import { required, url, minLength } from '@vuelidate/validators'
-
+import { ref } from 'vue/dist/vue.esm-bundler';
+import Erro from "@/components/Utils/Erro.vue";
+import Carregando from "@/components/Utils/Carregando.vue";
 
 
 export default {
@@ -10,26 +13,34 @@ export default {
         return { v$: useVuelidate() }
     },
     props: {
-        parentDataSource: {
+        parentdatasource: {
             type: Object,
             required: true,
         },
+        api_token:{
+            type : String ,
+            required : true ,
+        }
     },
     data() {
         return {
             configDataSource: config,
             showModal: false,
+            loading : false ,
+            showErro : false,
+            meuPerfilController: ref(new MeuPerfilController(this.api_token)),
             dataSource: {
-                id: this.parentDataSource == null ? '' : this.parentDataSource.id,
-                titulo: this.parentDataSource == null ? '' : this.parentDataSource.titulo,
-                descricao: this.parentDataSource == null ? '' : this.parentDataSource.descricao,
-                isbn: this.parentDataSource == null ? '' : this.parentDataSource.isbn,
-                capalivro: this.parentDataSource == null ? '' : this.parentDataSource.capalivro,
-                urldownload: this.parentDataSource == null ? '' : this.parentDataSource.urldownload,
-                editoras_nome: this.parentDataSource == null ? '' : this.parentDataSource.editoras_nome,
-                autores_nome: this.parentDataSource == null ? '' : this.parentDataSource.autores_nome,
-                idioma: this.parentDataSource == null ? '' : this.parentDataSource.idioma,
-                genero: this.parentDataSource == null ? '' : this.parentDataSource.genero,
+                id: this.parentdatasource == null ? '' : this.parentdatasource.id,
+                titulo: this.parentdatasource == null ? '' : this.parentdatasource.titulo,
+                descricao: this.parentdatasource == null ? '' : this.parentdatasource.descricao,
+                isbn: this.parentdatasource == null ? '' : this.parentdatasource.isbn,
+                capalivro: this.parentdatasource == null ? '' : this.parentdatasource.capalivro,
+                urldownload: this.parentdatasource == null ? '' : this.parentdatasource.urldownload,
+                editoras_nome: this.parentdatasource == null ? '' : this.parentdatasource.editoras_nome,
+                autores_nome: this.parentdatasource == null ? '' : this.parentdatasource.autores_nome,
+                idioma: this.parentdatasource == null ? '' : this.parentdatasource.idioma,
+                genero: this.parentdatasource == null ? '' : this.parentdatasource.genero,
+
             }
         }
     },
@@ -44,25 +55,45 @@ export default {
             }
         }
     },
-    emits: ['enviarModalFormularioAdicionar'],
+    emits: ['modalEditarSucesso'],
     methods: {
 
         enviarModalFormulario(): void {
-            this.$emit('enviarModalFormularioAdicionar', this.dataSource)
+            this.loading=true ;
+            const dados = this.meuPerfilController.getDadosLivros(this.dataSource);
+            this.meuPerfilController.postLivros(dados).then( response => {
+            if(response.status!==201){
+                this.showErro = true;
+                setTimeout(()=>{
+                    this.showErro = false;
+                },2000);
+            }else{
+                this.cancelarFormulario();
+                this.$emit('modalEditarSucesso', response);
+            }
+          }).catch(() =>{
+            this.showErro = true;
+                setTimeout(() => {
+                this.showErro = false ;
+            },2000);
+          })
+          .finally(()=>{
+            this.loading=false;
+          });
         },
         cancelarFormulario(): void {
 
             this.dataSource = {
-                id: this.parentDataSource.id,
-                titulo: this.parentDataSource.titulo,
-                descricao: this.parentDataSource.descricao,
-                isbn: this.parentDataSource.isbn,
-                capalivro: this.parentDataSource.capalivro,
-                urldownload: this.parentDataSource.urldownload,
-                editoras_nome: this.parentDataSource.editoras_nome,
-                autores_nome: this.parentDataSource.autores_nome,
-                idioma: this.parentDataSource.idioma,
-                genero: this.parentDataSource.genero
+                id: this.parentdatasource.id,
+                titulo: this.parentdatasource.titulo,
+                descricao: this.parentdatasource.descricao,
+                isbn: this.parentdatasource.isbn,
+                capalivro: this.parentdatasource.capalivro,
+                urldownload: this.parentdatasource.urldownload,
+                editoras_nome: this.parentdatasource.editoras_nome,
+                autores_nome: this.parentdatasource.autores_nome,
+                idioma: this.parentdatasource.idioma,
+                genero: this.parentdatasource.genero
             };
             this.$store.commit('closeModal');
             this.showModal = false;
@@ -73,12 +104,18 @@ export default {
 
         }
     },
-
+    components:{
+        Erro,
+        Carregando,
+    }
 
 }
 
 </script>
 <template>
+    <Erro :show="showErro"></Erro>
+    <Carregando :show="loading"></Carregando>
+
     <button class="mdc-button mdc-card__action mdc-card__action--button mdc-button--editar" @click="abrirModal">
         <div class="mdc-button__ripple"></div>
         <span :class="'material-icons'">
@@ -106,7 +143,7 @@ export default {
                     <span class="mdc-line-ripple"></span>
                     <div class="mdc-text-field-helper-line">
 
-                        <div class="mdc-text-field-character-counter" v-if="dataSource.titulo.length > 0">{{
+                        <div class="mdc-text-field-character-counter" v-if="dataSource.titulo">{{
                             dataSource.titulo.length }} /
                             60
                         </div>
@@ -125,7 +162,7 @@ export default {
                         maxlength="20">
                     <span class="mdc-line-ripple"></span>
                     <div class="mdc-text-field-helper-line">
-                        <div class="mdc-text-field-character-counter">{{ dataSource.isbn.length }} /
+                        <div class="mdc-text-field-character-counter" v-if="dataSource.isbn">{{ dataSource.isbn.length }} /
                             20
                         </div>
                     </div>
@@ -142,7 +179,7 @@ export default {
                         aria-labelledby="my-label-id" maxlength="60">
                     <span class="mdc-line-ripple"></span>
                     <div class="mdc-text-field-helper-line">
-                        <div class="mdc-text-field-character-counter" v-if="dataSource.autores_nome.length > 0">{{
+                        <div class="mdc-text-field-character-counter" v-if="dataSource.autores_nome">{{
                             dataSource.autores_nome.length
                         }} /
                             60
@@ -163,7 +200,7 @@ export default {
                         aria-labelledby="my-label-id" maxlength="60">
                     <span class="mdc-line-ripple"></span>
                     <div class="mdc-text-field-helper-line">
-                        <div class="mdc-text-field-character-counter" v-if="dataSource.editoras_nome.length">{{
+                        <div class="mdc-text-field-character-counter" v-if="dataSource.editoras_nome">{{
                             dataSource.editoras_nome.length
                         }} /
                             60
@@ -225,7 +262,7 @@ export default {
                             aria-labelledby="my-label-id" maxlength="30">
                         <span class="mdc-line-ripple"></span>
                         <div class="mdc-text-field-helper-line">
-                            <div class="mdc-text-field-character-counter">
+                            <div v-if="dataSource.genero" class="mdc-text-field-character-counter">
                                 {{ dataSource.genero.length }} / 30
                             </div>
                         </div>
@@ -242,7 +279,7 @@ export default {
                             aria-labelledby="my-label-id" maxlength="30">
                         <span class="mdc-line-ripple"></span>
                         <div class="mdc-text-field-helper-line">
-                            <div class="mdc-text-field-character-counter">
+                            <div v-if="dataSource.idioma" class="mdc-text-field-character-counter">
                                 {{ dataSource.idioma.length }} / 30
                             </div>
                         </div>
@@ -253,7 +290,7 @@ export default {
                     <span class="mdc-notched-outline">
                         <span class="mdc-notched-outline__leading"></span>
                         <span class="mdc-notched-outline__notch">
-                            <span v-if="dataSource.descricao.length == 0"
+                            <span v-if="dataSource.descricao"
                                 class="mdc-floating-label mdc-floating-label--float-above"><br>Descrição
                                 do livro</span>
                         </span>
@@ -263,7 +300,7 @@ export default {
                     <span class="mdc-text-field__resizer">
                         <textarea v-model="dataSource.descricao" class="mdc-text-field__input" aria-labelledby="my-label-id"
                             rows="5" cols="222" maxlength="2048"></textarea>
-                        <span class="mdc-text-field-character-counter">{{ dataSource.descricao.length }} /
+                        <span v-if="dataSource.descricao" class="mdc-text-field-character-counter">{{ dataSource.descricao.length }} /
                             2048</span>
                     </span>
                 </label>

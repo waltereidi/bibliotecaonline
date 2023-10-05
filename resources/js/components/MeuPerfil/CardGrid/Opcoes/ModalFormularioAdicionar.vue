@@ -62,7 +62,6 @@ export default {
             this.dataSource.users_id = this.users_id;
             const dados = this.meuPerfilController.getDadosLivros(this.dataSource);
             this.meuPerfilController.postLivros(dados).then( response => {
-                console.log(response);
             if(response.status!==201){
                 this.showErro = true;
                 setTimeout(()=>{
@@ -72,7 +71,13 @@ export default {
                 this.cancelarFormulario();
                 this.$emit('modalAdicionarSucesso', response);
             }
-          }).finally(()=>{
+          }).catch(() =>{
+            this.showErro = true;
+                setTimeout(() => {
+                this.showErro = false ;
+            },2000);
+          })
+          .finally(()=>{
             this.loading=false;
           });
 
@@ -104,7 +109,7 @@ export default {
 </script>
 <template>
     <Erro :show="showErro"></Erro>
-    <Carregando :show:="loading"></Carregando>
+    <Carregando :show="loading"></Carregando>
     <button class="mdc-button mdc-card__action mdc-card__action--button mdc-button--adicionar" @click="showModal = true">
         Adicionar
     </button>

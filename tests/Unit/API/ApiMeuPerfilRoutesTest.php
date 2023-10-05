@@ -7,14 +7,18 @@ use Tests\TestCase;
 
 class ApiMeuPerfilRoutesTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
+    public $user ;
+
+    public function setUp():void
+    {
+        parent::setUp();
+        $this->user = User::where('email', '=', 'testCase@email.com')->first();
+    }
 
     public function testeGetPaginacaoLivrosDoUsuario_SemToken_Retorna401(): void
     {
-        $user = User::where('email', '=', 'testCase@email.com')->first();
-        $dados = ['paginacao' => 0, 'users_id' => $user->id];
+
+        $dados = ['paginacao' => 0, 'users_id' => $this->user->id];
         //Setup
 
         $retorno = $this->post('/api/meuperfil/getPaginacaoLivrosDoUsuario',  $dados);
@@ -76,5 +80,25 @@ class ApiMeuPerfilRoutesTest extends TestCase
 
         //Assert
         $retorno->assertStatus(401);
+    }
+    public function testGetMeuPerfilLivrosDoUsuarioQuantidade_SemToken_Retorna401() : void
+    {
+        //setup
+
+        $url = '/api/meuperfil/getMeuPerfilLivrosDoUsuarioQuantidade/Bearer /0';
+        //execucao
+        $retorno = $this->get($url);
+        //assert
+        $retorno->assertStatus(401);
+    }
+    public function testGetMeuPerfilLivrosDoUsuarioQuantidade_SemToken_Retorna200() : void
+    {
+        //setup
+
+        $url = '/api/meuperfil/getMeuPerfilLivrosDoUsuarioQuantidade/Bearer '.$this->user->api_token.'/0';
+        //execucao
+        $retorno = $this->get($url,);
+        //assert
+        $retorno->assertStatus(200);
     }
 }

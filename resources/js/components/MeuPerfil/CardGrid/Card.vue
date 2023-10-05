@@ -9,6 +9,10 @@ export default {
             type: Object,
             required: true,
 
+        },
+        api_token:{
+            type:String,
+            required : true ,
         }
     },
     components: {
@@ -42,7 +46,7 @@ export default {
         </div>
         <div class="card--actions">
             <div class="card--actions__left">
-                <ModalFormulario :parentDataSource="dataSource"
+                <ModalFormulario :parentdatasource="datasource" :api_token="api_token"
                     @enviarModalFormularioAdicionar="childEnviarModalFormulario"></ModalFormulario>
 
             </div>

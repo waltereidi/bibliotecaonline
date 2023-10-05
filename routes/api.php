@@ -34,7 +34,7 @@ Route::prefix('meuperfil')->group(function () {
     Route::middleware('validartoken')->put('putLivros', [MeuPerfilController::class, 'putLivros']);
     Route::middleware('validartoken')->put('putMeuPerfil' , [MeuPerfilController::class , 'putMeuPerfil']);
     Route::middleware('validartoken')->post('postLivrosMeuPerfil' , [MeuPerfilController::class , 'postLivrosMeuPerfil'] );
-
+    Route::middleware('validartoken')->get('getMeuPerfilLivrosDoUsuarioQuantidade/{authorization}/{users_id}', [MeuPerfilController::class , 'getMeuPerfilLivrosDoUsuarioQuantidade']);
 });
 
 Route::prefix('mensagens')->group(function () {

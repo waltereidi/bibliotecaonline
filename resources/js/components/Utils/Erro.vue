@@ -10,7 +10,7 @@
 </script>
 <template>
     <div v-if="show" class="erro">
-        <p>Erro ao processar a busca</p>
+        <p>Erro ao realizar ação</p>
     </div>
 </template>
 <style scoped>
@@ -32,6 +32,6 @@
         left:25%;
         color:white;
         font-weight: bold;
-
+        z-index: 1000;
     }
 </style>

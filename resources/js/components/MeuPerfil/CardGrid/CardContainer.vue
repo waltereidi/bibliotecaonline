@@ -6,7 +6,7 @@ import Carregando from "@/components/Utils/Carregando.vue";
 import Sucesso from "@/components/Utils/Sucesso.vue";
 import {MeuPerfilController} from "@/MeuPerfil/meuperfilController";
 import { ref } from 'vue/dist/vue.esm-bundler';
-
+import Erro from '@/components/Utils/Erro.vue';
 
 export default {
     props : {
@@ -29,7 +29,9 @@ export default {
     },
     data(){
         return {
+            erro : false ,
             sucesso : false ,
+            loading : false,
             dataSource : this.datasourcelivros,
             meuperfilController : ref(new MeuPerfilController(this.api_token)),
             quantidadeLivros:this.quantidadelivros,
@@ -41,30 +43,63 @@ export default {
         Paginacao,
         Carregando ,
         Sucesso ,
+        Erro
     },
     methods: {
         buscar() {
 
         },
         childRetornaPaginacao(paginacao, multiplicador) {
+            this.loading = true ;
 
+            const dados  =this.meuperfilController.getDadosLivrosMeuPerfil({
+                quantidade : multiplicador ,
+                pagina : paginacao ,
+                meuperfil_id : this.datasourcemeuperfil.id
+            });
+
+
+            this.meuperfilController.postLivrosMeuPerfil(dados).then(result => {
+                if(result.status === 200)
+                {
+                    this.dataSource = result.data ;
+                }
+
+            }
+            ).catch(()=>{
+                this.erro = true;
+                setTimeout(() => {
+                this.erro = false ;
+            },2000);
+            }).finally(()=>{
+                this.loading=false;
+            });
 
         },
         childModalAdicionarSucesso( retorno ){
 
             this.sucesso = true ;
             const dados  =this.meuperfilController.getDadosLivrosMeuPerfil({
-                quantidade : 20 ,
+                quantidade : 6 ,
                 pagina : 0 ,
                 meuperfil_id : this.datasourcemeuperfil.id
             });
 
-            this.meuperfilController.postLivrosMeuPerfil(dados).then(result => {
-                if(result.status === 200)
+            const urlGet = this.meuperfilController.getDadosGetMeuPerfilLivrosDoUsuarioQuantidade(this.datasourcemeuperfil.users_id);
+            this.meuperfilController.getMeuPerfilLivrosDoUsuarioQuantidade(urlGet).then((response) => {
+                if(response.status === 200){
+                    this.quantidadeLivros = response.data;
+                }
+            }).catch(() => {
+                this.erro = true;
+                setTimeout(() => {
+                this.erro = false ;
+                },2000);
+            });
+            this.meuperfilController.postLivrosMeuPerfil(dados).then(response => {
+                if(response.status === 200)
                 {
-                    console.log(result);
-                    this.dataSource = result.data.livros ;
-                    this.quantidadeLivros = result.data.quantidadeTotal ;
+                    this.dataSource = response.data ;
                 }
             }
             );
@@ -73,20 +108,20 @@ export default {
             },2000);
 
         }
-    },
-
+    }
 
 
 }
 </script>
 <template>
+    <Carregando :show="loading"></Carregando>
     <Sucesso :show="sucesso"></Sucesso>
     <div class="Container" >
 
         <div class="Container--cardGridHeader">
 
             <div class="Container--cardGridHeader__left">
-                <Paginacao :quantidade="quantidadelivros" :multiplicador="6" :limitePaginacao="8" :travarPaginacao="false"
+                <Paginacao :quantidade="quantidadeLivros" :multiplicador="6" :limitePaginacao="8" :travarPaginacao="false"
                     v-if="quantidadelivros>0"
                     @retornaPaginacao="childRetornaPaginacao"></Paginacao>
             </div>
@@ -98,7 +133,7 @@ export default {
         <div class="Container--cardContainer">
 
             <div v-for="livro in dataSource" v-if="quantidadeLivros>6">
-                <Card :datasource="livro"></Card>
+                <Card :datasource="livro" :api_token="api_token"></Card>
             </div>
         </div>
         <div class="Container--cardContainerFooter">

@@ -48,7 +48,7 @@ class MeuPerfilController extends Controller
         }
         $dadosLivrosMeuPerfil = [
             'meuperfil_id' => $dataSourcePerfil->id ,
-            'quantidade' => 20 ,
+            'quantidade' => 6 ,
             'pagina' => 0 ,
         ];
         $dataSourceLivros = $this->livrosModel->postLivrosMeuPerfil($dadosLivrosMeuPerfil);
@@ -278,5 +278,12 @@ class MeuPerfilController extends Controller
             }
         }
 
+    }
+    public function getMeuPerfilLivrosDoUsuarioQuantidade(string $authorization, int $users_id ) : JsonResponse
+    {
+
+        $retorno = $this->livrosModel->meuPerfilLivrosDoUsuarioQuantidade($users_id);
+
+        return response()->json($retorno , 200);
     }
 }

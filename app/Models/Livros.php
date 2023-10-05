@@ -42,7 +42,7 @@ class Livros extends Model
                 DB::raw($paginacao . ' as paginacao')
             )
             ->where('livros.users_id', $users_id)->orderBy('livros.created_at', 'desc')
-            ->skip($paginacao)->limit(30)->get();
+            ->skip($paginacao)->limit(6)->get();
 
         return ($livrosDoUsuario->count() === 0) ?  null : $livrosDoUsuario;
     }
@@ -255,7 +255,7 @@ class Livros extends Model
     }
     public function postLivrosMeuPerfil($dados) : ?object
     {
-        $offset = $dados['quantidade']*$dados['pagina'];
+        $offset = ($dados['quantidade']*$dados['pagina'])-$dados['quantidade'];
         $retorno = DB::table('livros')
         ->join('autores' , 'autores.id' , '=' ,'livros.autores_id')
         ->join('editoras' ,'editoras.id' , '=' , 'livros.editoras_id')
@@ -278,8 +278,8 @@ class Livros extends Model
             'livros.users_id as users_id',
         )
         ->where('meuperfil.id' , '=' , $dados['meuperfil_id'])
-        ->limit($dados['quantidade'])
         ->offset($offset)
+        ->limit($dados['quantidade'])
         ->get();
         if(!(count($retorno) > 0) )
         {

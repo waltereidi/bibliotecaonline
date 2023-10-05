@@ -78,3 +78,14 @@ test('getDeletelivros' , () => {
 
 })
 
+test('getDadosPostLivrosQuantidadeTotal' , () => {
+    const meuperfil_id = 1 ;
+    const retorno = meuperfilController.getDadosPostLivrosQuantidadeTotal(meuperfil_id);
+
+    expect(retorno.meuperfil_id).toBe(meuperfil_id);
+    expect(retorno['Content-Type']).toBe('application/json');
+    expect(retorno['Authorization']).toBe('Bearer ');
+    expect(retorno['Accept']).toBe('application/json');
+    expect(retorno['Accept-Encoding']).toBe('gzip, deflate, br');
+    expect(retorno['Connection']).toBe('keep-alive');
+})

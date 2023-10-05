@@ -40,7 +40,7 @@ export class MeuPerfilController{
             id: dados.id??null ,
             titulo: dados.titulo,
             descricao: dados.descricao??null,
-            visibilidade: dados.visibilidade??null,
+            visibilidade: 1,
             isbn: dados.isbn??null,
             editoras_nome: dados.editoras_nome,
             autores_nome: dados.autores_nome,
@@ -61,10 +61,13 @@ export class MeuPerfilController{
     getDadosLivrosMeuPerfil(dados : object) : object {
          return {
             quantidade : dados.quantidade,
-            pagina : dados.paginacao ,
+            pagina : dados.pagina ,
             meuperfil_id : dados.meuperfil_id ,
             ...this.headers
          }
+    }
+    getDadosGetMeuPerfilLivrosDoUsuarioQuantidade(users_id) : string {
+        return '/api/meuperfil/getMeuPerfilLivrosDoUsuarioQuantidade/Bearer '+this.api_token+'/'+users_id;
     }
 
     async postLivros(body: object): Promise<LivrosMeuPerfil>
@@ -89,4 +92,8 @@ export class MeuPerfilController{
         return await axios.post<LivrosMeuPerfil>('/api/meuperfil/postLivrosMeuPerfil' , dados  );
     }
 
+    async getMeuPerfilLivrosDoUsuarioQuantidade(url:string ) : Promise<number>
+    {
+        return await axios.get<number>(url);
+    }
 }
