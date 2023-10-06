@@ -18,7 +18,7 @@ class ValidarTokenApi
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->method() === 'GET') {
+        if ($request->method() === 'GET' || $request->method() === 'DELETE') {
 
             $api_token = $request->route()->parameter('authorization');
 

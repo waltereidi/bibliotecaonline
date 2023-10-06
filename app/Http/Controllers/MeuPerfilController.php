@@ -195,10 +195,10 @@ class MeuPerfilController extends Controller
         }
     }
 
-    public function deleteLivros(DeleteLivrosRequest $request): JsonResponse
+
+    public function deleteLivros(string $authorization , int $id ): JsonResponse
     {
-        $dados = $request->all();
-        $retorno = $this->removerLivros($dados['id']);
+        $retorno = $this->removerLivros($id);
         if (!$retorno) {
             return response()->json('Livro não encontrado', 204);
         } else {

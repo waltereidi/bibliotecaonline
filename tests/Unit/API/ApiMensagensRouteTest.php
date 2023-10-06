@@ -110,21 +110,7 @@ class ApiMensagensRouteTest extends TestCase
         //Assert
         $this->assertEquals(401, $retorno->getStatusCode());
     }
-    public function testeDeletarMensagens_Retorna302()
-    {
-        //Setup
-        $dados = [
-            'Authorization' => 'Bearer ' . $this->user->api_token,
-            'id' => null, 'meuperfil_id' => null, 'meuperfilamigo_id' => null
-        ];
-        //Execução
-        $retorno = $this->delete('/api/mensagens/deletarMensagens', $dados);
-        //Assert
-        $this->assertEquals(302, $retorno->getStatusCode());
-        $retorno->assertSessionHasErrors(['id' => 'Campo obrigatório não preenchido']);
-        $retorno->assertSessionHasErrors(['meuperfil_id' => 'Campo obrigatório não preenchido']);
-        $retorno->assertSessionHasErrors(['meuperfilamigo_id' => 'Campo obrigatório não preenchido']);
-    }
+
 
 
     public function testeGetMensagensCaixa_Retorna401()

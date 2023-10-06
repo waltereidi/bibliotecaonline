@@ -7,6 +7,9 @@ import Sucesso from "@/components/Utils/Sucesso.vue";
 import {MeuPerfilController} from "@/MeuPerfil/meuperfilController";
 import { ref } from 'vue/dist/vue.esm-bundler';
 import Erro from '@/components/Utils/Erro.vue';
+import { meuperfilStore } from "@/Store/meuperfilStore";
+
+
 
 export default {
     props : {
@@ -76,9 +79,7 @@ export default {
             });
 
         },
-        childModalAdicionarSucesso( retorno ){
-
-            this.sucesso = true ;
+        async atualizarDataSource(){
             const dados  =this.meuperfilController.getDadosLivrosMeuPerfil({
                 quantidade : 6 ,
                 pagina : 0 ,
@@ -86,8 +87,9 @@ export default {
             });
 
             const urlGet = this.meuperfilController.getDadosGetMeuPerfilLivrosDoUsuarioQuantidade(this.datasourcemeuperfil.users_id);
-            this.meuperfilController.getMeuPerfilLivrosDoUsuarioQuantidade(urlGet).then((response) => {
+            await this.meuperfilController.getMeuPerfilLivrosDoUsuarioQuantidade(urlGet).then((response) => {
                 if(response.status === 200){
+                    this.quantidadeLivros = null ;
                     this.quantidadeLivros = response.data;
                 }
             }).catch(() => {
@@ -96,13 +98,47 @@ export default {
                 this.erro = false ;
                 },2000);
             });
-            this.meuperfilController.postLivrosMeuPerfil(dados).then(response => {
+            await this.meuperfilController.postLivrosMeuPerfil(dados).then(response => {
                 if(response.status === 200)
                 {
                     this.dataSource = response.data ;
                 }
+            });
+        },
+        childModalAdicionarSucesso( retorno ){
+
+            this.sucesso = true ;
+
+            this.atualizarDataSource();
+            setTimeout(() => {
+                this.sucesso = false ;
+            },2000);
+
+        },
+        childModalEditarSucesso(retorno){
+            this.sucesso = true ;
+
+            this.meuperfilController.postLivrosMeuPerfil(dados).then(response => {
+                if(response.status === 200)
+                {
+                    this.atualizarDataSource();
+                }
             }
             );
+            setTimeout(() => {
+                this.sucesso = false ;
+            },2000);
+
+        },
+        childConfirmarExcluir(id){
+            this.sucesso = true ;
+            const dados = this.meuperfilController.getDeleteLivros(id);
+            this.meuperfilController.deleteLivros(dados).then(response =>{
+                if(response.status == 200 )
+                {
+                   this.atualizarDataSource();
+                }
+            });
             setTimeout(() => {
                 this.sucesso = false ;
             },2000);
@@ -122,7 +158,7 @@ export default {
 
             <div class="Container--cardGridHeader__left">
                 <Paginacao :quantidade="quantidadeLivros" :multiplicador="6" :limitePaginacao="8" :travarPaginacao="false"
-                    v-if="quantidadelivros>0"
+                    v-if="quantidadeLivros>6 && quantidadeLivros!= null"
                     @retornaPaginacao="childRetornaPaginacao"></Paginacao>
             </div>
             <div class="Container--cardGridHeader__right">
@@ -132,8 +168,11 @@ export default {
         </div>
         <div class="Container--cardContainer">
 
-            <div v-for="livro in dataSource" v-if="quantidadeLivros>6">
-                <Card :datasource="livro" :api_token="api_token"></Card>
+            <div v-for="livro in dataSource" v-if="quantidadeLivros>0">
+                <Card :datasource="livro" :api_token="api_token"
+                @modalEditarSucesso="childModalEditarSucesso"
+                @confirmarExcluir="childConfirmarExcluir"
+                ></Card>
             </div>
         </div>
         <div class="Container--cardContainerFooter">

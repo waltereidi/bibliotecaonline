@@ -32,6 +32,6 @@
         left:25%;
         color:white;
         font-weight: bold;
-        z-index: 1000;
+        z-index: 10000;
     }
 </style>

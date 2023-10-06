@@ -20,7 +20,10 @@ use App\Http\Controllers\UsersController;
 
 
 Route::prefix('meuperfil')->group(function () {
-    Route::middleware('validartoken')->post('getPaginacaoLivrosDoUsuario', [MeuPerfilController::class, 'getPaginacaoLivrosDoUsuario']);
+    Route::middleware('validartoken')->post('getPaginacaoLivrosDoUsuario',function($request){
+        $meuperfilController = new MeuPerfilController();
+        return $meuperfilController->deleteLivros($request->route()->parameter('authorization') , $request->route()->parameter('id'));
+    });
     Route::middleware('validartoken')->post('adicionarLivros', [MeuPerfilController::class, 'adicionarLivros']);
     Route::middleware('validartoken')->put('editarLivros', [MeuPerfilController::class, 'editarLivros']);
     Route::middleware('validartoken')->delete('removerLivros', [MeuPerfilController::class, 'removerLivros']);
@@ -28,7 +31,7 @@ Route::prefix('meuperfil')->group(function () {
     Route::middleware('validartoken')->post('getDadosMeuPerfil', [MeuPerfilController::class, 'getDadosMeuPerfil']);
 
     //Requests
-
+    Route::middleware('validartoken')->delete('deleteLivros/{authorization}/{id}', [MeuPerfilController::class, 'deleteLivros']);
     Route::middleware('validartoken')->delete('deleteLivros', [MeuPerfilController::class, 'deleteLivros']);
     Route::middleware('validartoken')->post('postLivros', [MeuPerfilController::class, 'postLivros']);
     Route::middleware('validartoken')->put('putLivros', [MeuPerfilController::class, 'putLivros']);

@@ -91,14 +91,24 @@ class ApiMeuPerfilRoutesTest extends TestCase
         //assert
         $retorno->assertStatus(401);
     }
-    public function testGetMeuPerfilLivrosDoUsuarioQuantidade_SemToken_Retorna200() : void
+public function testGetMeuPerfilLivrosDoUsuarioQuantidade_ComToken_Retorna200() : void
     {
         //setup
 
         $url = '/api/meuperfil/getMeuPerfilLivrosDoUsuarioQuantidade/Bearer '.$this->user->api_token.'/0';
         //execucao
-        $retorno = $this->get($url,);
+        $retorno = $this->get($url);
         //assert
         $retorno->assertStatus(200);
+    }
+    public function testDeleteLivros_Retorna204() : void
+    {
+        //setup
+
+        $url = '/api/meuperfil/deleteLivros/Bearer '.$this->user->api_token.'/0';
+        //execucao
+        $retorno = $this->delete($url);
+        //assert
+        $retorno->assertStatus(204);
     }
 }

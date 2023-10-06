@@ -2,6 +2,7 @@
 import config from "@/../json/bibliotecaconfig.json";
 import ModalFormulario from './Opcoes/ModalFormulario.vue';
 import ModalExcluir from './Opcoes/ModalExcluir.vue';
+
 export default {
     props:
     {
@@ -24,11 +25,16 @@ export default {
             configDataSource: config,
         }
     },
+    emits:['modalEditarSucesso' , 'confirmarExcluir'],
     methods: {
-        childEnviarModalFormulario() {
+        childModalEditarSucesso(response) {
+            this.$emit('modalEditarSucesso' , response);
+        },
+        childConfirmarExcluir(){
+            this.$emit('confirmarExcluir' , this.datasource.id );
+    },
+    },
 
-        }
-    }
 }
 </script>
 <template>
@@ -47,12 +53,14 @@ export default {
         <div class="card--actions">
             <div class="card--actions__left">
                 <ModalFormulario :parentdatasource="datasource" :api_token="api_token"
-                    @enviarModalFormularioAdicionar="childEnviarModalFormulario"></ModalFormulario>
+                    @modalEditarSucesso="childModalEditarSucesso"></ModalFormulario>
 
             </div>
             <div class="card--actions__right">
                 <ModalExcluir :title="'Confirma exclusão'"
-                    :message="'Após confirmar a exclusão do livro sua ação não podera ser desfeita.'"></ModalExcluir>
+                    :message="'Após confirmar a exclusão do livro sua ação não podera ser desfeita.'"
+                    @confirmar="childConfirmarExcluir"
+                    ></ModalExcluir>
             </div>
         </div>
 

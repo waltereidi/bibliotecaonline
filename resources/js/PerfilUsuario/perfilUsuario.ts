@@ -1,6 +1,6 @@
 import { createApp } from 'vue/dist/vue.esm-bundler';
 import PerfilUsuario from "@/components/PerfilUsuario/PerfilUsuario.vue";
-import { store } from "@/store.ts";
+import { store } from "@/Store/store";
 
 
 const perfilUsuario = createApp();

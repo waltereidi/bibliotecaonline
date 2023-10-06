@@ -40,6 +40,9 @@ export default {
                 autores_nome: this.parentdatasource == null ? '' : this.parentdatasource.autores_nome,
                 idioma: this.parentdatasource == null ? '' : this.parentdatasource.idioma,
                 genero: this.parentdatasource == null ? '' : this.parentdatasource.genero,
+                users_id: this.parentdatasource.users_id,
+                visibilidade : this.parentdatasource.visibilidade ,
+
 
             }
         }
@@ -61,8 +64,9 @@ export default {
         enviarModalFormulario(): void {
             this.loading=true ;
             const dados = this.meuPerfilController.getDadosLivros(this.dataSource);
-            this.meuPerfilController.postLivros(dados).then( response => {
-            if(response.status!==201){
+            console.log(dados);
+            this.meuPerfilController.putLivros(dados).then( response => {
+            if(response.status!==200){
                 this.showErro = true;
                 setTimeout(()=>{
                     this.showErro = false;
@@ -313,7 +317,7 @@ export default {
                 </div>
 
                 <div class="confirmar">
-                    <button @click="cancelarFormulario()" :disabled="v$.dataSource.$invalid"
+                    <button @click="enviarModalFormulario()" :disabled="v$.dataSource.$invalid"
                         class="mdc-button mdc-button--confirmar">Confirmar
                     </button>
                 </div>

@@ -1,7 +1,7 @@
 import { createApp } from 'vue/dist/vue.esm-bundler';
 import Paginainicial from "@/components/Paginainicial/PaginaInicial.vue";
 
-import {store} from "@/store.ts";
+import {store} from "@/Store/store";
 
 
 const paginainicial = createApp();

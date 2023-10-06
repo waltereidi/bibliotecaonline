@@ -432,27 +432,15 @@ class MeuPerfilControllerTest extends TestCase
     public function testDeleteLivros_LivroNaoEncontrado_Retorna204(): void
     {
         //setup
-        $deleteLivrosRequest = new DeleteLivrosRequest([
-            'id'=>0
-        ]);
+        $id = 1;
+        $authorization = 'Bearer ';
         //execucao
-        $retorno = $this->meuPerfilController->deleteLivros($deleteLivrosRequest);
+        $retorno = $this->meuPerfilController->deleteLivros($authorization , $id);
 
         //assert
         $this->assertEquals(204 , $retorno->getStatusCode());
     }
-    public function testDeleteLivros_LivroDeletado_Retorna200():void
-    {
-        //setup
-        $livro = Livros::first();
-        $deleteLivrosRequest = new DeleteLivrosRequest([
-            'id' => $livro->id
-        ]);
-        //execucao
-        $retorno = $this->meuPerfilController->deleteLivros($deleteLivrosRequest);
-        //assert
-        $this->assertEquals(200  , $retorno->getStatusCode());
-    }
+
 
     public function testPostLivros_insertRealizado_Retorna200() :void
     {

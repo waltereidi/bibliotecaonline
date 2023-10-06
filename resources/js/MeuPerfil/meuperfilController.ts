@@ -52,11 +52,8 @@ export class MeuPerfilController{
             ...this.headers
         };
     }
-    getDeleteLivros(id : number) : object {
-        return {
-            id : id ,
-            ...this.headers
-        }
+    getDeleteLivros(id : number) : string {
+        return '/api/meuperfil/deleteLivros/Bearer '+this.api_token+'/'+id;
     }
     getDadosLivrosMeuPerfil(dados : object) : object {
          return {
@@ -78,18 +75,19 @@ export class MeuPerfilController{
     {
         return await axios.put<LivrosMeuPerfil>('/api/meuperfil/putLivros', body );
     }
-    async deleteLivros( body : object): Promise<boolean>
+    async deleteLivros( url : String): Promise<boolean>
     {
-        return await axios.delete<boolean>(`/api/meuperfil/deleteLivros` , body );
+
+        return await axios.delete<boolean>( url );
     }
     async putMeuPerfil(body : object ) :Promise<putMeuPerfil>
     {
         return await axios.put<putMeuPerfil>('/api/meuperfil/putMeuPerfil', body );
     }
 
-    async postLivrosMeuPerfil(dados : object) : Promise<Array<LivrosMeuPerfil>> {
+    async postLivrosMeuPerfil(body : object) : Promise<Array<LivrosMeuPerfil>> {
 
-        return await axios.post<LivrosMeuPerfil>('/api/meuperfil/postLivrosMeuPerfil' , dados  );
+        return await axios.post<LivrosMeuPerfil>('/api/meuperfil/postLivrosMeuPerfil' , body  );
     }
 
     async getMeuPerfilLivrosDoUsuarioQuantidade(url:string ) : Promise<number>

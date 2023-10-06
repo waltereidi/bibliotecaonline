@@ -1,4 +1,4 @@
-import { store } from "@/store.ts";
+import { store } from "@/Store/store";
 import Livros from "@/components/Livros/Livros.vue";
 import { createApp } from 'vue/dist/vue.esm-bundler';
 

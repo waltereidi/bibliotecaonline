@@ -117,7 +117,7 @@ export default {
         <div class="containerModalFormulario">
             <div class="containerModalFormulario--left">
 
-                <img v-if="!v$.dataSource.capalivro.$invalid" class="rounded mx-auto d-block" />
+                <img v-if="!v$.dataSource.capalivro.$invalid" class="rounded mx-auto d-block" :src="(dataSource.capalivro !==null && dataSource.capalivro.length>0) ? dataSource.capalivro : configDataSource.capaLivroDefault" />
 
             </div>
             <div class="containerModalFormulario--right">

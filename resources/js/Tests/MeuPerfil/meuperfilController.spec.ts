@@ -69,12 +69,8 @@ test('getDadosLivros', () => {
 test('getDeletelivros' , () => {
     const id = 1 ;
     const retorno = meuperfilController.getDeleteLivros(id);
-    expect(retorno.id).toBe(1);
-    expect(retorno['Content-Type']).toBe('application/json');
-    expect(retorno['Authorization']).toBe('Bearer ');
-    expect(retorno['Accept']).toBe('application/json');
-    expect(retorno['Accept-Encoding']).toBe('gzip, deflate, br');
-    expect(retorno['Connection']).toBe('keep-alive');
+    expect(retorno).toBe('/api/meuperfil/deleteLivros/Bearer /1');
+
 
 })
 

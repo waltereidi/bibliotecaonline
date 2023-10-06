@@ -15,14 +15,12 @@ export default {
 
         }
     },
+
     components: {
         ModalImagem,
         ModalDownload,
-
     },
-    mounted(){
 
-    }
 
 }
 </script>
