@@ -1,11 +1,9 @@
 <script lang="ts">
 import config from "@/../json/bibliotecaconfig.json";
 import { useVuelidate } from '@vuelidate/core'
-import { MeuPerfilController } from "@/MeuPerfil/meuperfilController";
 import { required, url, minLength } from '@vuelidate/validators'
 import { ref } from 'vue/dist/vue.esm-bundler';
-import Erro from "@/components/Utils/Erro.vue";
-import Carregando from "@/components/Utils/Carregando.vue";
+import { meuperfilStore } from "@/Store/meuperfilStore";
 
 
 export default {
@@ -16,19 +14,13 @@ export default {
         parentdatasource: {
             type: Object,
             required: true,
-        },
-        api_token:{
-            type : String ,
-            required : true ,
         }
     },
     data() {
         return {
+            meuperfilStore : meuperfilStore() ,
             configDataSource: config,
             showModal: false,
-            loading : false ,
-            showErro : false,
-            meuPerfilController: ref(new MeuPerfilController(this.api_token)),
             dataSource: {
                 id: this.parentdatasource == null ? '' : this.parentdatasource.id,
                 titulo: this.parentdatasource == null ? '' : this.parentdatasource.titulo,
@@ -62,28 +54,7 @@ export default {
     methods: {
 
         enviarModalFormulario(): void {
-            this.loading=true ;
-            const dados = this.meuPerfilController.getDadosLivros(this.dataSource);
-            console.log(dados);
-            this.meuPerfilController.putLivros(dados).then( response => {
-            if(response.status!==200){
-                this.showErro = true;
-                setTimeout(()=>{
-                    this.showErro = false;
-                },2000);
-            }else{
-                this.cancelarFormulario();
-                this.$emit('modalEditarSucesso', response);
-            }
-          }).catch(() =>{
-            this.showErro = true;
-                setTimeout(() => {
-                this.showErro = false ;
-            },2000);
-          })
-          .finally(()=>{
-            this.loading=false;
-          });
+
         },
         cancelarFormulario(): void {
 
@@ -108,17 +79,11 @@ export default {
 
         }
     },
-    components:{
-        Erro,
-        Carregando,
-    }
-
 }
 
 </script>
 <template>
-    <Erro :show="showErro"></Erro>
-    <Carregando :show="loading"></Carregando>
+
 
     <button class="mdc-button mdc-card__action mdc-card__action--button mdc-button--editar" @click="abrirModal">
         <div class="mdc-button__ripple"></div>

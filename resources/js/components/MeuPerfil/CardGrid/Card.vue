@@ -11,29 +11,21 @@ export default {
             required: true,
 
         },
-        api_token:{
-            type:String,
-            required : true ,
-        }
-    },
-    components: {
-        ModalFormulario,
-        ModalExcluir,
     },
     data() {
         return {
             configDataSource: config,
         }
     },
-    emits:['modalEditarSucesso' , 'confirmarExcluir'],
     methods: {
-        childModalEditarSucesso(response) {
-            this.$emit('modalEditarSucesso' , response);
-        },
         childConfirmarExcluir(){
             this.$emit('confirmarExcluir' , this.datasource.id );
     },
     },
+    components:{
+        ModalExcluir ,
+        ModalFormulario
+    }
 
 }
 </script>
@@ -52,8 +44,7 @@ export default {
         </div>
         <div class="card--actions">
             <div class="card--actions__left">
-                <ModalFormulario :parentdatasource="datasource" :api_token="api_token"
-                    @modalEditarSucesso="childModalEditarSucesso"></ModalFormulario>
+                <ModalFormulario :parentdatasource="datasource"></ModalFormulario>
 
             </div>
             <div class="card--actions__right">

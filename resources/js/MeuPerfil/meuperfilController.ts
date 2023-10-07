@@ -11,20 +11,17 @@ export class MeuPerfilController{
         this.apiRequest = new ApiRequest;
         this.headers = this.apiRequest.getDefaultHeaders(this.api_token);
     }
-
     somar( a:number , b:number ) : number {
         return a+b ;
     }
 
     getPutMeuPerfil( dados :object):object {
         let dataFormatada= null;
-
         if( Date(dados.datanascimento) != 'Invalid Date' && dados.datanascimento !=='' )
         {
             const data = dados.datanascimento.split('-');
             dataFormatada = data[2]+'/'+data[1]+'/'+data[0] ;
         }
-
         return {
             id : dados.id ,
             users_id : dados.users_id ,
@@ -34,8 +31,8 @@ export class MeuPerfilController{
             ...this.headers
         }
     }
-    getDadosLivros(dados:object): object{
 
+    getDadosLivros(dados:object): object{
         return {
             id: dados.id??null ,
             titulo: dados.titulo,
@@ -77,19 +74,16 @@ export class MeuPerfilController{
     }
     async deleteLivros( url : String): Promise<boolean>
     {
-
         return await axios.delete<boolean>( url );
     }
     async putMeuPerfil(body : object ) :Promise<putMeuPerfil>
     {
         return await axios.put<putMeuPerfil>('/api/meuperfil/putMeuPerfil', body );
     }
-
     async postLivrosMeuPerfil(body : object) : Promise<Array<LivrosMeuPerfil>> {
 
         return await axios.post<LivrosMeuPerfil>('/api/meuperfil/postLivrosMeuPerfil' , body  );
     }
-
     async getMeuPerfilLivrosDoUsuarioQuantidade(url:string ) : Promise<number>
     {
         return await axios.get<number>(url);

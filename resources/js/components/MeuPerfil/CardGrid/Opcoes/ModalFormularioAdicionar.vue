@@ -1,22 +1,10 @@
 <script lang="ts">
 import config from "@/../json/bibliotecaconfig.json";
-import { MeuPerfilController } from "@/MeuPerfil/meuperfilController";
 import { useVuelidate } from '@vuelidate/core'
 import { required, url, minLength } from '@vuelidate/validators'
 import { ref } from 'vue/dist/vue.esm-bundler';
-import Erro from "@/components/Utils/Erro.vue";
-import Carregando from "@/components/Utils/Carregando.vue";
+import { meuperfilStore } from "@/Store/meuperfilStore";
 export default {
-    props:{
-        api_token:{
-            type:String ,
-            required: true ,
-        },
-        users_id:{
-            type:Number ,
-            required : true,
-        }
-    },
     setup() {
         return { v$: useVuelidate() }
     },
@@ -24,10 +12,8 @@ export default {
     data() {
         return {
             configDataSource: config,
-            showModal: false,
-            showErro : false,
-            loading : false ,
-            meuPerfilController: ref(new MeuPerfilController(this.api_token)),
+            showModal:false ,
+            meuperfilStore: meuperfilStore(),
             dataSource: {
                 titulo: '',
                 descricao: '',
@@ -56,34 +42,19 @@ export default {
     },
     emits: ['modalAdicionarSucesso'],
     methods: {
+        abrirModal() {
+            this.$store.commit('openModal');
+            this.showModal = true;
 
-        enviarModalFormulario(): void {
-            this.loading=true ;
-            this.dataSource.users_id = this.users_id;
-            const dados = this.meuPerfilController.getDadosLivros(this.dataSource);
-            this.meuPerfilController.postLivros(dados).then( response => {
-            if(response.status!==201){
-                this.showErro = true;
-                setTimeout(()=>{
-                    this.showErro = false;
-                },2000);
-            }else{
-                this.cancelarFormulario();
-                this.$emit('modalAdicionarSucesso', response);
-            }
-          }).catch(() =>{
-            this.showErro = true;
-                setTimeout(() => {
-                this.showErro = false ;
-            },2000);
-          })
-          .finally(()=>{
-            this.loading=false;
-          });
+        },
+        async enviarModalFormulario(){
+            await meuperfilStore.postLivros(this.dataSource);
+
 
         },
         cancelarFormulario(): void {
             this.limparFormulario();
+            this.$store.commit('closeModal');
             this.showModal = false;
         },
         limparFormulario(): void {
@@ -100,17 +71,13 @@ export default {
             };
         }
     },
-    components:{
-        Erro,
-        Carregando,
-    }
+
 }
 
 </script>
 <template>
-    <Erro :show="showErro"></Erro>
-    <Carregando :show="loading"></Carregando>
-    <button class="mdc-button mdc-card__action mdc-card__action--button mdc-button--adicionar" @click="showModal = true">
+
+    <button class="mdc-button mdc-card__action mdc-card__action--button mdc-button--adicionar" @click="abrirModal">
         Adicionar
     </button>
     <div :class="{ 'showModal': showModal, 'hide': !showModal }">
