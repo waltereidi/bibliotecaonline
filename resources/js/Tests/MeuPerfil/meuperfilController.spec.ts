@@ -4,14 +4,13 @@ import { ApiRequest } from '@/Utils/ApiRequest';
 import { MeuPerfilDados } from '@/Entidades/meuperfilDados';
 import { LivrosMeuPerfil } from '@/Entidades/livrosMeuperfil';
 
-const meuperfilController = new MeuPerfilController('');
+const meuperfilController = new MeuPerfilController('' , {'users_id':1});
 const apiRequest = new ApiRequest;
 
 
 test('getPutMeuPerfil', () => {
     const dados: object = {
         id: 1,
-        users_id: 1,
         introducao: 'nova intro',
         profile_picture: null,
         datanascimento: '1993-12-29',
@@ -43,7 +42,6 @@ test('getDadosLivros', () => {
         genero: null,
         idioma: null,
         urldownload: 'http://www.php.net',
-        users_id: 1,
     };
 
     const retorno: LivrosMeuPerfil = meuperfilController.getDadosLivros(dados);

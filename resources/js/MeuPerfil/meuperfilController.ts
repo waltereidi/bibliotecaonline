@@ -6,10 +6,13 @@ export class MeuPerfilController{
     public api_token: string;
     private apiRequest: ApiRequest;
     private headers: object;
-    constructor(api_token: string ) {
+    private meuperfil : object ;
+    constructor(api_token: string , meuperfil:object ) {
         this.api_token = api_token;
         this.apiRequest = new ApiRequest;
         this.headers = this.apiRequest.getDefaultHeaders(this.api_token);
+        this.meuperfil = meuperfil;
+        console.log(meuperfil);
     }
     somar( a:number , b:number ) : number {
         return a+b ;
@@ -24,7 +27,7 @@ export class MeuPerfilController{
         }
         return {
             id : dados.id ,
-            users_id : dados.users_id ,
+            users_id : this.meuperfil.users_id ,
             introducao : dados.introducao??null ,
             profile_picture : dados.profile_picture??null ,
             datanascimento :dataFormatada,
@@ -45,7 +48,7 @@ export class MeuPerfilController{
             genero: dados.genero??null,
             idioma: dados.idioma??null,
             urldownload: dados.urldownload,
-            users_id : dados.users_id,
+            users_id : this.meuperfil.users_id,
             ...this.headers
         };
     }

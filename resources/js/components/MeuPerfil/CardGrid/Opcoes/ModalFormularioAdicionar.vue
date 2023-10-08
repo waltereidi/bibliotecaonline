@@ -25,7 +25,7 @@ export default {
                 idioma: '',
                 genero: '',
                 visibilidade : 1 ,
-                users_id : 0 ,
+                users_id : 0,
             }
         }
     },
@@ -40,17 +40,14 @@ export default {
             }
         }
     },
-    emits: ['modalAdicionarSucesso'],
     methods: {
         abrirModal() {
             this.$store.commit('openModal');
             this.showModal = true;
 
         },
-        async enviarModalFormulario(){
-            await meuperfilStore.postLivros(this.dataSource);
-
-
+        enviarModalFormulario(){
+            this.meuperfilStore.postLivros(this.dataSource);
         },
         cancelarFormulario(): void {
             this.limparFormulario();
@@ -67,7 +64,7 @@ export default {
                 editoras_nome: '',
                 autores_nome: '',
                 idioma: '',
-                genero: ''
+                genero: '',
             };
         }
     },

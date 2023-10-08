@@ -2,12 +2,14 @@
 import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
 import config from "@/../json/bibliotecaconfig.json";
 import CardContainer from "@/components/MeuPerfil/CardGrid/CardContainer.vue";
-import { MeuPerfilController } from "@/MeuPerfil/meuperfilController";
-import { ref } from 'vue/dist/vue.esm-bundler';
 import { useVuelidate } from '@vuelidate/core';
 import { required, url } from '@vuelidate/validators';
 import Carregando from "@/components/Utils/Carregando.vue";
-import Sucesso from  "@/components/Utils/Sucesso.vue";
+import Sucesso from "@/components/Utils/Sucesso.vue";
+import Alerta from"@/components/Utils/Alerta.vue";
+import Erro from '@/components/Utils/Erro.vue';
+import { meuperfilStore } from "@/Store/meuperfilStore";
+
 export default {
     setup(){
         return { v$ : useVuelidate() }
@@ -40,12 +42,7 @@ export default {
                     id : this.datasourcemeuperfil['id'],
                     users_id : this.datasourcemeuperfil['users_id'],
             },
-            messages : {
-                loading : false ,
-                sucesso : false ,
-            },
-            meuperfilModificado : false ,
-            meuPerfilController: ref(new MeuPerfilController(this.api_token))
+            meuperfilStore : meuperfilStore(),
         }
     },
     validations(){
@@ -62,32 +59,28 @@ export default {
         CardContainer,
         Carregando,
         Sucesso ,
+        Alerta ,
+        Erro ,
     },
     methods:{
 
-        async salvar(){
-            const dados = this.meuPerfilController.getPutMeuPerfil(this.dataSource);
-            this.messages.loading = true ;
-            this.meuPerfilController.putMeuPerfil(dados).then( response =>{
-                if(response.status == 200){
-                    this.messages.sucesso = true ;
-                    setTimeout( ()=> {
-                        this.messages.sucesso = false ;
-                    },2000);
-                };
-            }).finally(() =>{
-                this.messages.loading= false ;
-            }
-            );
-
+        salvar(){
+            this.meuperfilStore.putMeuPerfil(this.dataSource);
         }
+    },
+    beforeMount(){
+        this.meuperfilStore.setUser(this.datasourcemeuperfil , this.api_token , this.quantidadelivros , this.datasourcelivros);
     }
 
 }
 </script>
 <template>
-    <Carregando :show="messages.loading"></Carregando>
-    <Sucesso :show="messages.sucesso"></Sucesso>
+    <Carregando :show="meuperfilStore.messages.carregando"></Carregando>
+    <Sucesso :show="meuperfilStore.messages.sucesso"></Sucesso>
+    <Erro :show="meuperfilStore.messages.erro"></Erro>
+    <Alerta :show="meuperfilStore.messages.alerta"></Alerta>
+
+
     <div class="content">
         <div class="content--form">
             <div class="content--form__left">
@@ -151,7 +144,7 @@ export default {
 
                     </div>
                     <div class="actions--salvar">
-                        <button :disabled="(messages.loading || messages.sucesso || v$.dataSource.$invalid)" @click="salvar" class="mdc-button mdc-button--raised">Salvar</button>
+                        <button :disabled="(meuperfilStore.messages.carregando || meuperfilStore.messages.sucesso || v$.dataSource.$invalid)" @click="salvar" class="mdc-button mdc-button--raised">Salvar</button>
                     </div>
                 </div>
 
@@ -161,12 +154,7 @@ export default {
 
         </div>
         <div class="content--livrosContainer">
-            <CardContainer
-                :datasourcelivros="datasourcelivros"
-                :quantidadelivros="quantidadelivros"
-                :api_token="api_token"
-                :datasourcemeuperfil="datasourcemeuperfil"
-            ></CardContainer>
+            <CardContainer></CardContainer>
         </div>
     </div>
 </template>
