@@ -36,6 +36,7 @@ export class MeuPerfilController{
     }
 
     getDadosLivros(dados:object): object{
+
         return {
             id: dados.id??null ,
             titulo: dados.titulo,
@@ -59,7 +60,7 @@ export class MeuPerfilController{
          return {
             quantidade : dados.quantidade,
             pagina : dados.pagina ,
-            meuperfil_id : dados.meuperfil_id ,
+            meuperfil_id : this.meuperfil.id ,
             ...this.headers
          }
     }

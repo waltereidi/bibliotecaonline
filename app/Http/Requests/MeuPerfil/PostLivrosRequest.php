@@ -29,7 +29,7 @@ class PostLivrosRequest extends FormRequest
             'isbn' => ['nullable', 'string', 'max:20'],
             'editoras_nome' => ['required', 'string', 'max:60'],
             'autores_nome' => ['required', 'string', 'max:60'],
-            'capalivro' => ['nullable', 'max:512', 'url'],
+            'capalivro' => ['nullable', 'max:2048', 'url'],
             'genero' => ['nullable', 'max:30', 'string'],
             'idioma' => ['nullable', 'max:30', 'string'],
             'urldownload' => ['required', 'max:2048', 'string', 'url'],

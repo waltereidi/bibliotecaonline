@@ -16,7 +16,7 @@ class Livros extends Model
     protected $table = 'livros';
     protected $fillable = [
         'titulo', 'descricao', 'isbn', 'visibilidade', 'users_id',
-        'editoras_id', 'autores_id', 'created_at', 'updated_at', 'genero', 'idioma','urldownload'
+        'editoras_id', 'autores_id', 'created_at', 'updated_at', 'genero', 'idioma','urldownload', 'capalivro'
     ];
 
     public function meuPerfilLivrosDoUsuario($users_id, $paginacao = 0)
@@ -255,7 +255,7 @@ class Livros extends Model
     }
     public function postLivrosMeuPerfil($dados) : ?object
     {
-        $offset = ($dados['quantidade']*$dados['pagina'])-$dados['quantidade'];
+        $offset = ($dados['quantidade']*$dados['pagina']);
         $retorno = DB::table('livros')
         ->join('autores' , 'autores.id' , '=' ,'livros.autores_id')
         ->join('editoras' ,'editoras.id' , '=' , 'livros.editoras_id')
@@ -278,6 +278,7 @@ class Livros extends Model
             'livros.users_id as users_id',
         )
         ->where('meuperfil.id' , '=' , $dados['meuperfil_id'])
+        ->orderBy('livros.created_at')
         ->offset($offset)
         ->limit($dados['quantidade'])
         ->get();

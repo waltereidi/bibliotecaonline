@@ -53,11 +53,17 @@ export default {
     emits: ['modalEditarSucesso'],
     methods: {
 
-        enviarModalFormulario(): void {
-
+        async enviarModalFormulario(): void {
+            const retorno =await this.meuperfilStore.putLivros(this.dataSource) ;
+            if(retorno== 200)
+            {
+                this.limparFormulario();
+                this.$store.commit('closeModal');
+                this.showModal=false;
+            }
         },
-        cancelarFormulario(): void {
-
+        limparFormulario():void
+        {
             this.dataSource = {
                 id: this.parentdatasource.id,
                 titulo: this.parentdatasource.titulo,
@@ -70,6 +76,10 @@ export default {
                 idioma: this.parentdatasource.idioma,
                 genero: this.parentdatasource.genero
             };
+        },
+        cancelarFormulario(): void {
+
+            this.limparFormulario();
             this.$store.commit('closeModal');
             this.showModal = false;
         },

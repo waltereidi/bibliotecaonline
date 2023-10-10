@@ -46,8 +46,15 @@ export default {
             this.showModal = true;
 
         },
-        enviarModalFormulario(){
-            this.meuperfilStore.postLivros(this.dataSource);
+        async enviarModalFormulario(){
+
+            const retorno =await this.meuperfilStore.postLivros(this.dataSource) ;
+            if(retorno== 201)
+            {
+                this.limparFormulario();
+                this.$store.commit('closeModal');
+                this.showModal=false;
+            }
         },
         cancelarFormulario(): void {
             this.limparFormulario();

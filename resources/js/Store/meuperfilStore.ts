@@ -20,7 +20,8 @@ export const meuperfilStore = defineStore('meuperfil',{
                 alerta : false ,
                 sucesso : false ,
                 carregando : false ,
-            }
+            },
+            response:'',
         }
     },
     getters: {
@@ -35,6 +36,9 @@ export const meuperfilStore = defineStore('meuperfil',{
         },
         getUsersId:(state)=>{
             return state.user;
+        },
+        getResponse:(state)=>{
+            return state.response;
         }
 
     },
@@ -55,118 +59,83 @@ export const meuperfilStore = defineStore('meuperfil',{
             this.quantidadeLivros = quantidadeLivros ;
             this.datasource = datasource ;
 
-            this.user.meuPerfilController = ref(new MeuPerfilController(api_token), meuperfil);
+            this.user.meuPerfilController = ref(new MeuPerfilController(api_token, meuperfil));
         },
-        atualizarDataSource( quantidade:number, pagina:number)
+        consolelog(){
+            return 'sdsd';
+        },
+        async atualizarDataSource( quantidade:number, pagina:number)
         {
             this.messages.carregando = true ;
-            const dados = {
+
+            const dados = this.user.meuPerfilController.getDadosLivrosMeuPerfil({
                 quantidade : quantidade ,
                 pagina : pagina ,
                 meuperfil_id : this.user.meuperfil_id,
-            };
-            this.user.meuPerfilController.getDadosLivrosMeuPerfil(dados).then( response =>{
-                if(response.status === 200 ){
-                    this.datasource = response.data;
-                }else{
-                    if(response.status >= 500)
-                    {
-                        console.log(response);
-                        this.message('erro');
-                    }
-                }
+            });
+            const retorno = await this.user.meuPerfilController.postLivrosMeuPerfil(dados);
+            if(retorno.status===200)
+            {
+                this.datasource=null;
+                this.datasource = retorno.data ;
             }
-            ).catch( ()=>{
-                this.message('erro');
-            })
-            .finally(()=>{
-                this.messages.carregando = false ;
-            });
-        },
-        postLivros(dataSource:object)
-        {
-
-            let datasource = dataSource;
-            var retorno : number ;
-            this.message.carregando = true ;
-            const dados = this.user.meuPerfilController.getDadosLivros(datasource) ;
-            console.log(dados);
-            this.user.meuPerfilController.postLivros(dados).then((response)=>{
-                console.log(response);
-                if(response.status === 201){
-                    this.message('sucesso');
-                    this.atualizarDataSource( 6 , 0);
-                    retorno = 201 ;
-                }else{
-
-                    this.message('erro');
-                    retorno = 500 ;
-                }
-            }).catch( ()=>{
-                this.message('erro');
-                retorno = 500;
-            }).finally( () =>{
-                this.message.carregando = false ;
-                return retorno ;
-            });
+            this.messages.carregando=false;
 
         },
-        putLivros(datasource:object) : number
+        async postLivros(dataSource:object) : number
         {
             this.message.carregando = true ;
-
-
             const dados = this.user.meuPerfilController.getDadosLivros(datasource) ;
-            var retorno:number ;
-            this.user.meuPerfilController.putLivros(dados).then((response)=>{
-                if(response.status === 200){
-                    this.message('sucesso');
-                    this.atualizarDataSource( 6 , 0);
-                    retorno = 200 ;
-                }else{
-                    if(response.status === 204){
-                        this.message('alerta');
-                        console.log(response);
-                        retorno = 204;
-                    }
-                    else{
-                    console.log(response);
-                    this.message('erro');
-                    retorno = 500 ;
-                }
-                }
-            }).catch( ()=>{
-                this.message('erro');
+            const retorno =await this.user.meuPerfilController.postLivros(dados);
+            await this.atualizarDataSource(0 , 6);
+            this.message.carregando = false ;
+
+            if(retorno.status === 201 )
+            {
+                this.message('sucesso');
+                return 201 ;
+            }else{
+                console.log(retorno);
                 return 500;
-            }).finally( () =>{
-                this.message.carregando = false ;
-                return retorno ;
-            });
+            }
         },
-        deleteLivros(id:number): number
+        async putLivros(datasource:object) : number
         {
-            var retorno : number ;
+            this.message.carregando = true ;
+            const dados = this.user.meuPerfilController.getDadosLivros(datasource) ;
+            const retorno =await this.user.meuPerfilController.putLivros(dados);
+            await this.atualizarDataSource(0 , 6);
+            this.message.carregando = false ;
+
+            if(retorno.status === 200 )
+            {
+                this.message('sucesso');
+                return 200 ;
+            }else{
+                if(retorno.status===204)
+                {
+                    console.log(retorno);
+                    this.message('alerta');
+                    return 204;
+                }
+                console.log(retorno);
+                return 500;
+            }
+        },
+        async deleteLivros(id:number): number
+        {
             this.message.carregando = true ;
             const dados = this.user.meuPerfilController.getDeleteLivros(id);
-            this.user.meuPerfilController.deleteLivros(dados).then((response)=>{
-                if( response.status === 200 )
-                {
-                    this.atualizarDataSource( 6 , 0);
-                    retorno = 200 ;
-                }else{
-                    console.log(response);
-                    this.message('alert');
-                    retorno = 204 ;
-                }
+            const retorno =await this.user.meuPerfilController.deleteLivros(dados);
+            if(this.retorno.status === 200)
+            {
+                this.message('sucesso');
+                return 200 ;
+            }else{
+                this.message('alerta');
+                return 204;
+            }
 
-            }).catch((response)=>{
-                console.log(response);
-                this.message('error');
-                retorno = 500 ;
-            }).finally(()=>{
-                this.messages.carregando= false;
-                return retorno ;
-            });
         },
         putMeuPerfil(datasource : object ) : number
         {

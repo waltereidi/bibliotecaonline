@@ -20,7 +20,7 @@ export default {
     },
     methods: {
         childRetornaPaginacao(pagina , multiplicador ){
-            this.meuperfilStore.atualizarDataSource(pagina , multiplicador);
+            this.meuperfilStore.atualizarDataSource( multiplicador , pagina);
         }
     }
 
@@ -33,7 +33,7 @@ export default {
         <div class="Container--cardGridHeader">
             <div class="Container--cardGridHeader__left">
                 <Paginacao :quantidade="meuperfilStore.getQuantidade" :multiplicador="6" :limitePaginacao="8" :travarPaginacao="meuperfilStore.getMessages.carregando"
-                    v-if="meuperfilStore.quantidadelivros>6 && meuperfilStore.quantidadelivros!= null"
+                    v-if="meuperfilStore.getQuantidade>6 && meuperfilStore.getQuantidade!= null"
                     @retornaPaginacao="childRetornaPaginacao"></Paginacao>
             </div>
             <div class="Container--cardGridHeader__right">
