@@ -24,7 +24,7 @@ class PaginaInicialControllerTest extends TestCase
             'iniciopagina'=>0,
             'busca'=>[['indice'=>'testCase' , 'tipo'=>'testCase'],
             ['indice'=>'testCase2' , 'tipo'=>'testCase']] ]);
-        $this->dadosBusca = new PostBuscaRequest(['busca'=>'test/01']);
+        $this->dadosBusca = new PostBuscaRequest(['busca'=>'??????Busca?????']);
         $this->aplicativo = Aplicativo::where('nome' ,'=' ,'bibliotecaonline')->first();
 
     }

@@ -4,13 +4,18 @@
             show : {
                 required:true ,
                 type:Boolean
+            } ,
+            mensagem:{
+                required :false ,
+                default:null ,
+                type:String,
             }
         }
     }
 </script>
 <template>
     <div v-if="show" class="sucesso">
-        <p>Solicitação efetuada com sucesso</p>
+        <p>{{(mensagem!=null )? mensagem :'Solicitação efetuada com sucesso'}}</p>
     </div>
 </template>
 <style scoped>

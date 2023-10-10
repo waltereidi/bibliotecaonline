@@ -41,3 +41,8 @@
     align-items: center;
     overflow: hidden;
 }
+.mdc-card{
+    &__media{
+        height: 2em;
+    }
+}

@@ -51,4 +51,8 @@ export class PaginainicialController{
     {
         return await axios.post<object>('/api/paginainicial/postBuscaIndice' , request );
     }
+    async postBusca(request:object): Promise<object>
+    {
+        return await axios.post<object>('/api/paginainicial/postBusca', request);
+    }
 }

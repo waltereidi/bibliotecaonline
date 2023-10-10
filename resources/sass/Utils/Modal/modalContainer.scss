@@ -77,3 +77,14 @@
         justify-content: space-between;
     }
 }
+
+.download-button{
+    border:0px solid black;
+    margin-top:1em;
+    display: block;
+    &--icon{
+        height: 2em;
+        width: 2em;
+        margin: 0 0.5em 0 0;
+    }
+}

@@ -76,7 +76,6 @@ export const meuperfilStore = defineStore('meuperfil',{
             const retorno = await this.user.meuPerfilController.postLivrosMeuPerfil(dados);
             if(retorno.status===200)
             {
-                this.datasource=null;
                 this.datasource = retorno.data ;
             }
             this.messages.carregando=false;
@@ -84,10 +83,11 @@ export const meuperfilStore = defineStore('meuperfil',{
         },
         async postLivros(dataSource:object) : number
         {
+
             this.message.carregando = true ;
             const dados = this.user.meuPerfilController.getDadosLivros(datasource) ;
             const retorno =await this.user.meuPerfilController.postLivros(dados);
-            await this.atualizarDataSource(0 , 6);
+            await this.atualizarDataSource(6,0);
             this.message.carregando = false ;
 
             if(retorno.status === 201 )
@@ -104,7 +104,7 @@ export const meuperfilStore = defineStore('meuperfil',{
             this.message.carregando = true ;
             const dados = this.user.meuPerfilController.getDadosLivros(datasource) ;
             const retorno =await this.user.meuPerfilController.putLivros(dados);
-            await this.atualizarDataSource(0 , 6);
+            await this.atualizarDataSource(6,0);
             this.message.carregando = false ;
 
             if(retorno.status === 200 )
@@ -126,9 +126,12 @@ export const meuperfilStore = defineStore('meuperfil',{
         {
             this.message.carregando = true ;
             const dados = this.user.meuPerfilController.getDeleteLivros(id);
+
             const retorno =await this.user.meuPerfilController.deleteLivros(dados);
-            if(this.retorno.status === 200)
+
+            if( retorno.status === 200)
             {
+                this.atualizarDataSource(6,0);
                 this.message('sucesso');
                 return 200 ;
             }else{

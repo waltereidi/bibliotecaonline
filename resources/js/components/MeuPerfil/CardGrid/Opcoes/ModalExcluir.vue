@@ -39,7 +39,7 @@ export default {
         <div class="containerModalFormulario">
             <div class="modalFormulario rounded">
                 <div class="mdc-card__primary-action">
-                    <div class="mdc-card__media mdc-card__media--square">
+                    <div class="mdc-card__media">
                         <div class="mdc-card__media-content">
                             <h5>{{ title }}</h5>
                         </div>
@@ -72,5 +72,5 @@ export default {
 </template>
 <style scoped>
 @import "@/../sass/MeuPerfil/CardGrid/Modal/modalExcluir.scss";
-@import 'material-icons/iconfont/material-icons.css';
+
 </style>

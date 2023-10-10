@@ -5,6 +5,8 @@ import Paginacao from "@/components/Utils/Paginacao.vue";
 import { PaginainicialController } from "@/Paginainicial/paginainicialController";
 import Carregando from "@/components/Utils/Carregando.vue";
 import Erro from "@/components/Utils/Erro.vue";
+import Alerta from '../Utils/Alerta.vue';
+import Sucesso from '../Utils/Sucesso.vue';
 export default {
     props: {
         token_aplicativo: {
@@ -17,6 +19,8 @@ export default {
         Paginacao,
         Carregando,
         Erro,
+        Alerta ,
+        Sucesso,
 
     },
     data() {
@@ -30,6 +34,12 @@ export default {
             },
             travarPaginacao : false ,
             mensagemErro: false,
+            mensagemAlerta:false,
+            exibirPaginacao:true ,
+            mensagemSucesso:{
+                mensagem :'' ,
+                sucesso : false ,
+            },
             searchBar: '',
             modal: false,
             indiceAtivo:{ 'indice':'Todos' ,'tipo':'Todos'},
@@ -42,7 +52,42 @@ export default {
         }
     },
     methods: {
-        buscar() {
+        async buscar()
+        {
+            this.exibirPaginacao=false;
+            this.travarPaginacao = true ;
+            const dados = this.paginainicialController.getDadosBuscaRequest(this.searchBar);
+            const retorno =await this.paginainicialController.postBusca(dados);
+            console.log(retorno);
+            if(retorno.status === 204)
+            {
+                this.popAlerta();
+            }else{
+                if(retorno.status === 200)
+                {
+                    this.mensagemSucesso.mensagem=retorno.data['quantidadeTotal']+' livros encontrado'+((retorno.data['quantidadeTotal']>1)?'s':'') ;
+                    this.popSucesso();
+                    this.dataSource = retorno.data;
+
+                }
+            }
+
+            this.travarPaginacao=false;
+
+
+        },
+        popSucesso(){
+            this.mensagemSucesso.sucesso=true ;
+            setTimeout(()=>{
+                this.mensagemSucesso.sucesso=false;
+            },5000);
+        },
+        popAlerta(){
+
+            this.mensagemAlerta = true ;
+            setTimeout(()=>{
+                this.mensagemAlerta=false ;
+            },5000);
         },
         childRetornaPaginacao(paginaAtual: number, multiplicador: number) {
             if(this.indiceAtivo){
@@ -78,6 +123,8 @@ export default {
         indiceAtivo(newVal){
             if(!this.travarPaginacao)
                 this.travarPaginacao=true;
+                this.exibirPaginacao=true;
+
                 this.dataSource.quantidadeTotal= null ;
 
                 const dados =this.paginainicialController.getDadosBuscaIndice(20, 0 , [this.indiceAtivo] );
@@ -91,14 +138,16 @@ export default {
                     this.dataSource = resolve.data;
                     this.travarPaginacao = false ;
                 })
-
     }
-
 
 }
 }
 </script>
 <template>
+     <Carregando :show="travarPaginacao"></Carregando>
+     <Erro :show="mensagemErro"></Erro>
+     <Alerta :show="mensagemAlerta"></Alerta>
+     <Sucesso :show="mensagemSucesso.sucesso" :mensagem="mensagemSucesso.mensagem"></Sucesso>
     <div class="container">
         <div class="header">
             <img :src="'/imagens/wallpaper.jpg'" />
@@ -108,7 +157,7 @@ export default {
 
                 <label class="mdc-text-field mdc-text-field--filled mdc-text-field--with-trailing-icon">
                     <span class="mdc-floating-label" id="my-label-id" v-if="searchBar === ''">Procurar</span>
-                    <input v-model="searchBar" class="mdc-text-field__input" type="text" aria-labelledby="my-label-id">
+                    <input @keyup.enter="buscar" v-model="searchBar" class="mdc-text-field__input" type="text" aria-labelledby="my-label-id">
                     <i @click="buscar" class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing"
                         tabindex="0" role="button">search</i>
                 </label>
@@ -147,7 +196,7 @@ export default {
                         <div class="paginacaoContainer--left">
                         </div>
                         <div class="paginacaoContainer--right">
-                            <Paginacao :multiplicador="20" :quantidade="dataSource.quantidadeTotal" :limitePaginacao="5" :travarPaginacao="travarPaginacao" v-if="dataSource.quantidadeTotal!=null"
+                            <Paginacao :multiplicador="20" :quantidade="dataSource.quantidadeTotal" :limitePaginacao="5" :travarPaginacao="travarPaginacao" v-if="dataSource.quantidadeTotal!=null && exibirPaginacao"
                                 @retornaPaginacao="childRetornaPaginacao">
                             </Paginacao>
                         </div>
@@ -166,8 +215,7 @@ export default {
 
             </div>
 
-            <Carregando :show="travarPaginacao"></Carregando>
-            <Erro :show="mensagemErro"></Erro>
+
         </div>
 
 

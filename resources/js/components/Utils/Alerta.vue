@@ -30,7 +30,7 @@
         position: fixed;
         bottom:5em;
         left:25%;
-        color:white;
+        color: #607D8B;
         font-weight: bold;
         z-index: 10000;
     }

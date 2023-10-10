@@ -2,6 +2,7 @@
 import config from "@/../json/bibliotecaconfig.json";
 import ModalFormulario from './Opcoes/ModalFormulario.vue';
 import ModalExcluir from './Opcoes/ModalExcluir.vue';
+import { meuperfilStore } from "@/Store/meuperfilStore";
 
 export default {
     props:
@@ -15,11 +16,14 @@ export default {
     data() {
         return {
             configDataSource: config,
+            meuperfilStore: meuperfilStore(),
         }
     },
     methods: {
-        childConfirmarExcluir(){
-            this.$emit('confirmarExcluir' , this.datasource.id );
+       async childConfirmarExcluir(){
+            const retorno = await this.meuperfilStore.deleteLivros(this.datasource.id);
+
+
     },
     },
     components:{
@@ -32,11 +36,11 @@ export default {
 <template>
     <div class="card">
         <div class="card--titulo">
-            <h4>{{ datasource.titulo }}</h4>
+            <h4>{{ (datasource.titulo.length>20)?(datasource.titulo.substring(0,20))+'...':datasource.titulo  }}</h4>
 
         </div>
         <div class="card--autor">
-            <p class="text-muted">{{ datasource.autores_nome }}</p>
+            <p class="text-muted">{{ (datasource.autores_nome.length>30)?(datasource.autores_nome.substring(0,30))+'...':datasource.autores_nome }}</p>
         </div>
         <div class="card--media">
 

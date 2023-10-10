@@ -10,6 +10,7 @@ export default {
         return {
             showModal: false,
             downloadIcon: '',
+            labelButton: '',
         }
     },
     methods: {
@@ -27,14 +28,18 @@ export default {
     },
 
     mounted() {
-        if (/drive\.google/.test(this.urldownload)) {
+        if (/drive.google/.test(this.urldownload)) {
             this.downloadIcon = 'icons\\icons8-google-drive.svg';
+            this.labelButton='Google drive';
         } else if (/1drv\.ms/.test(this.urldownload)) {
             this.downloadIcon = 'icons\\icons8-onedrive.svg';
+            this.labelButton='One drive';
         } else if (/dropbox/.test(this.urldownload)) {
             this.downloadIcon = 'icons\\icons8-dropbox.svg';
+            this.labelButton='Drop box';
         } else {
             this.downloadIcon = '';
+            this.labelButton='';
         }
     }
 }
@@ -44,7 +49,9 @@ export default {
         v-if="(downloadIcon === '')">Visualizar link</button>
     <span v-else>
         <a :href="urldownload" target="_blank">
-            <img :src="downloadIcon">
+            <button class="download-button">
+                <img class="download-button--icon" :src="downloadIcon"><span>{{ labelButton }}</span>
+            </button>
         </a>
     </span>
 
@@ -60,7 +67,7 @@ export default {
                 <p class="modalDownload--content__link">{{ urldownload }}</p>
             </div>
             <div class="modalDownload--buttons">
-                <button @click="fecharModal" class="mdc-button mdc-button--outlined mdc-button--cancelar">
+                <button @click="fecharModal" class="mdc-button mdc-button--cancelar">
                     Cancelar
                 </button>
                 <a :href="urldownload" target="_blank">

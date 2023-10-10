@@ -41,7 +41,7 @@ class Livros extends Model
                 'livros.urldownload as urldownload',
                 DB::raw($paginacao . ' as paginacao')
             )
-            ->where('livros.users_id', $users_id)->orderBy('livros.created_at', 'desc')
+            ->where('livros.users_id', $users_id)->orderBy('livros.updated_at', 'desc')
             ->skip($paginacao)->limit(6)->get();
 
         return ($livrosDoUsuario->count() === 0) ?  null : $livrosDoUsuario;
@@ -215,10 +215,10 @@ class Livros extends Model
             'livros.capalivro as capalivro',
             'livros.urldownload as urldownload'
         )
-        ->whereRaw(" ( editoras.nome <-> ? ) <= 0.2 " , $busca )
-        ->orWhereRaw(" ( autores.nome <-> ? ) <= 0.2 " , $busca )
-        ->orWhereRaw(" ( livros.titulo <-> ? ) <= 0.2 " , $busca )
-        ->orWhereRaw(" ( livros.genero <-> ? ) <= 0.2 " , $busca )
+        ->whereRaw(" ( editoras.nome <-> ? ) <= 0.8 " , $busca )
+        ->orWhereRaw(" ( autores.nome <-> ? ) <= 0.8 " , $busca )
+        ->orWhereRaw(" ( livros.titulo <-> ? ) <= 0.8 " , $busca )
+        ->orWhereRaw(" ( livros.genero <-> ? ) <= 0.8 " , $busca )
         ->orWhereRaw(" ( livros.isbn <-> ? ) <= 0.2 " , $busca )
         ->limit(30);
         $quantidadeTotal = $query->count();
@@ -255,7 +255,7 @@ class Livros extends Model
     }
     public function postLivrosMeuPerfil($dados) : ?object
     {
-        $offset = ($dados['quantidade']*$dados['pagina']);
+        $offset = $dados['pagina']<=1? 0 :($dados['quantidade']*$dados['pagina']);
         $retorno = DB::table('livros')
         ->join('autores' , 'autores.id' , '=' ,'livros.autores_id')
         ->join('editoras' ,'editoras.id' , '=' , 'livros.editoras_id')
@@ -278,7 +278,7 @@ class Livros extends Model
             'livros.users_id as users_id',
         )
         ->where('meuperfil.id' , '=' , $dados['meuperfil_id'])
-        ->orderBy('livros.created_at')
+        ->orderBy('livros.updated_at','desc')
         ->offset($offset)
         ->limit($dados['quantidade'])
         ->get();

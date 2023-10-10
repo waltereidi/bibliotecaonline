@@ -42,6 +42,9 @@
         --mdc-theme-primary: #d50000;
     }
 }
+.mdc-button:hover{
+    background-color: inherit;
+}
 .body {
     font-family: "Roboto Mono";
 }
