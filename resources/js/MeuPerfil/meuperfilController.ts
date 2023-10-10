@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ApiRequest } from "@/Utils/ApiRequest";
+import { ApiRequest } from "@/Utils/apiRequest";
 import { LivrosMeuPerfil } from "@/Entidades/livrosMeuperfil";
 import { putMeuPerfil } from "@/Entidades/putMeuPerfil";
 export class MeuPerfilController{

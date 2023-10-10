@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Users } from '@/Utils/Entidades/users';
-import { ApiRequest } from '@/Utils/ApiRequest';
+import { ApiRequest } from '@/Utils/apiRequest';
 import { MensagensCaixa } from '@/Entidades/mensagensCaixa';
 import { PostMensagensLivros } from '@/Entidades/postMensagensLivros';
 import { Mensagens } from '@/Entidades/mensagens';

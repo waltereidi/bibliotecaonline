@@ -1,6 +1,6 @@
 import { IndicesPaginainicial } from "@/Entidades/indicesPaginainicial";
 import { PostIndicesPaginainicial } from "@/Entidades/postIndicesPaginainicial";
-import { ApiRequest } from "@/Utils/ApiRequest";
+import { ApiRequest } from "@/Utils/apiRequest";
 import axios from "axios";
 export class PaginainicialController{
     public token_aplicativo: string;

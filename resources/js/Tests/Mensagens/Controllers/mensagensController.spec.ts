@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { MensagensController } from "@/Mensagens/Controllers/mensagensController";
 import axios  from 'axios';
-import { ApiRequest } from '@/Utils/ApiRequest';
+import { ApiRequest } from '@/Utils/apiRequest';
 import { MensagensCaixa } from '@/Mensagens/Entidades/mensagensCaixa';
 import { Mensagens } from '@/Mensagens/Entidades/mensagens';
 

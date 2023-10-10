@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import { MeuPerfilController } from "@/MeuPerfil/meuperfilController";
-import { ApiRequest } from '@/Utils/ApiRequest';
+import { ApiRequest } from '@/Utils/apiRequest';
 import { MeuPerfilDados } from '@/Entidades/meuperfilDados';
 import { LivrosMeuPerfil } from '@/Entidades/livrosMeuperfil';
 

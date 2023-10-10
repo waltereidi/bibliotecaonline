@@ -1,5 +1,5 @@
 import { expect, test ,describe } from 'vitest';
-import { ApiRequest } from '@/Utils/ApiRequest';
+import { ApiRequest } from '@/Utils/apiRequest';
 import { Users } from '@/Utils/Entidades/users';
 import axios  from 'axios';
 const apiRequest = new ApiRequest;
