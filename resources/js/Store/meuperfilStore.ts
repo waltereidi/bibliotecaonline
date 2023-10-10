@@ -61,9 +61,6 @@ export const meuperfilStore = defineStore('meuperfil',{
 
             this.user.meuPerfilController = ref(new MeuPerfilController(api_token, meuperfil));
         },
-        consolelog(){
-            return 'sdsd';
-        },
         async atualizarDataSource( quantidade:number, pagina:number)
         {
             this.messages.carregando = true ;
@@ -81,7 +78,7 @@ export const meuperfilStore = defineStore('meuperfil',{
             this.messages.carregando=false;
 
         },
-        async postLivros(dataSource:object) : number
+        async postLivros(datasource:object) : number
         {
 
             this.message.carregando = true ;
@@ -140,31 +137,26 @@ export const meuperfilStore = defineStore('meuperfil',{
             }
 
         },
-        putMeuPerfil(datasource : object ) : number
+        async putMeuPerfil(datasource : object ) : number
         {
-            var retorno : number ;
             this.message.carregando = true ;
             const dados = this.user.meuPerfilController.getPutMeuPerfil(datasource);
-            this.user.meuPerfilController.putMeuPerfil(dados).then((response) =>{
-                if(response.status === 200 )
-                {
-                    this.message('sucesso');
-                }else{
-                    if(response.status===204){
-                        this.message('alerta');
-                        console.log(response);
-                    }else{
-                        this.message('erro');
-                        console.log(response);
-                    }
-                }
+            const retorno = await this.user.meuPerfilController.putMeuPerfil(dados);
 
-            }).catch( (response)=>{
-                this.message('error');
-            }).finally((response)=>{
-                this.messages.carregando=false;
-                return retorno;
-            });
+            if(retorno.status === 200 )
+            {
+                this.message('sucesso');
+            }else{
+                console.log(retorno);
+                if(retorno.status === 204)
+                {
+                    this.message('alerta');
+                }else{
+                    this.message('erro');
+                }
+            }
+
+
         },
     }
 

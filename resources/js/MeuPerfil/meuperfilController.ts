@@ -12,7 +12,6 @@ export class MeuPerfilController{
         this.apiRequest = new ApiRequest;
         this.headers = this.apiRequest.getDefaultHeaders(this.api_token);
         this.meuperfil = meuperfil;
-        console.log(meuperfil);
     }
     somar( a:number , b:number ) : number {
         return a+b ;
