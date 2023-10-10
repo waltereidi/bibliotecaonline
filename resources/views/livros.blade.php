@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@vite('resources/js/livros/livros.ts')
+@vite('resources/js/Livros/Livros.ts')
 
 @section('content')
 

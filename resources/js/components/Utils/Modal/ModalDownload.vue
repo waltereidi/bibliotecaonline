@@ -29,13 +29,13 @@ export default {
 
     mounted() {
         if (/drive.google/.test(this.urldownload)) {
-            this.downloadIcon = 'icons\\icons8-google-drive.svg';
+            this.downloadIcon = '\\icons\\icons8-google-drive.svg';
             this.labelButton='Google drive';
         } else if (/1drv\.ms/.test(this.urldownload)) {
-            this.downloadIcon = 'icons\\icons8-onedrive.svg';
+            this.downloadIcon = '\\icons\\icons8-onedrive.svg';
             this.labelButton='One drive';
         } else if (/dropbox/.test(this.urldownload)) {
-            this.downloadIcon = 'icons\\icons8-dropbox.svg';
+            this.downloadIcon = '\\icons\\icons8-dropbox.svg';
             this.labelButton='Drop box';
         } else {
             this.downloadIcon = '';

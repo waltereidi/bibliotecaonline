@@ -66,7 +66,7 @@ class MeuPerfil extends Model
                 'users.name as users_nome'
         )
         ->selectRaw('count(livros.id) over( partition by livros.id ) as quantidadelivros')
-        ->where('meuperfil.id' , '=' , $id)
+        ->where('users.id' , '=' , $id)
         ->first();
 
 
