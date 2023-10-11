@@ -338,5 +338,38 @@ class LivrosModelTest extends TestCase
         //assert
         $this->assertNull($retorno);
 
-    }
+   }
+   public function testGetPerfilUsuarioLivros_SemDadosRetornaNull() : void
+   {
+        //setup
+        $users_id = 0 ;
+        $offset = 0 ;
+
+        //execucao
+        $retorno = $this->livros->getPerfilUsuarioLivros($users_id , $offset );
+
+        //assert
+        $this->assertNull($retorno);
+   }
+   public function testGetPerfilUsuarioLivros_RetornaDataSource() : void
+   {
+        //Setup
+        $users_id = $this->user->id ;
+        $offset = 0 ;
+        //execucao
+        $retorno = $this->livros->getPerfilUsuarioLivros($users_id , $offset );
+        $validarChaves = get_object_vars($retorno[0]);
+        //assert
+        $this->assertTrue(count($retorno)>0 );
+        $this->assertTrue(count($retorno)<=6);
+        $this->assertIsObject($retorno);
+        $this->assertArrayHasKey( 'id' , $validarChaves);
+        $this->assertArrayHasKey( 'titulo' , $validarChaves);
+        $this->assertArrayHasKey( 'autores_nome' , $validarChaves);
+        $this->assertArrayHasKey( 'capalivro' , $validarChaves);
+
+
+
+
+   }
 }

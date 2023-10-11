@@ -291,4 +291,26 @@ class Livros extends Model
             return $retorno ;
         }
     }
+    public function getPerfilUsuarioLivros(int $users_id , int $offset) : ?object
+    {
+        $retorno= DB::table('livros')
+        ->select(
+            'livros.id as id' ,
+            'livros.titulo as titulo' ,
+            'autores.nome as autores_nome' ,
+            'livros.capalivro as capalivro'
+        )
+        ->join('autores' , 'autores.id' , '=' , 'livros.autores_id')
+        ->where('livros.users_id' ,'=' , $users_id)
+        ->offset($offset)
+        ->limit(6)
+        ->get();
+        if(count($retorno) == 0 )
+        {
+            return null;
+        }else{
+            return $retorno;
+        }
+
+    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\MensagensController;
 use App\Http\Controllers\MeuPerfilController;
 use App\Http\Controllers\PaginaInicialController;
+use App\Http\Controllers\PerfilUsuarioController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 
@@ -16,8 +17,6 @@ use App\Http\Controllers\UsersController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-
 
 Route::prefix('meuperfil')->group(function () {
     Route::middleware('validartoken')->post('getPaginacaoLivrosDoUsuario',function($request){
@@ -40,6 +39,10 @@ Route::prefix('meuperfil')->group(function () {
     Route::middleware('validartoken')->get('getMeuPerfilLivrosDoUsuarioQuantidade/{authorization}/{users_id}', [MeuPerfilController::class , 'getMeuPerfilLivrosDoUsuarioQuantidade']);
 });
 
+Route::prefix('perfilusuario')->group(function () {
+    Route::middleware('tokenaplicacao')->get('getPerfilUsuarioLivros/{authorization}/{users_id}/{offset}' , [PerfilUsuarioController::class ,'getPerfilUsuarioLivros']);
+});
+
 Route::prefix('mensagens')->group(function () {
     Route::middleware('validartoken')->post('adicionarMensagens', [MensagensController::class, 'adicionarMensagens']);
     Route::middleware('validartoken')->delete('deletarMensagens', [MensagensController::class, 'deletarMensagens']);
@@ -48,6 +51,7 @@ Route::prefix('mensagens')->group(function () {
     Route::middleware('validartoken')->post('getMensagensCaixa', [MensagensController::class, 'getMensagensCaixa']);
     Route::middleware('validartoken')->post('getMensagensLivros', [MensagensController::class, 'getMensagensLivros']);
 });
+
 Route::prefix('users')->group(function () {
     Route::post('getDadosUsers', [UsersController::class, 'getDadosUsers']);
 });

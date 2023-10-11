@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Livros;
 use App\Models\Aplicativo;
+use Illuminate\Support\Facades\DB;
 class LivrosController extends Controller
 {
     public $livrosModel ;
@@ -25,4 +26,6 @@ class LivrosController extends Controller
         return view('paginainicial')->with('token_aplicativo',$this->aplicativo->token_aplicacao );
         }
     }
+
+
 }

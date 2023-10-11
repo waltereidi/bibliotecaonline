@@ -54,11 +54,15 @@ export default {
     methods: {
         async buscar()
         {
+            if(this.searchBar.length <2 )
+            {
+                return ;
+            }
             this.exibirPaginacao=false;
             this.travarPaginacao = true ;
+
             const dados = this.paginainicialController.getDadosBuscaRequest(this.searchBar);
             const retorno =await this.paginainicialController.postBusca(dados);
-            console.log(retorno);
             if(retorno.status === 204)
             {
                 this.popAlerta();
