@@ -246,19 +246,7 @@ class MeuPerfilController extends Controller
         }
     }
 
-    public function getMeuPerfil(int $id)
-    {
-        $perfilusuario = $this->meuPerfil->getMeuPerfil($id);
-        if($perfilusuario){
-            return view('perfilusuario')->with('meuperfil' , $perfilusuario);
-        }
-        else{
-            return view('paginainicial')->with('token_aplicativo' , $this->aplicativo->token_aplicacao );
-        }
 
-
-
-    }
     public function postLivrosMeuPerfil(PostLivrosMeuPerfilRequest $request) :JsonResponse
     {
         $dados = $request->all();

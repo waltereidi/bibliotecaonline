@@ -6,6 +6,9 @@ use App\Http\Controllers\PerfilUsuarioController;
 use App\Models\Aplicativo;
 use App\Models\User;
 use Tests\TestCase;
+use Illuminate\View\View;
+use App\Models\MeuPerfil ;
+
 
 class PerfilUsuarioControllerTest extends TestCase
 {
@@ -47,6 +50,36 @@ class PerfilUsuarioControllerTest extends TestCase
         //assert
 
         $this->assertEquals($retorno->getStatusCode() , 200 ) ;
+    }
+    public function testGetMeuPerfil_RetornaViePaginainicialComToken(){
+        //setup
+
+        //execucao
+        $view = $this->perfilUsuarioController->getMeuPerfil(0);
+        $viewDataSource = $view->getData();
+
+        //assert
+        $this->assertInstanceOf(View::class , $view );
+        $this->assertEquals('paginainicial' , $view->getName() );
+        $this->assertEquals($viewDataSource['token_aplicativo'] ,$this->aplicativo->token_aplicacao);
+
+
+
+    }
+    public function testGetMeuPerfil_RetornaViewComLivro() :void
+    {
+        //setup
+        $meuPerfil = MeuPerfil::first();
+
+        //execucao
+        $view = $this->perfilUsuarioController->getMeuPerfil($meuPerfil->id);
+        $viewDataSource = $view->getData();
+        //assert
+        $this->assertInstanceOf(View::class , $view );
+        $this->assertEquals('perfilusuario' , $view->getName() );
+        $this->assertNotEmpty($viewDataSource['meuperfil']);
+        $this->assertEquals($viewDataSource['meuperfil']->token_aplicativo , $this->aplicativo->token_aplicacao);
+
     }
 
 

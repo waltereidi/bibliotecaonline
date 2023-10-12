@@ -5,6 +5,8 @@ use App\Http\Controllers\MeuPerfilController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PaginaInicialController;
 use App\Http\Controllers\LivrosController;
+use App\Http\Controllers\PerfilUsuarioController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,6 +27,6 @@ Route::get('/paginainicial', [PaginaInicialController::class, 'index'])->name('p
 Route::post('/meuPerfil', [MeuPerfilController::class, 'index'])->name('meuperfil');
 
 Route::get('/livros/{id}',[LivrosController::class , 'getLivro' ]);
-Route::get('/perfilusuario/{id}' , [MeuPerfilController::class , 'getMeuPerfil']);
+Route::get('/perfilusuario/{id}' , [PerfilUsuarioController::class , 'getMeuPerfil']);
 
 

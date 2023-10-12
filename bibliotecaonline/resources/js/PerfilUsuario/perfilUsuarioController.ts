@@ -1,3 +1,4 @@
+import axios from "axios";
 export  class PerfilUsuarioController
 {
     private token_aplicacao : string ;
@@ -13,7 +14,7 @@ export  class PerfilUsuarioController
     }
     async getPerfilusuarioLivros(url:string)
     {
-        await axios.get(url);
+        return await axios.get(url);
     }
 
 

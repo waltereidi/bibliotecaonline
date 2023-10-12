@@ -562,32 +562,5 @@ class MeuPerfilControllerTest extends TestCase
         //assert
         $this->assertEquals(200 , $retorno->getStatusCode());
     }
-    public function testGetMeuPerfil_RetornaViePaginainicialComToken(){
-        //setup
-
-        $view = $this->meuPerfilController->getMeuPerfil(0);
-        $viewDataSource = $view->getData();
-
-        $this->assertInstanceOf(View::class , $view );
-        $this->assertEquals('paginainicial' , $view->getName() );
-        $this->assertEquals($viewDataSource['token_aplicativo'] ,$this->aplicativo->token_aplicacao);
-
-
-
-    }
-    public function testGetMeuPerfil_RetornaViewComLivro() :void
-    {
-        //setup
-        $meuPerfil = MeuPerfil::first();
-
-        $view = $this->meuPerfilController->getMeuPerfil($meuPerfil->id);
-        $viewDataSource = $view->getData();
-
-        $this->assertInstanceOf(View::class , $view );
-        $this->assertEquals('perfilusuario' , $view->getName() );
-        $this->assertNotEmpty($viewDataSource['meuperfil']);
-
-
-    }
 
 }

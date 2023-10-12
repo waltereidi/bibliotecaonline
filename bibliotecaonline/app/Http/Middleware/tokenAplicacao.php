@@ -16,12 +16,13 @@ class tokenAplicacao
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->method() === 'GET') {
-            $api_token = $request->headers->get('authorization');
+        if ($request->method() === 'GET' || $request->method() === 'DELETE') {
+
+            $api_token = $request->route()->parameter('authorization');
+
         } else {
             $api_token = $request->Authorization;
         }
-
         $aplicativo = Aplicativo::where('token_aplicacao', '=',  substr($api_token, 7))
         ->where('nome' ,'=' ,'bibliotecaonline')->first();
         if (isset($api_token) &&  $aplicativo) {
