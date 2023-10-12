@@ -3,11 +3,12 @@ services:
     container_name: bibliotecaonline
     build: .
     volumes:
-      - /:/var/www/html
+      - /var/www/html
     ports:
       - "8000:8000"
       - "8099:80"
       - "8098:587"
+      - "5173:5173"
 
   pgsql:
     image: postgres:13.12

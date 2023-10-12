@@ -21,7 +21,8 @@ export default {
     components: {
         ModalImagem,
     },
-    mounted(){
+    created(){
+        window.addEventListener('scroll' , this.handleScroll);
     }
 }
 </script>
