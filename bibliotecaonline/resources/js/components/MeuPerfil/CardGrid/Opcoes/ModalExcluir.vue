@@ -50,21 +50,17 @@ export default {
                 </div>
                 <br>
                 <!-- Validações dos botões de Envio e cancelar -->
-                <div class="row">
-                    <div class="col-6">
+
                         <button @click="showModal = false" class="mdc-button mdc-button--cancelar">
                             <span class="mdc-button__ripple"></span>
                             <span class="mdc-button__label">Cancelar</span>
                         </button>
-                    </div>
-                    <div class="col-6">
+
                         <button @click="confirmar" class="mdc-button mdc-button--confirmar">
                             <span class="mdc-button__ripple"></span>
                             <span class="mdc-button__label">Confirmar</span>
                         </button>
-                    </div>
 
-                </div>
             </div>
         </div>
 

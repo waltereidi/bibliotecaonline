@@ -1,17 +1,39 @@
 {
+  "name": "bibliotecaonline",
+  "version": "0.0.1",
   "private": true,
-  "type": "module",
+  "description": "Troque livros , bibliotecaonline",
+  "author": "",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
     "serve": "vite --host",
+    "build": "vite build",
+    "dev": "vite",
     "test": "vitest"
+  },
+  "main": "vite.config.js",
+  "dependencies": {
+    "@material/button": "^14.0.0",
+    "@material/card": "^14.0.0",
+    "@material/dialog": "^14.0.0",
+    "@material/shape": "^14.0.0",
+    "@material/textfield": "^14.0.0",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
+    "bootstrap": "^5.3.1",
+    "material-icons": "^1.13.10",
+    "mavon-editor": "^3.0.1",
+    "pinia": "^2.1.6",
+    "register-service-worker": "^1.7.2",
+    "vue-loader": "^17.0.1",
+    "vuex": "^4.0.2",
+    "webpack": "^5.0.0-rc.6"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.10",
     "@popperjs/core": "^2.11.6",
     "@types/jest": "^29.5.3",
     "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/cli-plugin-pwa": "~5.0.0",
     "axios": "^1.1.2",
     "babel-jest": "^29.6.2",
     "concurrently": "^8.2.0",
@@ -25,30 +47,10 @@
     "vue": "^3.2.36",
     "vue-loader": "^17.0.1"
   },
-  "dependencies": {
-    "@material/button": "^14.0.0",
-    "@material/card": "^14.0.0",
-    "@material/dialog": "^14.0.0",
-    "@material/shape": "^14.0.0",
-    "@material/textfield": "^14.0.0",
-    "@vuelidate/core": "^2.0.3",
-    "@vuelidate/validators": "^2.0.4",
-    "bootstrap": "^5.3.1",
-    "material-icons": "^1.13.10",
-    "mavon-editor": "^3.0.1",
-    "pinia": "^2.1.6",
-    "vue-loader": "^17.0.1",
-    "vuex": "^4.0.2",
-    "webpack": "^5.0.0-rc.6"
-  },
-  "name": "bibliotecaonline",
-  "description": "Troque livros , bibliotecaonline",
-  "version": "0.0.1",
-  "main": "vite.config.js",
   "directories": {
     "test": "jest"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "type": "module"
 }

@@ -1,5 +1,4 @@
 <script lang="ts">
-import MeuPerfilDataSource from "@/../json/meuperfildatasource.json";
 import ModalImagem from "@/components/Utils/Modal/ModalImagem.vue";
 import config from "@/../json/bibliotecaconfig.json";
 import {ref} from 'vue';
@@ -29,31 +28,34 @@ export default {
     },
     methods:{
         handleScroll(event){
-            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight)  && (window.scrollY != this.scroll) )  {
-                this.scroll =window.scrollY;
-                this.carregando = true ;
-                const url = this.perfilUsuarioController.getDadosPerfilUsuarioLivros(this.datasource.users_id , this.offset);
-                this.perfilUsuarioController.getPerfilusuarioLivros(url).then( (response) => {
+            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight)  &&
+                (window.scrollY != this.scroll) &&
+                ( this.offset < this.datasource.quantidadelivros))
+                {
+                    this.scroll =window.scrollY;
+                    this.carregando = true ;
+                    const url = this.perfilUsuarioController.getDadosPerfilUsuarioLivros(this.datasource.users_id , this.offset);
+                    this.perfilUsuarioController.getPerfilusuarioLivros(url).then( (response) => {
 
 
-                    if(response.status === 200 )
-                    {
-                        response.data.forEach( livro => {
-                            this.livrosDataSource.push(livro);
-                        });
+                        if(response.status === 200 )
+                        {
+                            response.data.forEach( livro => {
+                                this.livrosDataSource.push(livro);
+                            });
 
-                        this.offset += response.data.length;
-                    }
-                }).finally(()=>{
-                    this.carregando= false;
-                });
-            }
+                            this.offset += response.data.length;
+                        }
+                    }).finally(()=>{
+                        this.carregando= false;
+                    });
+                }
         },
         acessarLivro(livros_id)
         {
 
             console.log(livros_id);
-            window.location.href('/livros/'+livros_id);
+            window.location.href='/livros/'+livros_id;
         }
     },
     created(){
@@ -104,7 +106,7 @@ export default {
             <p>{{ datasource.introducao }}</p>
 
         </div>
-        <div class="container--containerLivros"    v-if="windowSize > 460">
+        <div class="container--containerLivros" v-if="windowSize > 460">
 
             <div v-for="livro in livrosDataSource" class="container--containerLivros__livro" >
 
@@ -112,7 +114,8 @@ export default {
                     <img :src="livro.capalivro ?? configDataSource.capaLivroDefault">
                 </div>
 
-                <h5  class="titulo">{{ livro.titulo }}</h5>
+                <a :href="'/livros/'+livro.id"><h5  class="titulo">{{ livro.titulo }}</h5></a>
+
                 <p class="informacao">{{ livro.autores_nome }}</p>
             </div>
 

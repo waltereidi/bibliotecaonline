@@ -41,41 +41,83 @@
     align-items: center;
     overflow: hidden;
 }
-
-.modalDownload {
-    background-color: white;
-    padding: 1em 2em 1em 2em;
-    box-shadow: 0 10px 10px -10px;
-    flex-flow: row wrap;
-    max-width: 15vw;
-    word-break: break-word;
-    border-radius: 4px;
-
-    &--header {
-        flex: 0 0 auto;
-        h5 {
-            margin-left: 1em;
-        }
-    }
-    &--content {
-        flex: 1 1 auto;
-        &__message {
-            color: #727578;
-            font-size: 14;
-        }
-        &__link {
-            font-weight: 100;
-            border: solid 1px #bdbdbd;
-            color: blue;
-            padding: 1em;
-        }
-    }
-    &--buttons {
-        flex: 1 1 auto;
-        display: flex;
+@media (min-width:360px) and (max-width:460px)
+{
+    .modalDownload {
+        background-color: white;
+        padding: 1em 2em 1em 2em;
+        box-shadow: 0 10px 10px -10px;
         flex-flow: row wrap;
-        justify-content: space-between;
+        word-break: break-word;
+        border-radius: 4px;
+        max-width: 80vw;
+
+        &--header {
+            flex: 0 0 auto;
+            h5 {
+                margin-left: 1em;
+            }
+        }
+        &--content {
+            flex: 1 1 auto;
+            &__message {
+                color: #727578;
+                font-size: 14;
+            }
+            &__link {
+                font-weight: 100;
+                border: solid 1px #bdbdbd;
+                color: blue;
+                padding: 1em;
+            }
+        }
+        &--buttons {
+            flex: 1 1 auto;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+        }
     }
+
+}
+@media(min-width:460px)
+{
+    .modalDownload {
+        background-color: white;
+        padding: 1em 2em 1em 2em;
+        box-shadow: 0 10px 10px -10px;
+        flex-flow: row wrap;
+        max-width: 30em;
+        word-break: break-word;
+        border-radius: 4px;
+
+        &--header {
+            flex: 0 0 auto;
+            h5 {
+                margin-left: 1em;
+            }
+        }
+        &--content {
+            flex: 1 1 auto;
+            &__message {
+                color: #727578;
+                font-size: 14;
+            }
+            &__link {
+                font-weight: 100;
+                border: solid 1px #bdbdbd;
+                color: blue;
+                padding: 1em;
+            }
+        }
+        &--buttons {
+            flex: 1 1 auto;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+        }
+    }
+
 }
 
 .download-button{

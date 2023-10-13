@@ -88,7 +88,6 @@
                 max-width: 12em;
                 flex-flow: column;
                 text-align: center;
-                pointer-events: none;
             }
             &__livro:active {
                 transition: all 0.05s;
@@ -186,7 +185,6 @@
                 max-width: 12em;
                 flex-flow: column;
                 text-align: center;
-                pointer-events: none;
             }
             &__livro:hover {
                 transition: all 0.23s;
@@ -284,7 +282,6 @@
                 max-width: 12em;
                 flex-flow: column;
                 text-align: center;
-                pointer-events: none;
             }
             &__livro:hover {
                 transition: all 0.23s;

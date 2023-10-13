@@ -1,7 +1,7 @@
 @media (min-width: 320px) and (max-width: 460px) {
     .card {
         flex-flow: column;
-
+        min-width: 290px;
         &--titulo {
             padding: 0.7em;
         }
