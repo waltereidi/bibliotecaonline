@@ -1,11 +1,11 @@
 <h1> Em produção no link para preview</h1>
-<h2>Em desenvolvimento</h2>
+<h2>Projeto finalizado</h2>
 
 </br>
 <p>Projeto TDD Biblioteca Online</p>
 </br>
 <p>Troque livros biblioteca online , um projeto para facilitar a troca de livros online </br>
-TDD, VueJS ,TypeScript , PHP , Laravel , PostgreSQL </br>
+TDD, VueJS ,TypeScript , PHP , Laravel , PostgreSQL host na amazon AWS ubuntu22 1GB ram</br>
 <strong>Adicionado middlewares de validação de token nas rotas de API</br>
 Envio de emails para autenticação de de criação de conta e modificação de senha.</br>
 Model de mensagens com exemplo de SQL Avançado , funções de janela e filtro de agregações.
