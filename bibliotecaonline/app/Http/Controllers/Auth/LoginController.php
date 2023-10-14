@@ -39,18 +39,25 @@ class LoginController extends Controller
     }
     protected function authenticated(Request $request, $user)
     {
-        if( !empty($request->session()->get('url')) ){
-            $user->markEmailAsVerified();
-        }
-        if (!$user->hasVerifiedEmail() ) {
-            
-            auth()->logout(); // Desloga o usuário
-            Session::flash('error', 'Você precisa verificar seu email para continuar.');
-            return redirect()->route('login')
-                             ->with('error', 'Você precisa verificar seu email para continuar.');
-        }
+        //Opeção adicionada por hora até resolver o host da amazon
+        // if( !empty($request->session()->get('url')) ){
+        //     $user->markEmailAsVerified();
+        // }
+
+
+        // if (!$user->hasVerifiedEmail() ) {
+
+        //     auth()->logout(); // Desloga o usuário
+        //     Session::flash('error', 'Você precisa verificar seu email para continuar.');
+        //     return redirect()->route('login')
+        //                      ->with('error', 'Você precisa verificar seu email para continuar.');
+        // }
 
         // O email está verificado, redireciona para onde desejar
+        if(!$user->hasVerifiedEmail())
+        {
+            $user->markEmailAsVerified();
+        }
         return redirect('/paginainicial');
     }
 }
