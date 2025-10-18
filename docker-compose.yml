@@ -1,21 +1,39 @@
-services:
-  laravel-docker:
-    container_name: bibliotecaonline
-    build: .
-    volumes:
-      - /var/www/html
-    ports:
-      - "8000:8000"
-      - "8099:80"
-      - "8098:587"
-      - "5173:5173"
+version: '3.8'
 
-  pgsql:
-    image: postgres:13.12
+services:
+  # Serviço PHP/Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - laravel
+
+  # Serviço do banco PostgreSQL
+  db:
+    image: postgres:15
+    container_name: laravel_db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: bibliotecaonline
+      POSTGRES_USER: laravel
+      POSTGRES_PASSWORD: laravel
+      POSTGRES_DB: laravel
     ports:
-      - "5499:5432"
+      - "5432:5432"
+    networks:
+      - laravel
+    volumes:
+      - ./postgres-config/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./postgres-config/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+
+networks:
+  laravel:
+
+volumes:
+  pgdata:

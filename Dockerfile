@@ -1,35 +1,22 @@
-FROM php:8.2.0-apache
-WORKDIR /var/www/html
+FROM php:8.2-fpm
 
-RUN a2enmod rewrite
-RUN apt-get update -y && apt-get install -y \
-    libicu-dev \
-    libmariadb-dev \
-    unzip zip \
-    zlib1g-dev \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev
-
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
+# Instala dependências do sistema e extensões PHP necessárias
 RUN apt-get update && apt-get install -y \
     libpq-dev \
+    git \
+    unzip \
+    curl \
     && docker-php-ext-install pdo pdo_pgsql
 
+# Instala o Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
+WORKDIR /var/www/html
 
-ENV NODE_VERSION=16.13.0
-RUN apt install -y curl
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-ENV NVM_DIR=/root/.nvm
-RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
-ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
-RUN node --version
-RUN npm --version
+# Ajusta permissões
+RUN chown -R www-data:www-data /var/www/html
+COPY docker-script.sh /usr/local/bin/docker-script.sh
+RUN chmod +x /usr/local/bin/docker-script.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-script.sh"]
+CMD ["php-fpm"]
